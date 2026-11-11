@@ -1211,12 +1211,15 @@ html[data-layout="port"] *::-webkit-scrollbar { display: none; }
 html[data-layout="port"] * { scrollbar-width: none; -ms-overflow-style: none; }
 
 
+/* ===== Charm row wrapper (capt + charms + cons-bar) ===== */
+.pc-charms { position: relative; }
+
 /* ===== Consumable bar (thanh tiêu hao) ===== */
 .cons-bar { display: flex; align-items: center; gap: 8px; padding: 5px 10px 5px 8px;
-  background: color-mix(in srgb, var(--lacquer) 30%, transparent);
-  border: 1px solid color-mix(in srgb, var(--vang) 25%, transparent);
+  background: color-mix(in srgb, var(--lacquer) 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--vang) 30%, transparent);
   border-radius: 10px; margin: 2px 0 4px; }
-.cons-bar-label { font-size: 10px; color: var(--vang); font-weight: 700; letter-spacing: .04em; white-space: nowrap; text-transform: uppercase; }
+.cons-bar-label { font-size: 10px; color: var(--vang); font-weight: 700; letter-spacing: .06em; white-space: nowrap; text-transform: uppercase; }
 .cons-bar-slots { font-size: 10px; color: var(--dim); font-weight: 600; white-space: nowrap; margin-left: auto; }
 .cons-list { display: flex; gap: 6px; flex-wrap: wrap; }
 .cons-item { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px;
@@ -1230,6 +1233,20 @@ html[data-layout="port"] * { scrollbar-width: none; -ms-overflow-style: none; }
 /* Khi đang chọn tiêu hao: highlight bài trên tay */
 .cons-pick .card { outline: 2px dashed var(--xanh); cursor: crosshair; }
 .cons-pick .card:hover { outline-color: var(--vang); transform: translateY(-4px); }
+
+/* Portrait: overlay cons-bar lên góc phải của charm row, không chiếm row riêng */
+html[data-layout="port"] .cons-bar {
+  position: absolute; right: 0; top: 0; z-index: 4;
+  background: color-mix(in srgb, var(--den) 82%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--vang) 55%, transparent);
+  border-radius: 8px; margin: 0; padding: 3px 5px; gap: 4px;
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+html[data-layout="port"] .cons-bar-label { display: none; }
+html[data-layout="port"] .cons-bar-slots { display: none; }
+html[data-layout="port"] .cons-item { min-width: 30px; padding: 3px 4px; gap: 2px; border-radius: 6px; }
+html[data-layout="port"] .cons-item img.gi { width: 26px; height: 26px; }
+html[data-layout="port"] .cons-item .cname { display: none; }
 
 /* ===== Consumable detail popup ===== */
 .cons-popup { max-width: 340px; }

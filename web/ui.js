@@ -622,7 +622,7 @@
       <div class="panel calc" id="calc"><div class="hname"><b><span id="htierBadge" class="htier t${cs.tier}">${TIER_ICON[cs.tier]||cs.tier}</span> <span id="hname">${cs.name}</span></b><em id="hsub">${cs.sub}</em></div>
         <div class="eq"><div class="cbox" id="chipsBox">${cs.chips}</div><span class="x">×</span><div class="mbox" id="multBox">${fmtM(cs.mult)}</div></div></div>
       <div class="stats"><div class="stat st-h"><small>Lượt đánh</small><b class="num">${r.handsLeft}</b></div><div class="stat st-d"><small>Lượt bỏ</small><b class="num">${r.discardsLeft}</b></div><div class="stat st-m coin"><small>Tiền</small><b class="num" id="money">${run.money}</b></div><div class="stat st-p"><small>Bộ rút</small><b class="num">${r.draw.length}<i>/${run.deck.length}</i></b></div></div>
-      </div><div class="pc">${consBarHTML()}<div class="capt">Bùa ${run.usedSlots()}/${run.slots}</div>${charmsRowHTML()}
+      </div><div class="pc"><div class="pc-charms"><div class="capt">Bùa ${run.usedSlots()}/${run.slots}</div>${charmsRowHTML()}${consBarHTML()}</div>
       <div class="stage${ui.stage ? ' scoring' : ''}" id="stage">${stage}</div>
       <div class="hand${ui.selCons != null ? ' cons-pick' : ''}" id="hand" role="group" aria-label="Tay bài">${hand}</div>
       <div class="controls">
