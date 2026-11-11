@@ -189,7 +189,6 @@ html[data-layout="land"] .title .tl { justify-content: center; }
 html[data-layout="land"] .title .tr { justify-content: flex-end; padding-bottom: 24px; }
 html[data-layout="land"] .logo { font-size: clamp(60px, 8vw, 110px); }
 html[data-layout="land"] .title .cards .card { --w: 84px; }
-@media (prefers-reduced-motion: reduce) { .bgimg, .bgshade { transition: none; } }
 
 .rules { text-align: left; padding: 10px 14px; font-size: 14px; line-height: 1.35; max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 6px; }
 .rules summary { cursor: pointer; color: var(--vang); min-height: 32px; display: flex; align-items: center; }
@@ -391,7 +390,6 @@ html[data-layout="port"] .btn { font-size: 20px; } html[data-layout="port"] .btn
   50%       { filter: drop-shadow(0 0 8px rgba(0, 235, 205, 1)) drop-shadow(0 0 2px rgba(0, 235, 205, 0.7)); }
 }
 html.reduce .hand .card.hint .frame { animation: none; filter: drop-shadow(0 0 6px rgba(0,230,200,.9)); }
-@media (prefers-reduced-motion: reduce) { .hand .card.hint .frame { animation: none; } }
 .card .debtag { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(10, 8, 6, 0.85); color: var(--son-l); font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 3px; white-space: nowrap; letter-spacing: .04em; z-index: 3; pointer-events: none; }
 .card.e-linh .band { background: linear-gradient(90deg, var(--son) 0 33%, var(--ngoc) 33% 66%, var(--cham-l) 66% 100%); }
 .card.e-kim::after, .card.e-ngoc::after, .card.e-son::after, .card.e-thep::after { inset: calc(var(--u) * 4); }
@@ -747,7 +745,6 @@ html[data-layout="port"] #app > .panel:first-child, html[data-layout="port"] #ap
 .charm .cart img.px { animation: charmFloat 3s ease-in-out infinite; } .charm:nth-child(2n) .cart img.px { animation-delay: -1s; } .charm:nth-child(3n) .cart img.px { animation-delay: -2s; }
 .slot { animation: slotBlink 3s ease-in-out infinite; }
 html.reduce .bar i, html.reduce .bar i::after, html.reduce .hand .card .art img.px, html.reduce .pile i, html.reduce .charm .cart img.px, html.reduce .slot { animation: none !important; }
-@media (prefers-reduced-motion: reduce) { .bar i, .bar i::after, .hand .card .art img.px, .pile i, #btnPlay, .charm .cart img.px, .slot { animation: none !important; } }
 /* ===== Chú giải lá bài: các bộ lá này đi được ===== */
 .tip { max-width: min(340px, calc(100vw - 12px)); padding: 10px 12px; font-size: 13px; line-height: 1.4; }
 .tip .tipname { display: flex; align-items: center; gap: 6px; font-size: 16px; }
@@ -906,7 +903,6 @@ html[data-layout="land"] #app .stats { gap: 12px; }
 .hand .card .art img.px { animation: breathe 3.2s ease-in-out infinite; transform-origin: 50% 100%; }
 .hand .card:nth-child(2n) .art img.px { animation-delay: -.8s; } .hand .card:nth-child(3n) .art img.px { animation-delay: -1.6s; } .hand .card:nth-child(5n) .art img.px { animation-delay: -2.4s; }
 html.reduce .hand .card .art img.px { animation: none !important; }
-@media (prefers-reduced-motion: reduce) { .hand .card .art img.px { animation: none !important; } }
 
 /* ===== Màn dọc: dải thông tin trùm / thưởng ải cao đều nhau mọi ải, HUD gọn để lá bài trên tay luôn cùng cỡ ===== */
 html[data-layout="land"] .panel.strip { display: none; }
@@ -1270,7 +1266,6 @@ html[data-layout="port"] #app .meta .cons-dock {
 .cons-bar .cons-item.sel, .cons-bar .cons-item.active { animation: none; }
 @keyframes consReady { 0%, 100% { box-shadow: 0 0 0 0 rgba(226, 173, 60, 0); } 50% { box-shadow: 0 0 10px 2px rgba(226, 173, 60, .6); } }
 html.reduce .cons-bar .cons-item { animation: none !important; }
-@media (prefers-reduced-motion: reduce) { .cons-bar .cons-item { animation: none !important; } }
 /* ===== Consumable detail popup ===== */
 .cons-popup { max-width: 340px; }
 .cons-popup-top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }

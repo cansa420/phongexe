@@ -406,10 +406,6 @@ table.hands th.r { text-align: right; }
 @keyframes coinLoss { 40% { transform: scale(1.2); color: #ff7a5c; } }
 .coin.gain { animation: coinGain .65s; } .coin.loss { animation: coinLoss .5s; }
 
-@media (prefers-reduced-motion: reduce) {
-  .charms .charm, .charms .charm.r-than, .charm.v-ngoc::before, .charm.v-vang::before, .charm.v-son_mai::before, .card.e-kim::after, .card.e-ngoc::after, .card.e-son::after, .blind, .blind.now, .merge, .pcard .flipin, .rowin, #app.enter, .banner, .bandim, .lvup { animation: none !important; }
-  .rowin { opacity: 1; }
-}
 .tablewrap { max-height: 54vh; overflow: auto; border: 2px solid rgba(226,173,60,.25); border-radius: 8px; }
 table.hands thead th { position: sticky; top: 0; background: var(--lacquer2); z-index: 1; }
 table.hands tr.same td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
@@ -440,12 +436,6 @@ table.hands td.r { line-height: 1.05; }
 .panel.boss b.dc { white-space: normal; padding: 0 5px; border-radius: 4px; color: #fff; } .panel.boss b.dc.van { background: var(--son); } .panel.boss b.dc.sach { background: #1f8a78; } .panel.boss b.dc.wan { background: var(--cham); }
 .packc.quan { background: linear-gradient(135deg, #3f5a2a, #1f2f15); color: #d3f0b0; box-shadow: 0 4px 0 rgba(0,0,0,.55), 0 0 0 2px #8bc34a; }
 .pk-card { display: flex; justify-content: center; padding: 6px 0; --cw: 56px; } .pk-card .card { --w: 62px; margin: 0; }
-@media (prefers-reduced-motion: reduce) {
-  .bar i.charging, .bar i.charging::after, .mbox, .cbox, .merge.t4, .target.over .bar, .target.over .bar i, .target.over .num.score, .combo, .fanfare b, .fanfare::before { animation: none !important; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .card.new, .float { animation-duration: .01s; }
-}
 @media (min-width: 700px) { #app { padding-top: 22px; } :root { --cw: 62px; } }
 /* ===== PHỖNG.EXE: lớp giao diện pixel + hai bố cục (dọc 9:16, ngang 16:9) =====
    Đè lên lớp hoạt ảnh gốc của V3. Chỉ dùng sáu màu gốc của GDD (mục 9.2) và bậc pha trộn (9.3).
@@ -638,7 +628,6 @@ html[data-layout="land"] .title .tl { justify-content: center; }
 html[data-layout="land"] .title .tr { justify-content: flex-end; padding-bottom: 24px; }
 html[data-layout="land"] .logo { font-size: clamp(60px, 8vw, 110px); }
 html[data-layout="land"] .title .cards .card { --w: 84px; }
-@media (prefers-reduced-motion: reduce) { .bgimg, .bgshade { transition: none; } }
 
 .rules { text-align: left; padding: 10px 14px; font-size: 14px; line-height: 1.35; max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 6px; }
 .rules summary { cursor: pointer; color: var(--vang); min-height: 32px; display: flex; align-items: center; }
@@ -840,7 +829,6 @@ html[data-layout="port"] .btn { font-size: 20px; } html[data-layout="port"] .btn
   50%       { filter: drop-shadow(0 0 8px rgba(0, 235, 205, 1)) drop-shadow(0 0 2px rgba(0, 235, 205, 0.7)); }
 }
 html.reduce .hand .card.hint .frame { animation: none; filter: drop-shadow(0 0 6px rgba(0,230,200,.9)); }
-@media (prefers-reduced-motion: reduce) { .hand .card.hint .frame { animation: none; } }
 .card .debtag { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(10, 8, 6, 0.85); color: var(--son-l); font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 3px; white-space: nowrap; letter-spacing: .04em; z-index: 3; pointer-events: none; }
 .card.e-linh .band { background: linear-gradient(90deg, var(--son) 0 33%, var(--ngoc) 33% 66%, var(--cham-l) 66% 100%); }
 .card.e-kim::after, .card.e-ngoc::after, .card.e-son::after, .card.e-thep::after { inset: calc(var(--u) * 4); }
@@ -1196,7 +1184,6 @@ html[data-layout="port"] #app > .panel:first-child, html[data-layout="port"] #ap
 .charm .cart img.px { animation: charmFloat 3s ease-in-out infinite; } .charm:nth-child(2n) .cart img.px { animation-delay: -1s; } .charm:nth-child(3n) .cart img.px { animation-delay: -2s; }
 .slot { animation: slotBlink 3s ease-in-out infinite; }
 html.reduce .bar i, html.reduce .bar i::after, html.reduce .hand .card .art img.px, html.reduce .pile i, html.reduce .charm .cart img.px, html.reduce .slot { animation: none !important; }
-@media (prefers-reduced-motion: reduce) { .bar i, .bar i::after, .hand .card .art img.px, .pile i, #btnPlay, .charm .cart img.px, .slot { animation: none !important; } }
 /* ===== Chú giải lá bài: các bộ lá này đi được ===== */
 .tip { max-width: min(340px, calc(100vw - 12px)); padding: 10px 12px; font-size: 13px; line-height: 1.4; }
 .tip .tipname { display: flex; align-items: center; gap: 6px; font-size: 16px; }
@@ -1355,7 +1342,6 @@ html[data-layout="land"] #app .stats { gap: 12px; }
 .hand .card .art img.px { animation: breathe 3.2s ease-in-out infinite; transform-origin: 50% 100%; }
 .hand .card:nth-child(2n) .art img.px { animation-delay: -.8s; } .hand .card:nth-child(3n) .art img.px { animation-delay: -1.6s; } .hand .card:nth-child(5n) .art img.px { animation-delay: -2.4s; }
 html.reduce .hand .card .art img.px { animation: none !important; }
-@media (prefers-reduced-motion: reduce) { .hand .card .art img.px { animation: none !important; } }
 
 /* ===== Màn dọc: dải thông tin trùm / thưởng ải cao đều nhau mọi ải, HUD gọn để lá bài trên tay luôn cùng cỡ ===== */
 html[data-layout="land"] .panel.strip { display: none; }
@@ -1719,7 +1705,6 @@ html[data-layout="port"] #app .meta .cons-dock {
 .cons-bar .cons-item.sel, .cons-bar .cons-item.active { animation: none; }
 @keyframes consReady { 0%, 100% { box-shadow: 0 0 0 0 rgba(226, 173, 60, 0); } 50% { box-shadow: 0 0 10px 2px rgba(226, 173, 60, .6); } }
 html.reduce .cons-bar .cons-item { animation: none !important; }
-@media (prefers-reduced-motion: reduce) { .cons-bar .cons-item { animation: none !important; } }
 /* ===== Consumable detail popup ===== */
 .cons-popup { max-width: 340px; }
 .cons-popup-top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
@@ -3093,11 +3078,11 @@ function __require(name) {
   const fmt = (n) => Math.round(n).toLocaleString('vi-VN');
   const fmtM = (m) => (Math.abs(m - Math.round(m)) < 1e-9 ? String(Math.round(m)) : String(Math.round(m * 10) / 10).replace('.', ','));
   const root = $('#app');
-  const RM_MQ = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
-  let REDUCED = !!(RM_MQ && RM_MQ.matches); // cài đặt hệ thống; theo dõi trực tiếp để không kẹt giá trị lúc tải trang
-  if (RM_MQ && RM_MQ.addEventListener) RM_MQ.addEventListener('change', (e) => { REDUCED = e.matches; if (typeof ui !== 'undefined' && ui.settings) render(); });
+  const REDUCED = false; // game không còn tự tắt hiệu ứng theo cài đặt hệ thống; chỉ nút Giảm chuyển động trong Cài đặt quyết định
   const store = { get(k, d) { try { const v = localStorage.getItem('phongexe.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem('phongexe.' + k, JSON.stringify(v)); } catch (e) { /* không lưu được thì thôi */ } } };
   const settings = Object.assign({ musicOn: true, musicVol: 30, sfxOn: true, sfxVol: 85, reduce: false, layout: 'auto', dev: false, devUnlock: true, devOpen: true }, store.get('settings', {}));
+  // lần mở đầu tiên: lấy mặc định của nút theo hệ thống rồi lưu lại; từ đó về sau chỉ nút này quyết định
+  if (!('reduce' in store.get('settings', {}))) { settings.reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); store.set('settings', settings); }
   if (/[?&]dev\b/.test(location.search)) { settings.dev = true; if (window.innerWidth < 900 && !('devOpen' in store.get('settings', {}))) settings.devOpen = false; }
   const progress = Object.assign({ decks: 1, diff: {}, ach: [], achStats: { phu_doc: 0, wild50: 0, ownedCharms: [] } }, store.get('progress', null) || {});
   progress.achStats = Object.assign({ phu_doc: 0, wild50: 0, ownedCharms: [] }, progress.achStats || {});
@@ -4714,7 +4699,7 @@ function __require(name) {
     return `<div class="overlay still" data-act="close-bg"><div class="panel sheet set" role="dialog" aria-label="Cài đặt"><h2>${gicon('cai_dat')}Cài đặt</h2>
       <div class="srow"><div><b>Nhạc nền</b><span>Nhạc Shop — Bà Hàng Mã</span></div><div class="sctl">${slider('set-mvol', settings.musicVol, false, 'Âm lượng nhạc nền')}</div></div>
       <div class="srow"><div><b>Hiệu ứng âm thanh</b><span>Tiếng chọn bài, ghi điểm, qua ải</span></div><div class="sctl">${slider('set-vol', settings.sfxVol, false, 'Âm lượng hiệu ứng')}</div></div>
-      <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy${REDUCED ? '<br><b class="warn">Thiết bị đang bật giảm chuyển động trong cài đặt hệ thống nên hiệu ứng vẫn tắt dù mục này để Tắt.</b>' : ''}</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
+      <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
       <div class="srow"><div><b>Bố cục</b><span>Tự theo màn hình, hoặc ép dọc hay ngang</span></div><div class="chips">${chip('set-layout', 'auto', settings.layout === 'auto', 'Tự động')}${chip('set-layout', 'port', settings.layout === 'port', 'Dọc')}${chip('set-layout', 'land', settings.layout === 'land', 'Ngang')}</div></div>
       <div class="srow"><div><b>Mở đầu và hướng dẫn</b><span>Xem lại câu chuyện, hoặc hướng dẫn trong ván</span></div><div class="chips"><button class="mini" data-act="replay-story" type="button">${gicon('cuon_giay')}Mở đầu</button><button class="mini" data-act="replay-tut" type="button">${gicon('den_long')}Hướng dẫn</button></div></div>
       ${clear}

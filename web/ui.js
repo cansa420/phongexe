@@ -13,11 +13,11 @@
   const fmt = (n) => Math.round(n).toLocaleString('vi-VN');
   const fmtM = (m) => (Math.abs(m - Math.round(m)) < 1e-9 ? String(Math.round(m)) : String(Math.round(m * 10) / 10).replace('.', ','));
   const root = $('#app');
-  const RM_MQ = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
-  let REDUCED = !!(RM_MQ && RM_MQ.matches); // cài đặt hệ thống; theo dõi trực tiếp để không kẹt giá trị lúc tải trang
-  if (RM_MQ && RM_MQ.addEventListener) RM_MQ.addEventListener('change', (e) => { REDUCED = e.matches; if (typeof ui !== 'undefined' && ui.settings) render(); });
+  const REDUCED = false; // game không còn tự tắt hiệu ứng theo cài đặt hệ thống; chỉ nút Giảm chuyển động trong Cài đặt quyết định
   const store = { get(k, d) { try { const v = localStorage.getItem('phongexe.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem('phongexe.' + k, JSON.stringify(v)); } catch (e) { /* không lưu được thì thôi */ } } };
   const settings = Object.assign({ musicOn: true, musicVol: 30, sfxOn: true, sfxVol: 85, reduce: false, layout: 'auto', dev: false, devUnlock: true, devOpen: true }, store.get('settings', {}));
+  // lần mở đầu tiên: lấy mặc định của nút theo hệ thống rồi lưu lại; từ đó về sau chỉ nút này quyết định
+  if (!('reduce' in store.get('settings', {}))) { settings.reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); store.set('settings', settings); }
   if (/[?&]dev\b/.test(location.search)) { settings.dev = true; if (window.innerWidth < 900 && !('devOpen' in store.get('settings', {}))) settings.devOpen = false; }
   const progress = Object.assign({ decks: 1, diff: {}, ach: [], achStats: { phu_doc: 0, wild50: 0, ownedCharms: [] } }, store.get('progress', null) || {});
   progress.achStats = Object.assign({ phu_doc: 0, wild50: 0, ownedCharms: [] }, progress.achStats || {});
@@ -1634,7 +1634,7 @@
     return `<div class="overlay still" data-act="close-bg"><div class="panel sheet set" role="dialog" aria-label="Cài đặt"><h2>${gicon('cai_dat')}Cài đặt</h2>
       <div class="srow"><div><b>Nhạc nền</b><span>Nhạc Shop — Bà Hàng Mã</span></div><div class="sctl">${slider('set-mvol', settings.musicVol, false, 'Âm lượng nhạc nền')}</div></div>
       <div class="srow"><div><b>Hiệu ứng âm thanh</b><span>Tiếng chọn bài, ghi điểm, qua ải</span></div><div class="sctl">${slider('set-vol', settings.sfxVol, false, 'Âm lượng hiệu ứng')}</div></div>
-      <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy${REDUCED ? '<br><b class="warn">Thiết bị đang bật giảm chuyển động trong cài đặt hệ thống nên hiệu ứng vẫn tắt dù mục này để Tắt.</b>' : ''}</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
+      <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
       <div class="srow"><div><b>Bố cục</b><span>Tự theo màn hình, hoặc ép dọc hay ngang</span></div><div class="chips">${chip('set-layout', 'auto', settings.layout === 'auto', 'Tự động')}${chip('set-layout', 'port', settings.layout === 'port', 'Dọc')}${chip('set-layout', 'land', settings.layout === 'land', 'Ngang')}</div></div>
       <div class="srow"><div><b>Mở đầu và hướng dẫn</b><span>Xem lại câu chuyện, hoặc hướng dẫn trong ván</span></div><div class="chips"><button class="mini" data-act="replay-story" type="button">${gicon('cuon_giay')}Mở đầu</button><button class="mini" data-act="replay-tut" type="button">${gicon('den_long')}Hướng dẫn</button></div></div>
       ${clear}

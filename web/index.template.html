@@ -406,10 +406,6 @@ table.hands th.r { text-align: right; }
 @keyframes coinLoss { 40% { transform: scale(1.2); color: #ff7a5c; } }
 .coin.gain { animation: coinGain .65s; } .coin.loss { animation: coinLoss .5s; }
 
-@media (prefers-reduced-motion: reduce) {
-  .charms .charm, .charms .charm.r-than, .charm.v-ngoc::before, .charm.v-vang::before, .charm.v-son_mai::before, .card.e-kim::after, .card.e-ngoc::after, .card.e-son::after, .blind, .blind.now, .merge, .pcard .flipin, .rowin, #app.enter, .banner, .bandim, .lvup { animation: none !important; }
-  .rowin { opacity: 1; }
-}
 .tablewrap { max-height: 54vh; overflow: auto; border: 2px solid rgba(226,173,60,.25); border-radius: 8px; }
 table.hands thead th { position: sticky; top: 0; background: var(--lacquer2); z-index: 1; }
 table.hands tr.same td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
@@ -440,12 +436,6 @@ table.hands td.r { line-height: 1.05; }
 .panel.boss b.dc { white-space: normal; padding: 0 5px; border-radius: 4px; color: #fff; } .panel.boss b.dc.van { background: var(--son); } .panel.boss b.dc.sach { background: #1f8a78; } .panel.boss b.dc.wan { background: var(--cham); }
 .packc.quan { background: linear-gradient(135deg, #3f5a2a, #1f2f15); color: #d3f0b0; box-shadow: 0 4px 0 rgba(0,0,0,.55), 0 0 0 2px #8bc34a; }
 .pk-card { display: flex; justify-content: center; padding: 6px 0; --cw: 56px; } .pk-card .card { --w: 62px; margin: 0; }
-@media (prefers-reduced-motion: reduce) {
-  .bar i.charging, .bar i.charging::after, .mbox, .cbox, .merge.t4, .target.over .bar, .target.over .bar i, .target.over .num.score, .combo, .fanfare b, .fanfare::before { animation: none !important; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .card.new, .float { animation-duration: .01s; }
-}
 @media (min-width: 700px) { #app { padding-top: 22px; } :root { --cw: 62px; } }
 /*__SKIN__*/
 </style>
