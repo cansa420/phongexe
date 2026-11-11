@@ -1586,7 +1586,7 @@ html[data-layout="land"] .title { grid-template-columns: minmax(0, .85fr) minmax
 html[data-layout="land"] .title .lg    { grid-column: 1 / -1; grid-row: 1; display: flex; justify-content: center; align-items: center; padding: 30px 0 6px; }
 html[data-layout="land"] .title .tl   { grid-column: 1; grid-row: 2; justify-content: flex-end; align-self: stretch; min-height: 0; overflow: visible; transform: translateY(-140px); }
 html[data-layout="land"] .title .tbtns { grid-column: 1; grid-row: 3; align-self: end; padding-bottom: 16px; gap: 8px; transform: translateY(-140px); }
-html[data-layout="land"] .title .tr   { grid-column: 2; grid-row: 2; align-self: stretch; justify-content: flex-end; padding-bottom: 0; min-height: 0; overflow-y: auto; }
+html[data-layout="land"] .title .tr   { grid-column: 2; grid-row: 2; align-self: stretch; justify-content: flex-start; padding-bottom: 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 html[data-layout="land"] .title .tfoot { grid-column: 2; grid-row: 3; align-self: center; justify-self: start; padding: 10px 0 16px; margin: 0; }
 /* Ẩn Cách chơi trong landscape để panel có không gian xuống thấp hơn */
 html[data-layout="land"] .title .panel.howto { display: none; }
@@ -1667,6 +1667,20 @@ html[data-layout="port"] * { scrollbar-width: none; -ms-overflow-style: none; }
 
 /* Shop: cons offer section */
 .shop-cons-offers { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 0; }
+
+/* ===== Mobile landscape nhỏ: giảm logo + nút để panel bộ bài có thêm không gian ===== */
+@media (max-height: 450px) and (orientation: landscape) {
+  html[data-layout="land"] .title .lg { padding: 8px 0 4px; }
+  html[data-layout="land"] .title .lg h1.logo img { height: min(60px, 16svh); }
+  html[data-layout="land"] .title .tbtns .btn.play.big { min-height: 48px; }
+  html[data-layout="land"] .title .tbtns .btn.play.big img.gi { width: 32px; height: 32px; }
+  html[data-layout="land"] .title .tbtns .btn.play.big .bl { font-size: 14px; }
+  html[data-layout="land"] .title .tbtns .btn.discard.big { min-height: 38px; }
+  html[data-layout="land"] .title .tbtns .btn.discard.big img.gi { width: 26px; height: 26px; }
+  html[data-layout="land"] .title .tbtns { gap: 6px; padding-bottom: 8px; transform: translateY(-80px); }
+  html[data-layout="land"] .title .tl   { transform: translateY(-80px); }
+  html[data-layout="land"] .title .tfoot { padding: 4px 0 8px; }
+}
 
 </style>
 </head>
