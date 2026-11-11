@@ -1,0 +1,101 @@
+[
+  {
+    "id": "nhan_ban",
+    "vi": "Ấn Nhân Bản",
+    "max": 1,
+    "price": 4,
+    "weight": 20,
+    "text": "Chọn 1 lá: thêm một bản sao vào bộ bài"
+  },
+  {
+    "id": "tru_ta",
+    "vi": "Ấn Trừ Tà",
+    "max": 2,
+    "price": 3,
+    "weight": 20,
+    "text": "Xoá tối đa 2 lá khỏi bộ bài (bộ bài không dưới 60 lá)"
+  },
+  {
+    "id": "dao_sac",
+    "vi": "Ấn Đảo Họ",
+    "max": 2,
+    "price": 3,
+    "weight": 18,
+    "text": "Đổi họ tối đa 2 lá sang họ kế (Văn → Sách → Vạn → Văn), vĩnh viễn"
+  },
+  {
+    "id": "ngoc",
+    "vi": "Ấn Ngọc",
+    "max": 2,
+    "price": 4,
+    "weight": 16,
+    "text": "Tối đa 2 lá thành lá Ngọc: +30 chip khi ghi điểm"
+  },
+  {
+    "id": "kim",
+    "vi": "Ấn Kim",
+    "max": 2,
+    "price": 5,
+    "weight": 14,
+    "text": "Tối đa 2 lá thành lá Kim: +4 hệ số khi ghi điểm"
+  },
+  {
+    "id": "son",
+    "vi": "Ấn Son",
+    "max": 1,
+    "price": 6,
+    "weight": 8,
+    "text": "1 lá thành lá Son: ×1,5 hệ số khi ghi điểm"
+  },
+  {
+    "id": "thep",
+    "vi": "Ấn Thép",
+    "max": 2,
+    "price": 5,
+    "weight": 14,
+    "text": "Tối đa 2 lá thành lá Thép: giữ trên tay khi đánh thì ×1,5 hệ số"
+  },
+  {
+    "id": "linh",
+    "vi": "Ấn Linh",
+    "max": 1,
+    "price": 6,
+    "weight": 12,
+    "text": "1 lá thành lá Linh: tính là cả ba họ cho mọi bộ cùng họ"
+  },
+  {
+    "id": "luu_ly",
+    "vi": "Ấn Lưu Ly",
+    "max": 2,
+    "price": 5,
+    "weight": 12,
+    "text": "Tối đa 2 lá thành lá Lưu Ly: ×2 hệ số khi ghi điểm, mỗi lần ghi điểm 1/4 cơ hội vỡ và mất khỏi bộ bài"
+  },
+  {
+    "id": "trien_do",
+    "vi": "Triện Đỏ",
+    "seal": "do",
+    "max": 1,
+    "price": 6,
+    "weight": 10,
+    "text": "Đóng lên 1 lá: lá đó ghi điểm được tính thêm 1 lần"
+  },
+  {
+    "id": "trien_vang",
+    "vi": "Triện Vàng",
+    "seal": "vang",
+    "max": 1,
+    "price": 5,
+    "weight": 10,
+    "text": "Đóng lên 1 lá: +3 đồng mỗi khi lá đó ghi điểm"
+  },
+  {
+    "id": "trien_lam",
+    "vi": "Triện Lam",
+    "seal": "lam",
+    "max": 1,
+    "price": 5,
+    "weight": 10,
+    "text": "Đóng lên 1 lá: còn trên tay khi hạ ải thì nâng 1 cấp một bộ ngẫu nhiên"
+  }
+]

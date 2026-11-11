@@ -1661,19 +1661,33 @@ html[data-layout="port"] * { scrollbar-width: none; -ms-overflow-style: none; }
 
 
 /* ===== Consumable bar (thanh tiêu hao) ===== */
-.cons-bar { display: flex; align-items: center; gap: 6px; padding: 4px 8px; }
-.cons-bar-label { font-size: 10px; color: var(--dim); font-weight: 600; white-space: nowrap; }
+.cons-bar { display: flex; align-items: center; gap: 8px; padding: 5px 10px 5px 8px;
+  background: color-mix(in srgb, var(--lacquer) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--vang) 25%, transparent);
+  border-radius: 10px; margin: 2px 0 4px; }
+.cons-bar-label { font-size: 10px; color: var(--vang); font-weight: 700; letter-spacing: .04em; white-space: nowrap; text-transform: uppercase; }
+.cons-bar-slots { font-size: 10px; color: var(--dim); font-weight: 600; white-space: nowrap; margin-left: auto; }
 .cons-list { display: flex; gap: 6px; flex-wrap: wrap; }
-.cons-item { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px;
+.cons-item { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px;
   background: var(--panel); border: 2px solid var(--border); border-radius: 8px;
-  padding: 5px 7px; cursor: pointer; min-width: 48px; transition: border-color .15s, background .15s; }
-.cons-item:hover { border-color: var(--vang); background: var(--hover); }
+  padding: 5px 8px 4px; cursor: pointer; min-width: 52px; transition: border-color .15s, background .15s, transform .1s; }
+.cons-item:hover { border-color: var(--vang); background: var(--hover); transform: translateY(-2px); }
 .cons-item.sel { border-color: var(--xanh); background: color-mix(in srgb, var(--xanh) 18%, var(--panel)); box-shadow: 0 0 0 2px var(--xanh); }
-.cons-item img.gi { width: 28px; height: 28px; }
-.cons-item .consc { font-size: 9px; font-weight: 700; color: var(--text); line-height: 1.2; text-align: center; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cons-item.active { border-color: var(--vang); background: color-mix(in srgb, var(--vang) 15%, var(--panel)); box-shadow: 0 0 0 2px var(--vang); }
+.cons-item img.gi { width: 34px; height: 34px; }
+.cons-item .cname { font-size: 9px; font-weight: 700; color: var(--text); line-height: 1.2; text-align: center; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* Khi đang chọn tiêu hao: highlight bài trên tay */
 .cons-pick .card { outline: 2px dashed var(--xanh); cursor: crosshair; }
 .cons-pick .card:hover { outline-color: var(--vang); transform: translateY(-4px); }
+
+/* ===== Consumable detail popup ===== */
+.cons-popup { max-width: 340px; }
+.cons-popup-top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+.cons-popup-icon { width: 56px; height: 56px; flex-shrink: 0; }
+.cons-popup-info { flex: 1; min-width: 0; }
+.cons-popup-info .tag { display: inline-block; margin-bottom: 6px; }
+.cons-popup-info h2 { margin: 0 0 6px; font-size: 18px; }
+.cons-popup-info p { margin: 0; font-size: 13px; color: var(--dim); line-height: 1.4; }
 
 /* Shop: cons offer section */
 .shop-cons-offers { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 0; }
@@ -3420,10 +3434,11 @@ function __require(name) {
     const items = run.consumables.map((c) => {
       const def = CDATA.find((x) => x.id === c.id);
       const sel = ui.selCons === c.uid;
-      return `<button class="cons-item${sel ? ' sel' : ''}" data-act="use-cons" data-uid="${c.uid}" type="button" title="${def.vi}: ${def.text}">
-        <img class="px gi" src="assets/icons/${def.icon}.png" alt="" draggable="false"><span class="cv">${def.vi}</span></button>`;
+      const active = ui.consDetail === c.uid;
+      return `<button class="cons-item${sel ? ' sel' : ''}${active ? ' active' : ''}" data-act="use-cons" data-uid="${c.uid}" type="button">
+        <img class="px gi" src="assets/icons/${def.icon}.png" alt="" draggable="false"><span class="cname">${def.vi}</span></button>`;
     }).join('');
-    return `<div class="cons-bar"><small>Tiêu hao ${run.consumables.length}/${run.consumableSlots}</small><div class="cons-list">${items}</div></div>`;
+    return `<div class="cons-bar"><span class="cons-bar-label">Tiêu Hao</span><div class="cons-list">${items}</div><span class="cons-bar-slots">${run.consumables.length}/${run.consumableSlots}</span></div>`;
   }
   const sortDeck = (cards) => cards.slice().sort((a, b) => R[b.rank].order - R[a.rank].order || HO.indexOf(a.color) - HO.indexOf(b.color));
   function charmsRowHTML() {
@@ -3769,6 +3784,28 @@ function __require(name) {
     }
     if (ui.settings) out += settingsOverlay();
     if (ui.items) out += itemsOverlay();
+    if (ui.consDetail != null) {
+      const cons = run.consumables.find((c) => c.uid === ui.consDetail);
+      if (!cons) { ui.consDetail = null; }
+      else {
+        const def = CDATA.find((x) => x.id === cons.id);
+        const catVI = { phu: 'Phù', lt: 'Linh Thạch', phep: 'Phép' };
+        const catLabel = catVI[def.category] || 'Tiêu Hao';
+        out += `<div class="overlay" data-act="close-bg"><div class="panel sheet cons-popup" role="dialog" aria-label="${def.vi}">
+          <div class="cons-popup-top">
+            <img class="px gi cons-popup-icon" src="assets/icons/${def.icon}.png" alt="" draggable="false">
+            <div class="cons-popup-info">
+              <span class="tag" style="background:var(--lacquer2);color:var(--muted)">${catLabel}</span>
+              <h2>${def.vi}</h2>
+              <p>${def.text}</p>
+            </div>
+          </div>
+          <div class="row btns">
+            <button class="btn discard" data-act="close" type="button">Hủy</button>
+            <button class="btn play" data-act="confirm-use-cons" data-uid="${cons.uid}" type="button">Dùng ngay</button>
+          </div></div></div>`;
+      }
+    }
     if (ui.detail != null) {
       const i = run.charms.findIndex((c) => c.uid === ui.detail);
       if (i < 0) ui.detail = null;
@@ -4034,7 +4071,7 @@ function __require(name) {
     store.set('runsStarted', store.get('runsStarted', 0) + 1);
     run = new Run({ seed: Math.floor(Math.random() * 1e9), difficulty: ui.difficulty, deck: ui.deck });
     ui.achRun = { discardUsedThisAi: false, tripleSpecial: new Set(), flush5Count: 0, bossStreak: 0, glassStreak: 0, noBuy: true, sweepTypes: new Set() };
-    ui.view = 'play'; ui.intro = true; ui.sel.clear(); ui.playCount = {}; ui.known = new Set(); ui.stage = null; ui.detail = null; ui.info = false; ui.busy = false; ui.lastMoney = null; ui.prevView = null; ui.packPick = null; ui.justBought = null; ui.selCons = null;
+    ui.view = 'play'; ui.intro = true; ui.sel.clear(); ui.playCount = {}; ui.known = new Set(); ui.stage = null; ui.detail = null; ui.consDetail = null; ui.info = false; ui.busy = false; ui.lastMoney = null; ui.prevView = null; ui.packPick = null; ui.justBought = null; ui.selCons = null;
     render();
   }
   async function doPlay() {
@@ -4221,7 +4258,7 @@ function __require(name) {
       case 'card': {
         const id = t.dataset.id;
         if (ui.selCons != null) {
-          const uid = ui.selCons; ui.selCons = null;
+          const uid = ui.selCons; ui.selCons = null; ui.consDetail = null;
           try {
             const cr = run.useConsumable(uid, [id]);
             playSfx('card_flip', 0.6, 1.1);
@@ -4240,11 +4277,19 @@ function __require(name) {
       case 'use-cons': {
         if (run.phase !== 'playing') break;
         const uid = +t.dataset.uid;
+        if (!run.consumables.find((c) => c.uid === uid)) break;
+        if (ui.selCons === uid) { ui.selCons = null; ui.consDetail = null; render(); break; }
+        ui.consDetail = uid; render();
+        break;
+      }
+      case 'confirm-use-cons': {
+        if (run.phase !== 'playing') break;
+        const uid = +t.dataset.uid;
         const cons = run.consumables.find((c) => c.uid === uid);
-        if (!cons) break;
+        if (!cons) { ui.consDetail = null; render(); break; }
         const def = CDATA.find((x) => x.id === cons.id);
+        ui.consDetail = null;
         if (def.target === 'card_hand') {
-          if (ui.selCons === uid) { ui.selCons = null; render(); break; }
           ui.selCons = uid; render();
           toast(`${def.vi}: chọn 1 quân trên tay`);
         } else {
@@ -4266,7 +4311,7 @@ function __require(name) {
       case 'discard': doDiscard(); break;
       case 'info': playSfx('card_select', 0.18, 1.2); ui.info = true; render(); break;
       case 'items': playSfx('card_select', 0.18, 1.2); ui.items = true; render(); break;
-      case 'close': case 'close-bg': ui.info = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.deckView = false; ui.selCons = null; playSfx('card_select', 0.18, 1.3); render(); break;
+      case 'close': case 'close-bg': ui.info = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.consDetail = null; ui.deckView = false; ui.selCons = null; playSfx('card_select', 0.18, 1.3); render(); break;
       case 'charm': playSfx('card_select', 0.15, 1.25); ui.detail = +t.dataset.uid; render(); break;
       case 'sell': { run.sell(ui.detail); ui.detail = null; playSfx('buy', 0.6, 0.78); render(); break; }
       case 'move-l': case 'move-r': {
@@ -4690,7 +4735,7 @@ function __require(name) {
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     $$('.fanfare, .fandim, .banner, .bandim, .lvup, .toast').forEach((x) => x.remove()); hideTip();
-    if (ui.info || ui.deckView || ui.items || ui.settings || ui.detail != null) { ui.info = false; ui.deckView = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; render(); }
+    if (ui.info || ui.deckView || ui.items || ui.settings || ui.detail != null || ui.consDetail != null) { ui.info = false; ui.deckView = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.consDetail = null; render(); }
   });
 
   // ------------------------------------------------------------------ iOS install banner

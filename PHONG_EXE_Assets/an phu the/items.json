@@ -1,0 +1,288 @@
+{
+  "project": "PHỖNG.EXE",
+  "asset_pack": "12 Ấn, 7 Phù, 7 Thẻ bỏ qua",
+  "version": "1.1-fixed",
+  "source": "PHỖNG.EXE — Master GDD.docx, phụ lục Ấn/Phù/Thẻ",
+  "canvas": {
+    "width": 32,
+    "height": 32,
+    "format": "PNG",
+    "background": "transparent",
+    "max_art_size_px": 24
+  },
+  "palette": [
+    "#963F38",
+    "#293C4A",
+    "#45A79E",
+    "#E7DCC2",
+    "#191B1F",
+    "#B99A60"
+  ],
+  "counts": {
+    "Ấn": 12,
+    "Phù": 7,
+    "Thẻ bỏ qua": 7
+  },
+  "items": [
+    {
+      "id": 1,
+      "name": "Ấn Nhân Bản",
+      "slug": "an_nhan_ban",
+      "group": "Ấn",
+      "effect": "Chọn 1 lá: thêm một bản sao vào bộ bài.",
+      "asset": "icons/01_an_nhan_ban.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 2,
+      "name": "Ấn Trừ Tà",
+      "slug": "an_tru_ta",
+      "group": "Ấn",
+      "effect": "Xóa tối đa 2 lá khỏi bộ bài; bộ bài không dưới 60 lá.",
+      "asset": "icons/02_an_tru_ta.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 3,
+      "name": "Ấn Đảo Họ",
+      "slug": "an_dao_ho",
+      "group": "Ấn",
+      "effect": "Đổi họ tối đa 2 lá sang họ kế: Văn → Sách → Vạn → Văn, vĩnh viễn.",
+      "asset": "icons/03_an_dao_ho.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 4,
+      "name": "Ấn Ngọc",
+      "slug": "an_ngoc",
+      "group": "Ấn",
+      "effect": "Tối đa 2 lá thành lá Ngọc: +30 chip khi ghi điểm.",
+      "asset": "icons/04_an_ngoc.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 5,
+      "name": "Ấn Kim",
+      "slug": "an_kim",
+      "group": "Ấn",
+      "effect": "Tối đa 2 lá thành lá Kim: +4 hệ số khi ghi điểm.",
+      "asset": "icons/05_an_kim.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 6,
+      "name": "Ấn Son",
+      "slug": "an_son",
+      "group": "Ấn",
+      "effect": "1 lá thành lá Son: ×1,5 hệ số khi ghi điểm.",
+      "asset": "icons/06_an_son.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 7,
+      "name": "Ấn Thép",
+      "slug": "an_thep",
+      "group": "Ấn",
+      "effect": "Tối đa 2 lá thành lá Thép: giữ trên tay khi đánh thì ×1,5 hệ số.",
+      "asset": "icons/07_an_thep.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 8,
+      "name": "Ấn Linh",
+      "slug": "an_linh",
+      "group": "Ấn",
+      "effect": "1 lá thành lá Linh: tính là cả ba họ cho mọi bộ cùng họ.",
+      "asset": "icons/08_an_linh.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 9,
+      "name": "Ấn Lưu Ly",
+      "slug": "an_luu_ly",
+      "group": "Ấn",
+      "effect": "Tối đa 2 lá thành lá Lưu Ly: ×2 hệ số; mỗi lần ghi điểm có 1/4 cơ hội vỡ và mất khỏi bộ bài.",
+      "asset": "icons/09_an_luu_ly.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 10,
+      "name": "Triện Đỏ",
+      "slug": "trien_do",
+      "group": "Ấn",
+      "effect": "Đóng lên 1 lá: lá đó ghi điểm được tính thêm 1 lần.",
+      "asset": "icons/10_trien_do.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 11,
+      "name": "Triện Vàng",
+      "slug": "trien_vang",
+      "group": "Ấn",
+      "effect": "Đóng lên 1 lá: +3 đồng mỗi khi lá đó ghi điểm.",
+      "asset": "icons/11_trien_vang.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 12,
+      "name": "Triện Lam",
+      "slug": "trien_lam",
+      "group": "Ấn",
+      "effect": "Đóng lên 1 lá: còn trên tay khi hạ ải thì nâng 1 cấp một bộ ngẫu nhiên.",
+      "asset": "icons/12_trien_lam.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 13,
+      "name": "Phù Thêm Lượt",
+      "slug": "phu_them_luot",
+      "group": "Phù",
+      "effect": "+1 lượt đánh mỗi ải, vĩnh viễn.",
+      "asset": "icons/13_phu_them_luot.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 14,
+      "name": "Phù Thêm Bỏ",
+      "slug": "phu_them_bo",
+      "group": "Phù",
+      "effect": "+1 lượt bỏ bài mỗi ải, vĩnh viễn.",
+      "asset": "icons/14_phu_them_bo.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 15,
+      "name": "Phù Chợ Rộng",
+      "slug": "phu_cho_rong",
+      "group": "Phù",
+      "effect": "Chợ bán thêm 1 bùa mỗi lần.",
+      "asset": "icons/15_phu_cho_rong.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 16,
+      "name": "Phù Lãi Dày",
+      "slug": "phu_lai_day",
+      "group": "Phù",
+      "effect": "Trần tiền lãi tăng thêm 5 đồng.",
+      "asset": "icons/16_phu_lai_day.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 17,
+      "name": "Phù Giảm Giá",
+      "slug": "phu_giam_gia",
+      "group": "Phù",
+      "effect": "Mọi món ở chợ rẻ hơn 25% (làm tròn lên, tối thiểu 1 đồng).",
+      "asset": "icons/17_phu_giam_gia.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 18,
+      "name": "Phù Chợ Quẻ",
+      "slug": "phu_cho_que",
+      "group": "Phù",
+      "effect": "Chợ bán thêm 1 Quẻ mỗi lần.",
+      "asset": "icons/18_phu_cho_que.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 19,
+      "name": "Phù Thêm Ô Bùa",
+      "slug": "phu_them_o_bua",
+      "group": "Phù",
+      "effect": "+1 ô bùa, vĩnh viễn.",
+      "asset": "icons/19_phu_them_o_bua.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 20,
+      "name": "Thẻ Quẻ",
+      "slug": "the_que",
+      "group": "Thẻ bỏ qua",
+      "effect": "Chọn 1 trong 2 Quẻ miễn phí.",
+      "asset": "icons/20_the_que.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 21,
+      "name": "Thẻ Tiền",
+      "slug": "the_tien",
+      "group": "Thẻ bỏ qua",
+      "effect": "Nhận ngay 6 đồng.",
+      "asset": "icons/21_the_tien.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 22,
+      "name": "Thẻ Bùa",
+      "slug": "the_bua",
+      "group": "Thẻ bỏ qua",
+      "effect": "1 bùa Hiếm miễn phí (đầy ô thì nhận 6 đồng).",
+      "asset": "icons/22_the_bua.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 23,
+      "name": "Thẻ Gói",
+      "slug": "the_goi",
+      "group": "Thẻ bỏ qua",
+      "effect": "Mở ngay 1 Gói Bùa miễn phí.",
+      "asset": "icons/23_the_goi.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 24,
+      "name": "Thẻ Đầu Tư",
+      "slug": "the_dau_tu",
+      "group": "Thẻ bỏ qua",
+      "effect": "+12 đồng sau khi hạ trùm kế tiếp.",
+      "asset": "icons/24_the_dau_tu.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 25,
+      "name": "Thẻ Tốc Hành",
+      "slug": "the_toc_hanh",
+      "group": "Thẻ bỏ qua",
+      "effect": "+2 đồng cho mỗi ải đã bỏ qua trong ván, tính cả lần này.",
+      "asset": "icons/25_the_toc_hanh.png",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": 26,
+      "name": "Thẻ Thăng Cấp",
+      "slug": "the_thang_cap",
+      "group": "Thẻ bỏ qua",
+      "effect": "Nâng 2 cấp một bộ ngẫu nhiên.",
+      "asset": "icons/26_the_thang_cap.png",
+      "width": 32,
+      "height": 32
+    }
+  ]
+}

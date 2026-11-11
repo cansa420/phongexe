@@ -1,0 +1,13 @@
+[
+  {"id": "n1", "vi": "Nhất", "order": 1, "chips": 1, "perColor": 4},
+  {"id": "n2", "vi": "Nhị", "order": 2, "chips": 2, "perColor": 4},
+  {"id": "n3", "vi": "Tam", "order": 3, "chips": 3, "perColor": 4},
+  {"id": "n4", "vi": "Tứ", "order": 4, "chips": 4, "perColor": 4},
+  {"id": "n5", "vi": "Ngũ", "order": 5, "chips": 5, "perColor": 4},
+  {"id": "n6", "vi": "Lục", "order": 6, "chips": 6, "perColor": 4},
+  {"id": "n7", "vi": "Thất", "order": 7, "chips": 7, "perColor": 4},
+  {"id": "n8", "vi": "Bát", "order": 8, "chips": 8, "perColor": 4},
+  {"id": "n9", "vi": "Cửu", "order": 9, "chips": 9, "perColor": 4},
+  {"id": "n10", "vi": "Yêu", "order": 10, "chips": 12, "perColor": 4},
+  {"id": "junk", "vi": "Tạp", "order": 0, "chips": 0, "perColor": 0}
+]

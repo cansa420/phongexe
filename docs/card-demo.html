@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Demo lá bài mới</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--den:#191b1f;--cham:#293C4A;--ngoc:#45a79e;--kem:#e7dcc2;--son:#963F38;--vang:#B99A60;--cham-l:#45545c;--son-l:#aa665b;--son-d:#5e2f2d;--ngoc-l:#76b7a9;--ngoc-d:#316865;--vang-d:#716143;--vang-l:#d3c09d;--kem-d:#b3ac99}
+body{margin:0;padding:24px;background:linear-gradient(#232f39,#191b1f);color:var(--kem);font:15px/1.5 "Be Vietnam Pro",system-ui,sans-serif}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:28px 0 10px;color:var(--vang)}p{margin:0 0 14px;color:var(--kem-d);max-width:70ch}
+.row{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+img{image-rendering:pixelated}
+/* ---- lá bài kiểu mới ---- */
+.k{--w:150px;--band:var(--son);--bandL:var(--son-l);--bandD:var(--son-d);--tx:var(--kem);--ink:var(--son);
+  position:relative;width:var(--w);height:calc(var(--w)*2.4);display:flex;flex-direction:column;background:var(--kem);
+  box-shadow:0 0 0 3px var(--den),0 0 0 5px var(--vang-d);border-radius:5px;overflow:hidden}
+.k.sach{--band:var(--ngoc);--bandL:var(--ngoc-l);--bandD:var(--ngoc-d);--tx:var(--den);--ink:var(--ngoc-d)}
+.k.wan{--band:var(--cham-l);--bandL:#6b7c84;--bandD:var(--cham);--tx:var(--kem);--ink:var(--cham)}
+.k .hd,.k .ft{position:relative;display:flex;align-items:center;background:linear-gradient(var(--bandL) 0 2px,var(--band) 2px calc(100% - 3px),var(--bandD) calc(100% - 3px));color:var(--tx);font-weight:800}
+.k .hd{height:calc(var(--w)*.3);padding:0 calc(var(--w)*.09);font-size:calc(var(--w)*.125);padding-right:calc(var(--w)*.2);border-bottom:3px solid var(--den);letter-spacing:.01em}
+.k .hd{white-space:nowrap}.k .hd.long{font-size:calc(var(--w)*.1);padding-right:calc(var(--w)*.2)}.k .hd::after{content:"";position:absolute;right:calc(var(--w)*.07);top:50%;width:calc(var(--w)*.07);height:calc(var(--w)*.07);background:var(--vang);transform:translateY(-50%) rotate(45deg);box-shadow:0 0 0 2px var(--den)}
+.k .ft{height:calc(var(--w)*.24);padding:0 calc(var(--w)*.12);justify-content:space-between;border-top:3px solid var(--den);font-size:calc(var(--w)*.1)}.k .ft b{font-size:calc(var(--w)*.14)}
+.k .ft b{font-weight:800}.k .ft span{letter-spacing:.06em;text-transform:uppercase}
+.k .art{position:relative;flex:1;display:grid;place-items:center;
+  background:radial-gradient(ellipse at 50% 60%,#f3ead3 0,var(--kem) 55%,#cfc4a8 100%)}
+.k .art::before{content:"";position:absolute;inset:calc(var(--w)*.05);border:2px solid color-mix(in srgb,var(--ink) 55%,transparent);border-radius:2px;pointer-events:none}
+.k .art::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(25,27,31,.03) 0 2px,transparent 2px 4px);pointer-events:none}
+.k .art img{width:92%;height:auto;max-height:96%;object-fit:contain;position:relative;z-index:1}
+.k.sm{--w:64px}.k.md{--w:96px}.k.lg{--w:200px}
+/* ---- lá bài cũ để so sánh ---- */
+.old{width:150px;height:360px;background:var(--kem);box-shadow:0 0 0 3px var(--den);display:flex;flex-direction:column}
+.old .a{background:var(--son);font-weight:800;padding:8px;font-size:30px}.old .b{flex:1;display:grid;place-items:center}.old .b img{width:100%}.old .c{background:var(--son);padding:6px;font-weight:800}
+small{display:block;color:var(--kem-d);margin-top:8px;text-align:center}
+</style>
+<h1>Demo: lá bài vẽ lại</h1>
+<p>Nhân vật vẽ ở 64 × 118 px (bản cũ 48 × 56 px), mỗi bộ phận tô 4 tông sáng/tối, ánh sáng từ trên-trái, không viền đen, viền chỉ là tông tối của chính màu đó. Khung lá có viền đôi, nền giấy, khung tranh bên trong, đầu và chân lá có vát sáng/tối.</p>
+
+<h2>Bản mới (cỡ lớn)</h2>
+<div class="row">
+ <div><div class="k lg"><div class="hd">Cửu</div><div class="art"><img src="../assets/demo/van_9.png" alt=""></div><div class="ft"><b>9</b><span>Văn</span></div></div><small>Cửu Văn · người vác thang</small></div>
+ <div><div class="k lg wan"><div class="hd">Ông Lão</div><div class="art"><img src="../assets/demo/wan_10.png" alt=""></div><div class="ft"><b>12</b><span>Vạn</span></div></div><small>Ông Lão Vạn · lá Yêu</small></div>
+ <div><div class="k lg sach"><div class="hd">Thang</div><div class="art"><img src="../assets/demo/sach_10.png" alt=""></div><div class="ft"><b>12</b><span>Sách</span></div></div><small>Thang Thang · lá Yêu</small></div>
+ <div><div class="k lg"><div class="hd">Chi Chi</div><div class="art"><img src="../assets/demo/van_10.png" alt=""></div><div class="ft"><b>12</b><span>Văn</span></div></div><small>Chi Chi · lá Yêu</small></div>
+ <div><div class="k lg wan"><div class="hd">Nhị</div><div class="art"><img src="../assets/demo/wan_2.png" alt=""></div><div class="ft"><b>2</b><span>Vạn</span></div></div><small>Nhị Vạn · cành đào</small></div>
+ <div><div class="k lg sach"><div class="hd">Ngũ</div><div class="art"><img src="../assets/demo/sach_5.png" alt=""></div><div class="ft"><b>5</b><span>Sách</span></div></div><small>Ngũ Sách · thuyền buồm</small></div>
+</div>
+
+<h2>Cỡ trong game (tay bài / bàn đánh)</h2>
+<div class="row">
+ <div class="k md"><div class="hd">Cửu</div><div class="art"><img src="../assets/demo/van_9.png" alt=""></div><div class="ft"><b>9</b><span>Văn</span></div></div>
+ <div class="k md wan"><div class="hd">Ông Lão</div><div class="art"><img src="../assets/demo/wan_10.png" alt=""></div><div class="ft"><b>12</b><span>Vạn</span></div></div>
+ <div class="k md sach"><div class="hd">Thang</div><div class="art"><img src="../assets/demo/sach_10.png" alt=""></div><div class="ft"><b>12</b><span>Sách</span></div></div>
+ <div class="k sm"><div class="hd">Cửu</div><div class="art"><img src="../assets/demo/van_9.png" alt=""></div><div class="ft"><b>9</b><span>Văn</span></div></div>
+ <div class="k sm sach"><div class="hd">Ngũ</div><div class="art"><img src="../assets/demo/sach_5.png" alt=""></div><div class="ft"><b>5</b><span>Sách</span></div></div>
+</div>
+
+<h2>Bản cũ (để so sánh)</h2>
+<div class="row"><div><div class="old"><div class="a">Cửu</div><div class="b"><img src="../assets/cards/van_9.png" alt=""></div><div class="c">9 VĂN</div></div><small>Cửu Văn cũ</small></div></div>
+</html>

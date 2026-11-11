@@ -474,10 +474,11 @@
     const items = run.consumables.map((c) => {
       const def = CDATA.find((x) => x.id === c.id);
       const sel = ui.selCons === c.uid;
-      return `<button class="cons-item${sel ? ' sel' : ''}" data-act="use-cons" data-uid="${c.uid}" type="button" title="${def.vi}: ${def.text}">
-        <img class="px gi" src="assets/icons/${def.icon}.png" alt="" draggable="false"><span class="cv">${def.vi}</span></button>`;
+      const active = ui.consDetail === c.uid;
+      return `<button class="cons-item${sel ? ' sel' : ''}${active ? ' active' : ''}" data-act="use-cons" data-uid="${c.uid}" type="button">
+        <img class="px gi" src="assets/icons/${def.icon}.png" alt="" draggable="false"><span class="cname">${def.vi}</span></button>`;
     }).join('');
-    return `<div class="cons-bar"><small>Tiêu hao ${run.consumables.length}/${run.consumableSlots}</small><div class="cons-list">${items}</div></div>`;
+    return `<div class="cons-bar"><span class="cons-bar-label">Tiêu Hao</span><div class="cons-list">${items}</div><span class="cons-bar-slots">${run.consumables.length}/${run.consumableSlots}</span></div>`;
   }
   const sortDeck = (cards) => cards.slice().sort((a, b) => R[b.rank].order - R[a.rank].order || HO.indexOf(a.color) - HO.indexOf(b.color));
   function charmsRowHTML() {
@@ -823,6 +824,28 @@
     }
     if (ui.settings) out += settingsOverlay();
     if (ui.items) out += itemsOverlay();
+    if (ui.consDetail != null) {
+      const cons = run.consumables.find((c) => c.uid === ui.consDetail);
+      if (!cons) { ui.consDetail = null; }
+      else {
+        const def = CDATA.find((x) => x.id === cons.id);
+        const catVI = { phu: 'Phù', lt: 'Linh Thạch', phep: 'Phép' };
+        const catLabel = catVI[def.category] || 'Tiêu Hao';
+        out += `<div class="overlay" data-act="close-bg"><div class="panel sheet cons-popup" role="dialog" aria-label="${def.vi}">
+          <div class="cons-popup-top">
+            <img class="px gi cons-popup-icon" src="assets/icons/${def.icon}.png" alt="" draggable="false">
+            <div class="cons-popup-info">
+              <span class="tag" style="background:var(--lacquer2);color:var(--muted)">${catLabel}</span>
+              <h2>${def.vi}</h2>
+              <p>${def.text}</p>
+            </div>
+          </div>
+          <div class="row btns">
+            <button class="btn discard" data-act="close" type="button">Hủy</button>
+            <button class="btn play" data-act="confirm-use-cons" data-uid="${cons.uid}" type="button">Dùng ngay</button>
+          </div></div></div>`;
+      }
+    }
     if (ui.detail != null) {
       const i = run.charms.findIndex((c) => c.uid === ui.detail);
       if (i < 0) ui.detail = null;
@@ -1088,7 +1111,7 @@
     store.set('runsStarted', store.get('runsStarted', 0) + 1);
     run = new Run({ seed: Math.floor(Math.random() * 1e9), difficulty: ui.difficulty, deck: ui.deck });
     ui.achRun = { discardUsedThisAi: false, tripleSpecial: new Set(), flush5Count: 0, bossStreak: 0, glassStreak: 0, noBuy: true, sweepTypes: new Set() };
-    ui.view = 'play'; ui.intro = true; ui.sel.clear(); ui.playCount = {}; ui.known = new Set(); ui.stage = null; ui.detail = null; ui.info = false; ui.busy = false; ui.lastMoney = null; ui.prevView = null; ui.packPick = null; ui.justBought = null; ui.selCons = null;
+    ui.view = 'play'; ui.intro = true; ui.sel.clear(); ui.playCount = {}; ui.known = new Set(); ui.stage = null; ui.detail = null; ui.consDetail = null; ui.info = false; ui.busy = false; ui.lastMoney = null; ui.prevView = null; ui.packPick = null; ui.justBought = null; ui.selCons = null;
     render();
   }
   async function doPlay() {
@@ -1275,7 +1298,7 @@
       case 'card': {
         const id = t.dataset.id;
         if (ui.selCons != null) {
-          const uid = ui.selCons; ui.selCons = null;
+          const uid = ui.selCons; ui.selCons = null; ui.consDetail = null;
           try {
             const cr = run.useConsumable(uid, [id]);
             playSfx('card_flip', 0.6, 1.1);
@@ -1294,11 +1317,19 @@
       case 'use-cons': {
         if (run.phase !== 'playing') break;
         const uid = +t.dataset.uid;
+        if (!run.consumables.find((c) => c.uid === uid)) break;
+        if (ui.selCons === uid) { ui.selCons = null; ui.consDetail = null; render(); break; }
+        ui.consDetail = uid; render();
+        break;
+      }
+      case 'confirm-use-cons': {
+        if (run.phase !== 'playing') break;
+        const uid = +t.dataset.uid;
         const cons = run.consumables.find((c) => c.uid === uid);
-        if (!cons) break;
+        if (!cons) { ui.consDetail = null; render(); break; }
         const def = CDATA.find((x) => x.id === cons.id);
+        ui.consDetail = null;
         if (def.target === 'card_hand') {
-          if (ui.selCons === uid) { ui.selCons = null; render(); break; }
           ui.selCons = uid; render();
           toast(`${def.vi}: chọn 1 quân trên tay`);
         } else {
@@ -1320,7 +1351,7 @@
       case 'discard': doDiscard(); break;
       case 'info': playSfx('card_select', 0.18, 1.2); ui.info = true; render(); break;
       case 'items': playSfx('card_select', 0.18, 1.2); ui.items = true; render(); break;
-      case 'close': case 'close-bg': ui.info = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.deckView = false; ui.selCons = null; playSfx('card_select', 0.18, 1.3); render(); break;
+      case 'close': case 'close-bg': ui.info = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.consDetail = null; ui.deckView = false; ui.selCons = null; playSfx('card_select', 0.18, 1.3); render(); break;
       case 'charm': playSfx('card_select', 0.15, 1.25); ui.detail = +t.dataset.uid; render(); break;
       case 'sell': { run.sell(ui.detail); ui.detail = null; playSfx('buy', 0.6, 0.78); render(); break; }
       case 'move-l': case 'move-r': {
@@ -1744,7 +1775,7 @@
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     $$('.fanfare, .fandim, .banner, .bandim, .lvup, .toast').forEach((x) => x.remove()); hideTip();
-    if (ui.info || ui.deckView || ui.items || ui.settings || ui.detail != null) { ui.info = false; ui.deckView = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; render(); }
+    if (ui.info || ui.deckView || ui.items || ui.settings || ui.detail != null || ui.consDetail != null) { ui.info = false; ui.deckView = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.consDetail = null; render(); }
   });
 
   // ------------------------------------------------------------------ iOS install banner

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "them_luot",
+    "vi": "Phù Thêm Lượt",
+    "price": 10,
+    "text": "+1 lượt đánh mỗi ải, vĩnh viễn",
+    "handsBonus": 1
+  },
+  {
+    "id": "them_bo",
+    "vi": "Phù Thêm Bỏ",
+    "price": 8,
+    "text": "+1 lượt bỏ bài mỗi ải, vĩnh viễn",
+    "discardsBonus": 1
+  },
+  {
+    "id": "cho_rong",
+    "vi": "Phù Chợ Rộng",
+    "price": 8,
+    "text": "Chợ bán thêm 1 bùa mỗi lần",
+    "shopCharmBonus": 1
+  },
+  {
+    "id": "lai_day",
+    "vi": "Phù Lãi Dày",
+    "price": 8,
+    "text": "Trần tiền lãi tăng thêm 5 đồng",
+    "interestCapBonus": 5
+  },
+  {
+    "id": "gia_re",
+    "vi": "Phù Giảm Giá",
+    "price": 10,
+    "text": "Mọi món ở chợ rẻ hơn 25% (làm tròn lên, tối thiểu 1 đồng)",
+    "discountPct": 25
+  },
+  {
+    "id": "cho_que",
+    "vi": "Phù Chợ Quẻ",
+    "price": 8,
+    "text": "Chợ bán thêm 1 Quẻ mỗi lần",
+    "shopQueBonus": 1
+  },
+  {
+    "id": "o_bua",
+    "vi": "Phù Thêm Ô Bùa",
+    "price": 15,
+    "text": "+1 ô bùa, vĩnh viễn",
+    "slotsBonus": 1
+  },
+  {
+    "id": "them_o_tieu_hao",
+    "vi": "Phù Thêm Ô Tiêu Hao",
+    "price": 10,
+    "text": "+1 ô vật phẩm tiêu hao, vĩnh viễn (tối đa 4)",
+    "consumableSlotsBonus": 1
+  }
+]

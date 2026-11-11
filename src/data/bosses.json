@@ -1,0 +1,125 @@
+{
+  "pool": [
+    {
+      "id": "chan_tinh",
+      "vi": "Chằn Tinh",
+      "text": "Đôi, Hai đôi bị phạt (còn nửa chip, nửa hệ số gốc)",
+      "effect": {
+        "banHands": [
+          "pair_mixed",
+          "two_pair"
+        ]
+      }
+    },
+    {
+      "id": "thuy_tinh",
+      "vi": "Thủy Tinh",
+      "text": "Không có lượt bỏ bài",
+      "effect": {
+        "discardsMinus": 99
+      }
+    },
+    {
+      "id": "cao_chin_duoi",
+      "vi": "Cáo Chín Đuôi",
+      "text": "Phu bí, Cù lũ, Tứ quý và Ngũ quý bị phạt (còn nửa chip, nửa hệ số gốc)",
+      "effect": {
+        "banHands": [
+          "three",
+          "full",
+          "four",
+          "five"
+        ]
+      }
+    },
+    {
+      "id": "thuy_quai",
+      "vi": "Thủy Quái Đứt Dây",
+      "text": "Mọi sảnh và phu dọc bị phạt (còn nửa chip, nửa hệ số gốc)",
+      "effect": {
+        "banHands": [
+          "run3_same",
+          "run4_same",
+          "run5",
+          "run5_same"
+        ]
+      }
+    },
+    {
+      "id": "quy_mot_mat",
+      "vi": "Quỷ Một Mắt",
+      "text": "Bớt 1 lượt đánh",
+      "effect": {
+        "handsMinus": 1
+      }
+    },
+    {
+      "id": "ma_da",
+      "vi": "Ma Da",
+      "text": "Tay bài bớt 2 quân",
+      "effect": {
+        "handSizeMinus": 2
+      }
+    },
+    {
+      "id": "giac_cuu_yeu",
+      "vi": "Giặc Cửu Yêu",
+      "text": "Lá Cửu và lá Yêu không cho chip và không kích hoạt bùa",
+      "effect": {
+        "debuffRanks": [
+          "n9",
+          "n10"
+        ]
+      }
+    },
+    {
+      "id": "quy_moc",
+      "vi": "Quỷ Móc",
+      "text": "Mỗi lần đánh, 2 quân ngẫu nhiên còn trên tay bị móc mất",
+      "effect": {
+        "hookDiscard": 2
+      }
+    },
+    {
+      "id": "quy_thue",
+      "vi": "Quỷ Thu Thuế",
+      "text": "Mất 1 đồng cho mỗi quân bạn đánh ra",
+      "effect": {
+        "taxPerCard": 1
+      }
+    },
+    {
+      "id": "ma_troi",
+      "vi": "Ma Trơi",
+      "text": "Mỗi lượt, một bùa ngẫu nhiên bị vô hiệu",
+      "effect": {
+        "disableCharm": true
+      }
+    },
+    {
+      "id": "tay_gay",
+      "vi": "Tay Gãy",
+      "text": "Mỗi lần đánh, bộ đó bị hạ 1 cấp trước khi tính (tối thiểu cấp 1)",
+      "effect": {
+        "armDown": true
+      }
+    },
+    {
+      "id": "quy_nhuom",
+      "vi": "Quỷ Nhuộm",
+      "text": "Một họ ngẫu nhiên (Văn, Sách hoặc Vạn) bị vô hiệu cả ải: lá họ đó và lá Linh không ghi điểm",
+      "effect": {
+        "debuffColor": true
+      }
+    }
+  ],
+  "final": {
+    "id": "han_bat",
+    "vi": "Hạn Bạt",
+    "text": "Tay bài bớt 1 quân và bớt 2 lượt bỏ bài",
+    "effect": {
+      "handSizeMinus": 1,
+      "discardsMinus": 2
+    }
+  }
+}

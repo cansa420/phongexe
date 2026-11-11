@@ -1,0 +1,501 @@
+{
+  "project": "PHỖNG.EXE",
+  "total": 45,
+  "groups": [
+    {
+      "name": "Phu_Doc",
+      "count": 6
+    },
+    {
+      "name": "Bo_Giong",
+      "count": 5
+    },
+    {
+      "name": "Cung_Ho",
+      "count": 7
+    },
+    {
+      "name": "La_Yeu",
+      "count": 7
+    },
+    {
+      "name": "Giu_Bai",
+      "count": 4
+    },
+    {
+      "name": "Chung",
+      "count": 13
+    },
+    {
+      "name": "Than",
+      "count": 3
+    }
+  ],
+  "export_spec": {
+    "individual_png_canvas": [
+      256,
+      256
+    ],
+    "visible_art_max_dimension": 184,
+    "background": "transparent",
+    "centering": "visible alpha bounding box centered in canvas",
+    "preview_slot": [
+      256,
+      256
+    ],
+    "preview_gap": 192,
+    "source_crop": "calibrated non-uniform cell boundaries"
+  },
+  "items": [
+    {
+      "id": 1,
+      "name": "Nối Liền",
+      "group": "Phu_Doc",
+      "asset": "icons/charm_01_Noi_Lien.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 2,
+      "name": "Tăng Dần",
+      "group": "Phu_Doc",
+      "asset": "icons/charm_02_Tang_Dan.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 3,
+      "name": "Thông Suốt",
+      "group": "Phu_Doc",
+      "asset": "icons/charm_03_Thong_Suot.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 4,
+      "name": "Sảnh Dài",
+      "group": "Phu_Doc",
+      "asset": "icons/charm_04_Sanh_Dai.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 5,
+      "name": "Cộng Dồn Sảnh",
+      "group": "Phu_Doc",
+      "asset": "icons/charm_05_Cong_Don_Sanh.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 6,
+      "name": "Bí Ngũ",
+      "group": "Phu_Doc",
+      "asset": "icons/charm_06_Bi_Ngu.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 7,
+      "name": "Có Đôi Có Cặp",
+      "group": "Bo_Giong",
+      "asset": "icons/charm_07_Co_Doi_Co_Cap.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 8,
+      "name": "Cùng Số Khác Họ",
+      "group": "Bo_Giong",
+      "asset": "icons/charm_08_Cung_So_Khac_Ho.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 9,
+      "name": "Cù Lũ Nở Rộ",
+      "group": "Bo_Giong",
+      "asset": "icons/charm_09_Cu_Lu_No_Ro.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 10,
+      "name": "Khàn Mạnh",
+      "group": "Bo_Giong",
+      "asset": "icons/charm_10_Khan_Manh.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 11,
+      "name": "Tứ Quý Hội Tụ",
+      "group": "Bo_Giong",
+      "asset": "icons/charm_11_Tu_Quy_Hoi_Tu.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 12,
+      "name": "Một Họ",
+      "group": "Cung_Ho",
+      "asset": "icons/charm_12_Mot_Ho.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 13,
+      "name": "Đủ Ba Họ",
+      "group": "Cung_Ho",
+      "asset": "icons/charm_13_Du_Ba_Ho.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 14,
+      "name": "Đồng Tông",
+      "group": "Cung_Ho",
+      "asset": "icons/charm_14_Dong_Tong.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 15,
+      "name": "Họ Văn Lên Ngôi",
+      "group": "Cung_Ho",
+      "asset": "icons/charm_15_Ho_Van_Len_Ngoi.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 16,
+      "name": "Họ Sách Lên Ngôi",
+      "group": "Cung_Ho",
+      "asset": "icons/charm_16_Ho_Sach_Len_Ngoi.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 17,
+      "name": "Họ Vạn Lên Ngôi",
+      "group": "Cung_Ho",
+      "asset": "icons/charm_17_Ho_Van_Len_Ngoi.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 18,
+      "name": "Đổi Họ",
+      "group": "Cung_Ho",
+      "asset": "icons/charm_18_Doi_Ho.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 19,
+      "name": "Mê Yêu",
+      "group": "La_Yeu",
+      "asset": "icons/charm_19_Me_Yeu.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 20,
+      "name": "Yêu Giữ Nhà",
+      "group": "La_Yeu",
+      "asset": "icons/charm_20_Yeu_Giu_Nha.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 21,
+      "name": "Yêu Đi Đầu",
+      "group": "La_Yeu",
+      "asset": "icons/charm_21_Yeu_Di_Dau.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 22,
+      "name": "Gọi Thêm Yêu",
+      "group": "La_Yeu",
+      "asset": "icons/charm_22_Goi_Them_Yeu.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 23,
+      "name": "Tôm Lèo Mở Đường",
+      "group": "La_Yeu",
+      "asset": "icons/charm_23_Tom_Leo_Mo_Duong.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 24,
+      "name": "Ba Yêu Hội Tụ",
+      "group": "La_Yeu",
+      "asset": "icons/charm_24_Ba_Yeu_Hoi_Tu.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 25,
+      "name": "Yêu Nặng Ký",
+      "group": "La_Yeu",
+      "asset": "icons/charm_25_Yeu_Nang_Ky.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 26,
+      "name": "Ngồi Chờ",
+      "group": "Giu_Bai",
+      "asset": "icons/charm_26_Ngoi_Cho.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 27,
+      "name": "Ít Mà Chất",
+      "group": "Giu_Bai",
+      "asset": "icons/charm_27_It_Ma_Chat.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 28,
+      "name": "Giữ Đủ Ba Họ",
+      "group": "Giu_Bai",
+      "asset": "icons/charm_28_Giu_Du_Ba_Ho.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 29,
+      "name": "Tranh Chi",
+      "group": "Giu_Bai",
+      "asset": "icons/charm_29_Tranh_Chi.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 30,
+      "name": "Số Nhỏ",
+      "group": "Chung",
+      "asset": "icons/charm_30_So_Nho.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 31,
+      "name": "Số Lớn",
+      "group": "Chung",
+      "asset": "icons/charm_31_So_Lon.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 32,
+      "name": "Ngũ Phúc",
+      "group": "Chung",
+      "asset": "icons/charm_32_Ngu_Phuoc.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 33,
+      "name": "Dội Trống",
+      "group": "Chung",
+      "asset": "icons/charm_33_Doi_Trong.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 34,
+      "name": "Kho Bài",
+      "group": "Chung",
+      "asset": "icons/charm_34_Kho_Bai.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 35,
+      "name": "Thăng Hạng May",
+      "group": "Chung",
+      "asset": "icons/charm_35_Thang_Hang_May.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 36,
+      "name": "Nhặt Ve Chai",
+      "group": "Chung",
+      "asset": "icons/charm_36_Nhat_Ve_Chai.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 37,
+      "name": "Heo Đất",
+      "group": "Chung",
+      "asset": "icons/charm_37_Heo_Dat.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 38,
+      "name": "Bỏ Thêm",
+      "group": "Chung",
+      "asset": "icons/charm_38_Bo_Them.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 39,
+      "name": "Lên Hạng",
+      "group": "Chung",
+      "asset": "icons/charm_39_Len_Hang.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 40,
+      "name": "Đánh Thêm",
+      "group": "Chung",
+      "asset": "icons/charm_40_Danh_Them.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 41,
+      "name": "Tay Dài",
+      "group": "Chung",
+      "asset": "icons/charm_41_Tay_Dai.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 42,
+      "name": "Phao Cứu Sinh",
+      "group": "Chung",
+      "asset": "icons/charm_42_Phao_Cuu_Sinh.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 43,
+      "name": "Nhất Thống",
+      "group": "Than",
+      "asset": "icons/charm_43_Nhat_Thong.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 44,
+      "name": "Bản Sao",
+      "group": "Than",
+      "asset": "icons/charm_44_Ban_Sao.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    },
+    {
+      "id": 45,
+      "name": "Thêm Chỗ Ngồi",
+      "group": "Than",
+      "asset": "icons/charm_45_Them_Cho_Ngoi.png",
+      "width": 256,
+      "height": 256,
+      "visible_max_dimension": 184,
+      "transparent_background": true
+    }
+  ]
+}

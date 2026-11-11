@@ -1,0 +1,281 @@
+{
+  "_note": "Mọi con số là bản nháp đã qua mô phỏng bot (xem docs/BALANCE.md). Người chơi thật có thể giỏi hơn bot.",
+  "handSize": 8,
+  "maxPlay": 5,
+  "hands": 4,
+  "discards": 3,
+  "slots": 5,
+  "maxSlots": 7,
+  "bossBan": "half",
+  "startMoney": 4,
+  "changCount": 8,
+  "aiKinds": [
+    "thuong",
+    "lon",
+    "trum"
+  ],
+  "aiNames": {
+    "thuong": "Ải Thường",
+    "lon": "Ải Lớn",
+    "trum": "Ải Trùm"
+  },
+  "rewards": {
+    "thuong": 3,
+    "lon": 4,
+    "trum": 5,
+    "perUnusedHand": 1
+  },
+  "shop": {
+    "charmOffers": 3,
+    "queOffers": 1,
+    "quePrice": 3,
+    "rerollBase": 4,
+    "rerollStep": 1,
+    "rarityWeights": {
+      "thuong": 70,
+      "hiem": 25,
+      "quy": 5
+    },
+    "variantChance": {
+      "ngoc": 0.08,
+      "vang": 0.04,
+      "son_mai": 0.015,
+      "ran": 0.005
+    },
+    "variantSurcharge": {
+      "ngoc": 2,
+      "vang": 4,
+      "son_mai": 6,
+      "ran": 8
+    },
+    "anOffers": 2,
+    "packOffers": 2,
+    "consumableOffers": 1,
+    "packPrice": 4,
+    "packWeights": {
+      "bua": 40,
+      "que": 30,
+      "quan": 30
+    },
+    "packChoices": 3
+  },
+  "than": {
+    "afterBossChang": [
+      3,
+      6
+    ],
+    "choices": 3
+  },
+  "variants": {
+    "ngoc": {
+      "vi": "Men ngọc",
+      "text": "luôn +50 chip mỗi lần đánh, không cần điều kiện của bùa"
+    },
+    "vang": {
+      "vi": "Men vàng",
+      "text": "luôn +10 hệ số mỗi lần đánh, không cần điều kiện của bùa"
+    },
+    "son_mai": {
+      "vi": "Sơn mài",
+      "text": "luôn ×1.5 hệ số mỗi lần đánh, không cần điều kiện của bùa"
+    },
+    "ran": {
+      "vi": "Men rạn",
+      "text": "+1 ô bùa (không chiếm ô)"
+    }
+  },
+  "consumableSlots": 2,
+  "lockHands": false,
+  "minDeck": 60,
+  "interest": {
+    "per": 5,
+    "cap": 5
+  },
+  "enhancements": {
+    "ngoc": {
+      "vi": "Ngọc",
+      "text": "+30 chip khi ghi điểm"
+    },
+    "kim": {
+      "vi": "Kim",
+      "text": "+4 hệ số khi ghi điểm"
+    },
+    "son": {
+      "vi": "Son",
+      "text": "×1,5 hệ số khi ghi điểm"
+    },
+    "thep": {
+      "vi": "Thép",
+      "text": "Giữ trên tay khi đánh: ×1,5 hệ số"
+    },
+    "linh": {
+      "vi": "Linh",
+      "text": "Tính là cả ba họ (Văn, Sách, Vạn) cho mọi bộ cùng họ"
+    },
+    "luu_ly": {
+      "vi": "Lưu Ly",
+      "text": "×2 hệ số khi ghi điểm, mỗi lần ghi điểm 1/4 cơ hội vỡ"
+    }
+  },
+  "skip": {
+    "tags": [
+      "que",
+      "tien",
+      "bua",
+      "goi",
+      "dautu",
+      "nhanh",
+      "cap",
+      "cons"
+    ],
+    "queChoices": 2,
+    "moneyTag": 6,
+    "allowed": [
+      "thuong",
+      "lon"
+    ],
+    "investAmount": 12,
+    "speedPer": 2,
+    "capLevels": 2
+  },
+  "difficulty": {
+    "junk": {
+      "startChang": 2,
+      "perChang": 0.5,
+      "bossBonus": 1,
+      "max": 6
+    }
+  },
+  "defaultDifficulty": "kho",
+  "difficultyPresets": {
+    "de": {
+      "vi": "Dễ",
+      "text": "Không có lá Tạp. +1 lượt bỏ bài. Mục tiêu ×0.85.",
+      "targetMul": 0.85,
+      "startMoney": 6,
+      "discards": 4,
+      "junk": { "max": 0 }
+    },
+    "thuong": {
+      "vi": "Thường",
+      "text": "Lá Tạp từ chặng 1 (tối đa 6). Mục tiêu chuẩn.",
+      "targetMul": 1.0,
+      "startMoney": 4,
+      "discards": 3,
+      "junk": { "startChang": 1, "perChang": 0.5, "bossBonus": 1, "max": 6 }
+    },
+    "kho": {
+      "vi": "Khó",
+      "text": "Lá Tạp từ chặng 1 (tối đa 8). -1 lượt bỏ bài. Mục tiêu ×1.2.",
+      "targetMul": 1.2,
+      "startMoney": 3,
+      "discards": 2,
+      "junk": { "startChang": 1, "perChang": 0.75, "bossBonus": 1, "max": 8 }
+    },
+    "ac": {
+      "vi": "Ác mộng",
+      "text": "Lá Tạp từ chặng 1 (tối đa 10). -2 lượt bỏ bài. Mục tiêu ×1.5.",
+      "targetMul": 1.5,
+      "startMoney": 2,
+      "discards": 1,
+      "junk": { "startChang": 1, "perChang": 1, "bossBonus": 2, "max": 10 }
+    }
+  },
+  "skipTags": {
+    "que": {
+      "vi": "Thẻ Quẻ",
+      "text": "Chọn 1 trong 2 Quẻ miễn phí"
+    },
+    "tien": {
+      "vi": "Thẻ Tiền",
+      "text": "Nhận ngay 6 đồng"
+    },
+    "bua": {
+      "vi": "Thẻ Bùa",
+      "text": "1 bùa Hiếm miễn phí (đầy ô thì nhận 6 đồng)"
+    },
+    "goi": {
+      "vi": "Thẻ Gói",
+      "text": "Mở ngay 1 Gói Bùa miễn phí"
+    },
+    "dautu": {
+      "vi": "Thẻ Đầu Tư",
+      "text": "+12 đồng sau khi hạ trùm kế tiếp"
+    },
+    "nhanh": {
+      "vi": "Thẻ Tốc Hành",
+      "text": "+2 đồng cho mỗi ải đã bỏ qua trong ván, tính cả lần này"
+    },
+    "cap": {
+      "vi": "Thẻ Thăng Cấp",
+      "text": "Nâng 2 cấp một bộ ngẫu nhiên"
+    },
+    "cons": {
+      "vi": "Thẻ Tiêu Hao",
+      "text": "Nhận 1 vật phẩm tiêu hao ngẫu nhiên"
+    }
+  },
+  "defaultDeck": "chuan",
+  "decks": {
+    "chuan": {
+      "vi": "Bộ Chuẩn",
+      "text": "120 lá, không thay đổi"
+    },
+    "van": {
+      "vi": "Bộ Văn Đỏ",
+      "text": "+1 lượt bỏ bài mỗi ải",
+      "discardsBonus": 1
+    },
+    "sach": {
+      "vi": "Bộ Sách Lục",
+      "text": "+1 lượt đánh nhưng bớt 1 lượt bỏ bài mỗi ải",
+      "handsBonus": 1,
+      "discardsBonus": -1
+    },
+    "vang": {
+      "vi": "Bộ Vàng",
+      "text": "Khởi đầu thêm 10 đồng",
+      "money": 10
+    },
+    "den": {
+      "vi": "Bộ Đen",
+      "text": "+1 ô bùa nhưng bớt 1 lượt bỏ bài mỗi ải",
+      "slots": 1,
+      "discardsBonus": -1
+    },
+    "socao": {
+      "vi": "Bộ Số Cao",
+      "text": "Bỏ hết lá Nhất, Nhị, Tam (còn 84 lá): chip cao hơn nhưng sảnh thấp khó ra",
+      "removeRanks": [
+        "n1",
+        "n2",
+        "n3"
+      ]
+    },
+    "thuan": {
+      "vi": "Bộ Thuần Văn",
+      "text": "Mọi lá đều họ Văn nên mọi bộ đều cùng họ, nhưng bớt 1 lượt bỏ bài và không còn Tôm, Lèo, Tam Yêu (trừ khi có lá Linh)",
+      "allColor": "van",
+      "discardsBonus": -1
+    },
+    "ngau": {
+      "vi": "Bộ Hỗn Loạn",
+      "text": "120 lá có số và họ ngẫu nhiên: Ngũ quý dễ ra nhưng khó đoán",
+      "randomize": true
+    }
+  },
+  "seals": {
+    "do": {
+      "vi": "Triện Đỏ",
+      "text": "Quân ghi điểm được tính thêm 1 lần"
+    },
+    "vang": {
+      "vi": "Triện Vàng",
+      "text": "+3 đồng mỗi khi quân này ghi điểm"
+    },
+    "lam": {
+      "vi": "Triện Lam",
+      "text": "Còn trên tay khi hạ ải: nâng 1 cấp một bộ ngẫu nhiên"
+    }
+  }
+}
