@@ -350,7 +350,9 @@ html[data-layout] .sheet h2, html[data-layout] .cash div.big { font-size: 26px; 
 html[data-layout] .stat b, html[data-layout] .coin, html[data-layout] .cash .line .num, html[data-layout] .hrow .hv .num { font-size: var(--fs-num); line-height: 1.15; }
 html[data-layout] .target .num, html[data-layout] .blind .bt .num { font-size: 32px !important; line-height: 1.1; }
 html[data-layout] .eq .cbox, html[data-layout] .eq .mbox { font-size: var(--fs-big); }
-html[data-layout] .float { font-size: 22px; }
+html[data-layout] .float { font-size: 24px; }
+html[data-layout] .float.x { font-size: 30px; }
+html[data-layout] .float.tier { font-size: 34px; }
 html[data-layout] .reward b, html[data-layout] .calc .hname em b { font-size: inherit !important; }
 html[data-layout] .calc .hname em b.est { font-size: 1.2em !important; }
 html[data-layout="port"] .stat b { font-size: 22px; } html[data-layout="port"] .stat small { font-size: 11px; }

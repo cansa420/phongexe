@@ -1026,7 +1026,7 @@
       const cb0 = $('#chipsBox'); const mb0 = $('#multBox');
       const ch = st.chips >= 300 ? 3 : st.chips >= 150 ? 2 : st.chips >= 70 ? 1 : 0; const mh = st.mult >= 60 ? 3 : st.mult >= 24 ? 2 : st.mult >= 10 ? 1 : 0;
       heatBox(cb0, ch, (1 + Math.min(0.15, Math.log2(st.chips + 1) / 45)).toFixed(3)); heatBox(mb0, mh, (1 + Math.min(0.24, Math.log2(st.mult + 1) / 24)).toFixed(3));
-      if (mb0 && mh >= 1 && (st.dMult || st.xMult)) { const b = mb0.getBoundingClientRect(); embers(b.left + b.width / 2, b.top + 4, [0, 3, 6, 10][mh], b.width * 0.7, 60 + mh * 30); }
+      if (mb0 && (st.dMult || st.xMult)) { const b = mb0.getBoundingClientRect(); embers(b.left + b.width / 2, b.top + 4, [2, 4, 7, 12][mh], b.width * 0.7, 60 + mh * 30); }
       playSfx(st.xMult ? 'mult' : 'chip', st.xMult ? 0.7 : 0.55);
       if (st.xMult) sweep(220, 880, 0.25, 'sawtooth', 0.05);
       n++;
@@ -1045,8 +1045,8 @@
     const box = (m || $('#calc')).getBoundingClientRect();
     const cx = box.left + box.width / 2; const cy = box.top + box.height / 2;
     burst(cx, cy, [8, 18, 34, 60, 120][tier]);
-    if (tier >= 3) { embers(cx, cy + 10, tier === 4 ? 36 : 18, box.width, tier === 4 ? 200 : 130); flash(tier === 4); }
-    shake([3, 6, 11, 17, 26][tier]);
+    if (tier >= 2) { embers(cx, cy + 10, tier === 4 ? 36 : tier === 3 ? 18 : 8, box.width, tier === 4 ? 200 : tier === 3 ? 130 : 70); flash(tier === 4); }
+    shake([7, 10, 14, 19, 26][tier]);
     if (tier >= 2) thud();
     if (tier >= 3) { arpeggio(tier === 4 ? 7 : 5); if (tier === 4) playSfx('fanfare', 0.7, 1, 2.5); } else chime();
     if (tier >= 1) floatAt($('#calc'), ['', 'Khá!', 'Hay!', 'Tuyệt vời!', 'QUÁ TẢI!!'][tier], 'tier', -34);
