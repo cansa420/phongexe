@@ -544,14 +544,15 @@
   function isHintMode() {
     return !!(run && run.difficultyId === 'de' && run.deckId === 'chuan' && run.chang <= 2);
   }
-  // Trả về Set id các lá trên tay có thể ghép bộ với lá đang chọn (khi chọn đúng 1 lá)
+  // Trả về Set id các lá trên tay sẽ cải thiện bộ khi thêm vào (1–4 lá đang chọn)
   function getHintCards() {
-    if (!isHintMode() || ui.sel.size !== 1 || !run.round || run.phase !== 'playing') return new Set();
+    if (!isHintMode() || ui.sel.size === 0 || ui.sel.size >= 5 || !run.round || run.phase !== 'playing') return new Set();
     const sel = [...ui.sel];
+    const curIdx = HAND_ORDER.indexOf(run.preview(sel).type);
     const hinted = new Set();
     for (const c of run.round.hand) {
       if (ui.sel.has(c.id) || c.rank === 'junk') continue;
-      if (run.preview([...sel, c.id]).type !== 'single') hinted.add(c.id);
+      if (HAND_ORDER.indexOf(run.preview([...sel, c.id]).type) < curIdx) hinted.add(c.id);
     }
     return hinted;
   }
