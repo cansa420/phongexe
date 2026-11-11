@@ -1668,14 +1668,25 @@ html[data-layout="port"] * { scrollbar-width: none; -ms-overflow-style: none; }
 /* Shop: cons offer section */
 .shop-cons-offers { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 0; }
 
+/* ===== Viewport-scale: lobby panels + buttons, gameplay Đánh / Bỏ bài ===== */
+/* Lobby dọc – nút co theo chiều cao màn */
+html[data-layout="port"] #app .title .tbtns .btn.play.big    { min-height: min(82px, 13svh); }
+html[data-layout="port"] #app .title .tbtns .btn.discard.big { min-height: min(62px, 10svh); }
+/* Lobby – hộp Độ khó / Bộ bài: padding + chip theo svh */
+html[data-layout] #app .title .panel                         { padding: min(14px, 2.5svh) 20px min(16px, 2.8svh); }
+html[data-layout] #app .title .chips .mini                   { min-height: min(40px, 8svh); }
+/* Gameplay – nút Đánh / Bỏ bài co theo svh, không đè bộ bài trên tay */
+html[data-layout="port"] #app .controls .btn { min-height: min(42px, 8svh); padding: min(6px, 1.3svh) 12px; }
+html[data-layout="land"] #app .controls .btn { min-height: min(44px, 10svh); padding: min(6px, 1.5svh) 12px; }
+
 /* ===== Mobile landscape nhỏ: giảm logo + nút để panel bộ bài có thêm không gian ===== */
 @media (max-height: 450px) and (orientation: landscape) {
   html[data-layout="land"] .title .lg { padding: 8px 0 4px; }
   html[data-layout="land"] .title .lg h1.logo img { height: min(60px, 16svh); }
-  html[data-layout="land"] .title .tbtns .btn.play.big { min-height: 48px; }
+  html[data-layout="land"] .title .tbtns .btn.play.big { min-height: min(48px, 10.5svh); }
   html[data-layout="land"] .title .tbtns .btn.play.big img.gi { width: 32px; height: 32px; }
   html[data-layout="land"] .title .tbtns .btn.play.big .bl { font-size: 14px; }
-  html[data-layout="land"] .title .tbtns .btn.discard.big { min-height: 38px; }
+  html[data-layout="land"] .title .tbtns .btn.discard.big { min-height: min(38px, 8.5svh); }
   html[data-layout="land"] .title .tbtns .btn.discard.big img.gi { width: 26px; height: 26px; }
   html[data-layout="land"] .title .tbtns { gap: 6px; padding-bottom: 8px; transform: translateY(-80px); }
   html[data-layout="land"] .title .tl   { transform: translateY(-80px); }
