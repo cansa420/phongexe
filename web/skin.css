@@ -1236,25 +1236,34 @@ html[data-layout="port"] * { scrollbar-width: none; -ms-overflow-style: none; }
 .cons-pick .card { outline: 2px dashed var(--xanh); cursor: crosshair; }
 .cons-pick .card:hover { outline-color: var(--vang); transform: translateY(-4px); }
 
-/* Portrait: overlay cons-bar lên góc phải của charm row, không chiếm row riêng */
-html[data-layout="port"] .cons-bar {
-  position: absolute; right: 0; top: 0; z-index: 4;
-  background: color-mix(in srgb, var(--den) 82%, transparent);
-  border: 1.5px solid color-mix(in srgb, var(--vang) 55%, transparent);
-  border-radius: 8px; margin: 0; padding: 3px 5px; gap: 4px;
-  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+/* Dock tiêu hao: chỉ dùng ở màn dọc, nằm bên trái hàng Xếp bài nên không thêm hàng nào */
+.cons-dock { display: none; }
+html[data-layout="port"] .pc-charms .cons-bar { display: none; }
+html[data-layout="port"] #app .meta .cons-dock {
+  display: flex; align-items: center; gap: 8px; margin: 0; padding: 1px 3px 1px 10px; box-sizing: border-box; height: 36px;
+  background: color-mix(in srgb, var(--den) 80%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--vang) 60%, transparent);
+  border-radius: 10px; box-shadow: 0 3px 0 rgba(0, 0, 0, .35);
 }
-html[data-layout="port"] .cons-bar-label { display: none; }
-html[data-layout="port"] .cons-bar-slots { display: none; }
-html[data-layout="port"] .cons-item { min-width: 30px; padding: 3px 4px; gap: 2px; border-radius: 6px; }
-html[data-layout="port"] .cons-item img.gi { width: 26px; height: 26px; }
-html[data-layout="port"] .cons-item .cname { display: none; }
+.cons-cap { display: flex; flex-direction: column; gap: 1px; line-height: 1.1; white-space: nowrap; }
+.cons-cap span { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--vang); }
+.cons-cap b { font-size: 13px; color: var(--text); }
+.cons-dock .cons-list { gap: 4px; flex-wrap: nowrap; }
+.cons-dock .cons-item { min-width: 0; width: 30px; height: 30px; padding: 0; box-sizing: border-box; justify-content: center; border-radius: 7px; }
+.cons-dock .cons-item img.gi { width: 24px; height: 24px; }
+.cons-dock .cons-item .cname { display: none; }
+.cons-slot { width: 30px; height: 30px; box-sizing: border-box; border: 2px dashed color-mix(in srgb, var(--vang) 35%, transparent); border-radius: 7px; background: rgba(0, 0, 0, .25); }
+/* Màn hẹp: bỏ chữ "Xếp bài" để dock và 2 nút xếp nằm vừa một hàng */
+@media (max-width: 420px) { html[data-layout="port"] #app .sorts small { display: none; } html[data-layout="port"] #app .meta { flex-wrap: nowrap; } }
 
 /* ===== Consumable detail popup ===== */
 .cons-popup { max-width: 340px; }
 .cons-popup-top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
-.cons-popup-icon { width: 56px; height: 56px; flex-shrink: 0; }
+.cons-popup img.gi.cons-popup-icon { width: 56px !important; height: 56px !important; flex-shrink: 0; }
 .cons-popup-info { flex: 1; min-width: 0; }
+/* Hủy / Dùng ngay: hai cột bằng nhau, cùng cao, cùng hàng (ghi đè .sheet .btn.play margin-top + width 100%) */
+html[data-layout] #app .cons-popup .row.btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: stretch; margin: 0; }
+html[data-layout] #app .cons-popup .row.btns .btn { width: 100%; min-height: 56px; margin: 0 0 6px; padding: 10px 12px; box-sizing: border-box; }
 .cons-popup-info .tag { display: inline-block; margin-bottom: 6px; }
 .cons-popup-info h2 { margin: 0 0 6px; font-size: 18px; }
 .cons-popup-info p { margin: 0; font-size: 13px; color: var(--dim); line-height: 1.4; }

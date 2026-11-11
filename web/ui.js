@@ -469,8 +469,10 @@
       + `<div class="otxt"><div class="oname"><b>${c.vi}</b><span class="osub">${CAT_VI[c.category] || 'Tiêu Hao'}</span></div><div class="desc">${c.text}</div></div>`
       + `<button class="buy" data-act="buy" data-uid="${o.uid}" ${disabled ? 'disabled' : ''}>${gicon('thoi_vang')}${o.price}${full ? '<small>Đầy ô</small>' : ''}</button></div>`;
   }
-  function consBarHTML() {
-    if (!run || !run.consumables || !run.consumables.length) return '';
+  // dock = bản gắn vào hàng Xếp bài ở màn dọc: luôn hiện, có ô trống, không chiếm thêm hàng
+  function consBarHTML(dock) {
+    if (!run || !run.consumables) return '';
+    if (!dock && !run.consumables.length) return '';
     const items = run.consumables.map((c) => {
       const def = CDATA.find((x) => x.id === c.id);
       const sel = ui.selCons === c.uid;
@@ -478,6 +480,10 @@
       return `<button class="cons-item${sel ? ' sel' : ''}${active ? ' active' : ''}" data-act="use-cons" data-uid="${c.uid}" type="button">
         <img class="px gi" src="assets/icons/${def.icon}.png" alt="" draggable="false"><span class="cname">${def.vi}</span></button>`;
     }).join('');
+    if (dock) {
+      const empty = '<span class="cons-slot" aria-hidden="true"></span>'.repeat(Math.max(0, run.consumableSlots - run.consumables.length));
+      return `<div class="cons-bar cons-dock" role="group" aria-label="Vật phẩm tiêu hao"><span class="cons-cap"><span>Tiêu hao</span><b>${run.consumables.length}/${run.consumableSlots}</b></span><div class="cons-list">${items}${empty}</div></div>`;
+    }
     return `<div class="cons-bar"><span class="cons-bar-label">Tiêu Hao</span><div class="cons-list">${items}</div><span class="cons-bar-slots">${run.consumables.length}/${run.consumableSlots}</span></div>`;
   }
   const sortDeck = (cards) => cards.slice().sort((a, b) => R[b.rank].order - R[a.rank].order || HO.indexOf(a.color) - HO.indexOf(b.color));
@@ -630,7 +636,7 @@
         <button class="btn discard" id="btnDis" data-act="discard" type="button" ${canDis ? '' : 'disabled'}>Bỏ bài<small>còn ${r.discardsLeft} lượt</small></button>
       </div>
       </div><div class="pr"><div class="pile" title="Bộ rút: bấm để xem Bộ bài" role="button" tabindex="0" data-act="deck" aria-label="Xem Bộ bài"><i></i><i></i><i></i><b class="num">${r.draw.length}</b><small>/ ${run.deck.length}</small></div>
-      <div class="meta">${r.hand.some((c) => c.junk) ? `<span class="mnote">${r.hand.filter((c) => c.junk).length} lá Tạp trên tay</span>` : ''}<span class="sorts"><small>Xếp bài</small><button class="mini${ui.sortMode === 'rank' ? ' on' : ''}" data-act="sort" data-mode="rank" type="button">Theo số</button><button class="mini${ui.sortMode === 'color' ? ' on' : ''}" data-act="sort" data-mode="color" type="button">Theo họ</button></span></div></div>
+      <div class="meta">${consBarHTML(true)}${r.hand.some((c) => c.junk) ? `<span class="mnote">${r.hand.filter((c) => c.junk).length} lá Tạp trên tay</span>` : ''}<span class="sorts"><small>Xếp bài</small><button class="mini${ui.sortMode === 'rank' ? ' on' : ''}" data-act="sort" data-mode="rank" type="button">Theo số</button><button class="mini${ui.sortMode === 'color' ? ' on' : ''}" data-act="sort" data-mode="color" type="button">Theo họ</button></span></div></div>
       ${overlays()}`;
   }
 
