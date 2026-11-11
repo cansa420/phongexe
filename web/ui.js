@@ -552,7 +552,7 @@
     const curIdx = ord.indexOf(run.preview(sel).type);
     const hinted = new Set();
     for (const c of run.round.hand) {
-      if (ui.sel.has(c.id) || c.rank === 'junk') continue;
+      if (ui.sel.has(c.id) || c.rank === 'junk' || c.rank === 'n10') continue;
       if (ord.indexOf(run.preview([...sel, c.id]).type) < curIdx) hinted.add(c.id);
     }
     return hinted;

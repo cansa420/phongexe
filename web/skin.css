@@ -381,18 +381,15 @@ html[data-layout="port"] .btn { font-size: 20px; } html[data-layout="port"] .btn
 .card .seal { left: calc(var(--u) * 10); top: calc(var(--u) * 30); width: calc(var(--w) * .16); height: calc(var(--w) * .16); z-index: 2; }
 .card .stamp { right: calc(var(--u) * 10); top: calc(var(--u) * 30); z-index: 2; }
 .card.deb { filter: grayscale(0.65) brightness(0.75); }
-/* Gợi ý ghép bộ: outline xanh ngọc + filter pulse (không dùng box-shadow vì bị reset line 305) */
-.hand .card.hint {
-  outline: 2.5px solid rgba(0, 220, 190, 0.9);
-  outline-offset: 2px;
-  animation: hintPulse 1.3s ease-in-out infinite;
+/* Gợi ý ghép bộ: outline + animation trên .frame (không dùng filter trên card, tránh phá stacking context) */
+.hand .card.hint { outline: 2.5px solid rgba(0, 220, 190, 0.85); outline-offset: 2px; }
+.hand .card.hint .frame { animation: hintFramePulse 1.3s ease-in-out infinite; }
+@keyframes hintFramePulse {
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(0, 220, 190, 0.6)); }
+  50%       { filter: drop-shadow(0 0 8px rgba(0, 235, 205, 1)) drop-shadow(0 0 2px rgba(0, 235, 205, 0.7)); }
 }
-@keyframes hintPulse {
-  0%, 100% { filter: brightness(1)    drop-shadow(0 0 3px rgba(0, 220, 190, 0.5)); }
-  50%       { filter: brightness(1.22) drop-shadow(0 0 10px rgba(0, 230, 200, 0.95)); }
-}
-html.reduce .hand .card.hint { animation: none; outline: 2.5px solid rgba(0,220,190,.9); filter: brightness(1.12) drop-shadow(0 0 7px rgba(0,230,200,.85)); }
-@media (prefers-reduced-motion: reduce) { .hand .card.hint { animation: none; } }
+html.reduce .hand .card.hint .frame { animation: none; filter: drop-shadow(0 0 6px rgba(0,230,200,.9)); }
+@media (prefers-reduced-motion: reduce) { .hand .card.hint .frame { animation: none; } }
 .card .debtag { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(10, 8, 6, 0.85); color: var(--son-l); font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 3px; white-space: nowrap; letter-spacing: .04em; z-index: 3; pointer-events: none; }
 .card.e-linh .band { background: linear-gradient(90deg, var(--son) 0 33%, var(--ngoc) 33% 66%, var(--cham-l) 66% 100%); }
 .card.e-kim::after, .card.e-ngoc::after, .card.e-son::after, .card.e-thep::after { inset: calc(var(--u) * 4); }
