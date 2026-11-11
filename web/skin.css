@@ -1143,12 +1143,14 @@ html[data-layout="port"] #app .title .tbtns { margin: 0; width: min(100%, 400px)
 html[data-layout="port"] #app .title .tr { flex: none; padding-top: 0; }
 
 /* Landscape: logo hàng 1 full width, cards/panels hàng 2, buttons/Cài đặt hàng 3 */
-html[data-layout="land"] .title { grid-template-columns: minmax(0, .85fr) minmax(0, 1.25fr); grid-template-rows: auto minmax(0, 1fr) auto; }
+html[data-layout="land"] .title { grid-template-columns: minmax(0, .85fr) minmax(0, 1.25fr); grid-template-rows: auto minmax(0, 1fr) auto auto minmax(0, 1fr) auto; }
 html[data-layout="land"] .title .lg    { grid-column: 1 / -1; grid-row: 1; display: flex; justify-content: center; align-items: center; padding: 30px 0 6px; }
-html[data-layout="land"] .title .tl   { grid-column: 1; grid-row: 2; justify-content: flex-end; align-self: stretch; min-height: 0; overflow: visible; transform: translateY(-140px); }
-html[data-layout="land"] .title .tbtns { grid-column: 1; grid-row: 3; align-self: end; padding-bottom: 16px; gap: 8px; transform: translateY(-140px); }
-html[data-layout="land"] .title .tr   { grid-column: 2; grid-row: 2 / 4; align-self: start; justify-content: flex-start; padding-top: 116px; padding-bottom: 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-html[data-layout="land"] .title .tfoot { grid-column: 2; grid-row: 3; align-self: center; justify-self: start; padding: 10px 0 16px; margin: 0; }
+html[data-layout="land"] .title .tl   { grid-column: 1; grid-row: 3; justify-content: flex-end; align-self: end; min-height: 0; overflow: visible; padding: 0; }
+html[data-layout="land"] .title .tbtns { grid-column: 1; grid-row: 4; align-self: start; padding-bottom: 0; gap: 8px; }
+/* Cụm trái (cards + nút, hàng 3-4) và cụm phải (panels, span hàng 3-4) cùng tâm dọc; hàng 2 và 5 là khoảng đệm 1fr */
+html[data-layout="land"] .title .tl .cards { margin: 0 0 22px; }
+html[data-layout="land"] .title .tr   { grid-column: 2; grid-row: 3 / 5; align-self: center; justify-content: center; padding-top: 0; padding-bottom: 0; min-height: 0; }
+html[data-layout="land"] .title .tfoot { grid-column: 2; grid-row: 6; align-self: center; justify-self: start; padding: 10px 0 16px; margin: 0; }
 /* Ẩn Cách chơi trong landscape để panel có không gian xuống thấp hơn */
 html[data-layout="land"] .title .panel.howto { display: none; }
 /* Buttons nhỏ hơn trong landscape để row 3 không chiếm quá nhiều */
@@ -1280,7 +1282,14 @@ html[data-layout="land"] #app .controls .btn { min-height: min(44px, 10svh); pad
   html[data-layout="land"] .title .tbtns .btn.play.big .bl { font-size: 14px; }
   html[data-layout="land"] .title .tbtns .btn.discard.big { min-height: min(38px, 8.5svh); }
   html[data-layout="land"] .title .tbtns .btn.discard.big img.gi { width: 26px; height: 26px; }
-  html[data-layout="land"] .title .tbtns { gap: 6px; padding-bottom: 8px; transform: translateY(-80px); }
-  html[data-layout="land"] .title .tl   { transform: translateY(-80px); }
+  html[data-layout="land"] .title .tbtns { gap: 6px; }
   html[data-layout="land"] .title .tfoot { padding: 4px 0 8px; }
+}
+/* Landscape thấp: 1 hàng nội dung co giãn, panel phải cuộn bên trong, cụm trái vẫn cùng tâm dọc */
+@media (max-height: 620px) {
+  html[data-layout="land"] .title { grid-template-rows: auto minmax(0, 1fr) auto; }
+  html[data-layout="land"] .title .tl { display: none; }
+  html[data-layout="land"] .title .tbtns { grid-row: 2; align-self: center; }
+  html[data-layout="land"] .title .tr { grid-row: 2; align-self: center; max-height: 100%; justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  html[data-layout="land"] .title .tfoot { grid-row: 3; }
 }

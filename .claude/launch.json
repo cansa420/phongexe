@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "0.0.1",
   "configurations": [
     {
@@ -6,6 +6,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["-e", "const http=require('http'),fs=require('fs'),path=require('path');http.createServer((req,res)=>{let f=path.join('C:\\Users\\Admin\\AppData\\Roaming\\Claude\\scratch-workspaces\\a0740424-7b2e-4619-b2f3-9034577920f2\\2c42ac17-1f53-475e-8dfa-c71147a91d8d\\scratch-2026-11-02-af71ee\\phongexe\\dist',req.url==='/'?'/index.html':req.url);try{res.end(fs.readFileSync(f))}catch(e){res.writeHead(404);res.end()}}).listen(7788)"],
       "port": 7788
+    },
+    {
+      "name": "phongexe-local",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["-e", "const http=require('http'),fs=require('fs'),path=require('path');http.createServer((req,res)=>{let f=path.join('C:/Users/Admin/Documents/phongexe/dist',req.url.split('?')[0]==='/'?'/index.html':req.url.split('?')[0]);try{res.end(fs.readFileSync(f))}catch(e){res.writeHead(404);res.end()}}).listen(7789)"],
+      "port": 7789
     }
   ]
 }
