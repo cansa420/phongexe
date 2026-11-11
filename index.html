@@ -1705,6 +1705,21 @@ html[data-layout="port"] #app .meta .cons-dock {
 /* Màn hẹp: bỏ chữ "Xếp bài" để dock và 2 nút xếp nằm vừa một hàng */
 @media (max-width: 420px) { html[data-layout="port"] #app .sorts small { display: none; } html[data-layout="port"] #app .meta { flex-wrap: nowrap; } }
 
+/* Thanh tiêu hao màn ngang: khối đặc nằm giữa, viền vàng, icon lớn kèm tên, nhấp nháy nhẹ để người chơi thấy mình đang có vật phẩm */
+.pc-charms .cons-bar { width: fit-content; max-width: 100%; margin: 6px auto 8px; padding: 6px 8px 6px 14px; gap: 12px;
+  background: color-mix(in srgb, var(--den) 90%, transparent); border: 2px solid color-mix(in srgb, var(--vang) 75%, transparent);
+  border-radius: 12px; box-shadow: 0 4px 0 rgba(0, 0, 0, .45); }
+.pc-charms .cons-cap span { font-size: 11px; } .pc-charms .cons-cap b { font-size: 17px; }
+.pc-charms .cons-list { flex-wrap: nowrap; gap: 8px; align-items: center; }
+.pc-charms .cons-item { flex-direction: row; gap: 8px; min-width: 0; padding: 4px 14px 4px 6px; border-color: var(--vang); }
+.pc-charms .cons-item img.gi { width: 42px; height: 42px; }
+.pc-charms .cons-item .cname { font-size: 14px; max-width: 170px; text-align: left; }
+.pc-charms .cons-slot { width: 54px; height: 54px; }
+.cons-bar .cons-item { animation: consReady 1.8s ease-in-out infinite; }
+.cons-bar .cons-item.sel, .cons-bar .cons-item.active { animation: none; }
+@keyframes consReady { 0%, 100% { box-shadow: 0 0 0 0 rgba(226, 173, 60, 0); } 50% { box-shadow: 0 0 10px 2px rgba(226, 173, 60, .6); } }
+html.reduce .cons-bar .cons-item { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .cons-bar .cons-item { animation: none !important; } }
 /* ===== Consumable detail popup ===== */
 .cons-popup { max-width: 340px; }
 .cons-popup-top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
@@ -1751,6 +1766,76 @@ html[data-layout="land"] #app .controls .btn { min-height: min(44px, 10svh); pad
   html[data-layout="land"] .title .tr { grid-row: 2; align-self: center; max-height: 100%; justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   html[data-layout="land"] .title .tfoot { grid-row: 3; }
 }
+
+/* ===== Màn ngang thấp (điện thoại xoay ngang): HUD gọn lại, nhường chiều cao cho bộ bài ===== */
+@media (max-height: 520px) {
+  html[data-layout="land"] #app { padding: max(8px, env(safe-area-inset-top)) calc(50px + env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important; }
+  html[data-layout="land"] .gear { width: 42px; height: 42px; padding: 6px; top: max(6px, env(safe-area-inset-top)); right: max(6px, env(safe-area-inset-right)); }
+  html[data-layout="land"] #app[data-view="play"] { grid-template-columns: clamp(180px, 26%, 230px) minmax(0, 1fr) 88px; grid-template-rows: minmax(0, 1fr); gap: 10px; align-items: stretch; height: 100svh; box-sizing: border-box; }
+  html[data-layout="land"] #app[data-view="play"] :is(.pl, .pc, .pr) { height: auto; max-height: none; min-height: 0; gap: 6px; padding-bottom: 0; }
+  /* cột trái */
+  html[data-layout="land"] #app[data-view="play"] .hudlogo { display: none; }
+  html[data-layout="land"] #app[data-view="play"] .pl { justify-content: flex-end; }
+  html[data-layout="land"] #app[data-view="play"] .blindbar { padding: 7px 10px 9px; row-gap: 3px; min-height: 0; }
+  html[data-layout="land"] #app[data-view="play"] .blindbar .bb1 small { font-size: 9px; }
+  html[data-layout="land"] #app[data-view="play"] .blindbar .bb1 b { font-size: 14px; line-height: 1.1; }
+  html[data-layout="land"] #app[data-view="play"] .blindbar .tools { flex-wrap: nowrap; gap: 4px; }
+  html[data-layout="land"] #app[data-view="play"] .blindbar .mini { min-height: 24px; padding: 0 5px; font-size: 10.5px; white-space: nowrap; }
+  html[data-layout="land"] #app[data-view="play"] .blindbar .mini img.gi { display: none; }
+  html[data-layout="land"] #app[data-view="play"] .panel.boss { padding: 5px 10px 6px; font-size: 10.5px; line-height: 1.2; min-height: 0; gap: 2px 6px; }
+  html[data-layout="land"] #app[data-view="play"] .panel.boss :is(b, span) { font-size: 10.5px; line-height: 1.2; }
+  html[data-layout="land"] #app[data-view="play"] .panel.target { padding: 5px 10px 7px; min-height: 0; height: auto; gap: 2px 8px; }
+  html[data-layout="land"] #app[data-view="play"] .panel.target small { font-size: 9px; }
+  html[data-layout="land"] #app[data-view="play"] .panel.target .bar { height: 8px; }
+  html[data-layout="land"] #app[data-view="play"] .target .num { font-size: 22px !important; }
+  html[data-layout="land"] #app[data-view="play"] .panel.calc { padding: 6px 8px 8px; gap: 4px; min-height: 0; height: auto; flex: none; }
+  html[data-layout="land"] #app[data-view="play"] .calc .hname { flex: none; gap: 1px; }
+  html[data-layout="land"] #app[data-view="play"] .calc .hname b { font-size: 14px; }
+  html[data-layout="land"] #app[data-view="play"] .calc .hname em { font-size: 11px; }
+  html[data-layout="land"] #app[data-view="play"] .calc .eq .cbox, html[data-layout="land"] #app[data-view="play"] .calc .eq .mbox { min-height: 34px; font-size: 22px; }
+  html[data-layout="land"] #app[data-view="play"] .stats { gap: 4px; margin: 0; }
+  html[data-layout="land"] #app[data-view="play"] .stat { height: 38px; }
+  html[data-layout="land"] #app[data-view="play"] .stat small { font-size: 7.5px; margin: 2px 2px 0; padding: 1px; }
+  html[data-layout="land"] #app[data-view="play"] .stat b { font-size: 16px; margin: 0 2px 2px; }
+  /* cột giữa: bùa + tiêu hao chung một hàng thấp, khu đánh bài dùng lá nhỏ, phần còn lại cho tay bài */
+  html[data-layout="land"] #app[data-view="play"] .pc-charms { display: flex; align-items: center; justify-content: center; gap: 8px; flex: none; min-width: 0; }
+  html[data-layout="land"] #app[data-view="play"] .capt { display: none; }
+  html[data-layout="land"] #app[data-view="play"] .charms { grid-template-columns: repeat(var(--n, 5), minmax(0, 44px)) !important; width: auto; flex: 0 1 auto; min-width: 0; gap: 5px; margin: 0; }
+  html[data-layout="land"] #app[data-view="play"] .charms :is(.charm, .slot) { aspect-ratio: 1 / 1.05; }
+  html[data-layout="land"] #app[data-view="play"] .charms .charm .cname { display: none; }
+  html[data-layout="land"] #app[data-view="play"] .pc-charms .cons-bar { margin: 0; padding: 2px 4px 2px 8px; gap: 6px; flex: none; border-width: 1.5px; box-shadow: 0 2px 0 rgba(0, 0, 0, .4); }
+  html[data-layout="land"] #app[data-view="play"] .pc-charms .cons-cap span { font-size: 9px; }
+  html[data-layout="land"] #app[data-view="play"] .pc-charms .cons-cap b { font-size: 13px; }
+  html[data-layout="land"] #app[data-view="play"] .pc-charms .cons-item { width: 36px; height: 36px; padding: 0; justify-content: center; box-sizing: border-box; }
+  html[data-layout="land"] #app[data-view="play"] .pc-charms .cons-item img.gi { width: 28px; height: 28px; }
+  html[data-layout="land"] #app[data-view="play"] .pc-charms .cons-item .cname { display: none; }
+  html[data-layout="land"] #app[data-view="play"] .pc-charms .cons-slot { width: 36px; height: 36px; }
+  html[data-layout="land"] #app[data-view="play"] .stage { flex: 1 1 0; min-height: calc(var(--cw) * var(--ratio) * .6 + 8px); gap: 6px; }
+  html[data-layout="land"] #app[data-view="play"] .stage .card { --w: calc(var(--cw) * .6); }
+  html[data-layout="land"] #app[data-view="play"] .stage .hint { font-size: 12px; line-height: 1.3; padding: 6px 10px; }
+  html[data-layout="land"] #app[data-view="play"] .hand { padding-top: 12px; padding-bottom: 2px; min-height: 0; flex: none; }
+  html[data-layout="land"] #app[data-view="play"] .controls { margin-top: 4px; max-width: 420px; flex: none; }
+  html[data-layout="land"] #app[data-view="play"] .controls .btn { min-height: 38px; padding: 3px 10px; font-size: 15px; }
+  html[data-layout="land"] #app[data-view="play"] .controls .btn small { font-size: 9px; }
+  /* cột phải */
+  html[data-layout="land"] #app[data-view="play"] .pr { justify-content: flex-end; }
+  html[data-layout="land"] #app[data-view="play"] .pile { margin-bottom: 28px; }
+  html[data-layout="land"] #app[data-view="play"] .meta { padding: 8px 8px 10px; }
+  html[data-layout="land"] #app[data-view="play"] .sorts { grid-template-columns: 1fr; gap: 5px; }
+  html[data-layout="land"] #app[data-view="play"] .sorts .mini { min-height: 28px; font-size: 12px; padding: 0 6px; }
+  /* title: chip nhỏ hơn và 4 cột để cả hai bảng vừa màn hình, không phải cuộn */
+  html[data-layout="land"] #app .title .panel { padding: 8px 14px 10px; }
+  html[data-layout="land"] #app .title .chips .mini { min-height: 30px; font-size: 12px; padding: 0 8px; }
+  html[data-layout="land"] #app .title .deckchips { grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); }
+  html[data-layout="land"] #app .title .tr { gap: 8px; }
+  /* đưa Điểm kỷ lục / Cài đặt / Thành Tích sang dưới hai nút bên trái, để cột phải dùng hết chiều cao */
+  html[data-layout="land"] #app .title .tr { grid-row: 2 / 4; }
+  html[data-layout="land"] #app .title .tfoot { grid-column: 1; grid-row: 3; justify-self: center; padding: 4px 0 6px; gap: 6px; }
+  html[data-layout="land"] #app .title .tfoot .mini { min-height: 30px; font-size: 12px; padding: 0 8px; }
+  html[data-layout="land"] #app .title .tbtns .btn.big .bl { font-size: 15px; }
+}
+/* dòng gợi ý bộ trong bảng tính điểm */
+.hintline { color: #35d9c0; font-weight: 700; } .hintline b { color: #8ff5e4; }
 
 </style>
 </head>
@@ -3008,7 +3093,9 @@ function __require(name) {
   const fmt = (n) => Math.round(n).toLocaleString('vi-VN');
   const fmtM = (m) => (Math.abs(m - Math.round(m)) < 1e-9 ? String(Math.round(m)) : String(Math.round(m * 10) / 10).replace('.', ','));
   const root = $('#app');
-  const REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const RM_MQ = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  let REDUCED = !!(RM_MQ && RM_MQ.matches); // cài đặt hệ thống; theo dõi trực tiếp để không kẹt giá trị lúc tải trang
+  if (RM_MQ && RM_MQ.addEventListener) RM_MQ.addEventListener('change', (e) => { REDUCED = e.matches; if (typeof ui !== 'undefined' && ui.settings) render(); });
   const store = { get(k, d) { try { const v = localStorage.getItem('phongexe.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem('phongexe.' + k, JSON.stringify(v)); } catch (e) { /* không lưu được thì thôi */ } } };
   const settings = Object.assign({ musicOn: true, musicVol: 30, sfxOn: true, sfxVol: 85, reduce: false, layout: 'auto', dev: false, devUnlock: true, devOpen: true }, store.get('settings', {}));
   if (/[?&]dev\b/.test(location.search)) { settings.dev = true; if (window.innerWidth < 900 && !('devOpen' in store.get('settings', {}))) settings.devOpen = false; }
@@ -3475,11 +3562,8 @@ function __require(name) {
       return `<button class="cons-item${sel ? ' sel' : ''}${active ? ' active' : ''}" data-act="use-cons" data-uid="${c.uid}" type="button">
         <img class="px gi" src="assets/icons/${def.icon}.png" alt="" draggable="false"><span class="cname">${def.vi}</span></button>`;
     }).join('');
-    if (dock) {
-      const empty = '<span class="cons-slot" aria-hidden="true"></span>'.repeat(Math.max(0, run.consumableSlots - run.consumables.length));
-      return `<div class="cons-bar cons-dock" role="group" aria-label="Vật phẩm tiêu hao"><span class="cons-cap"><span>Tiêu hao</span><b>${run.consumables.length}/${run.consumableSlots}</b></span><div class="cons-list">${items}${empty}</div></div>`;
-    }
-    return `<div class="cons-bar"><span class="cons-bar-label">Tiêu Hao</span><div class="cons-list">${items}</div><span class="cons-bar-slots">${run.consumables.length}/${run.consumableSlots}</span></div>`;
+    const empty = '<span class="cons-slot" aria-hidden="true"></span>'.repeat(Math.max(0, run.consumableSlots - run.consumables.length));
+    return `<div class="cons-bar${dock ? ' cons-dock' : ''}" role="group" aria-label="Vật phẩm tiêu hao"><span class="cons-cap"><span>Tiêu hao</span><b>${run.consumables.length}/${run.consumableSlots}</b></span><div class="cons-list">${items}${empty}</div></div>`;
   }
   const sortDeck = (cards) => cards.slice().sort((a, b) => R[b.rank].order - R[a.rank].order || HO.indexOf(a.color) - HO.indexOf(b.color));
   function charmsRowHTML() {
@@ -3547,18 +3631,43 @@ function __require(name) {
     return !!(run && run.difficultyId === 'de' && run.deckId === 'chuan' && run.chang <= 2);
   }
   // Trả về Set id các lá trên tay sẽ cải thiện bộ khi thêm vào (1–4 lá đang chọn)
-  function getHintCards() {
-    if (!isHintMode() || ui.sel.size === 0 || ui.sel.size >= 5 || !run.round || run.phase !== 'playing') return new Set();
+  // Thử mọi cách thêm 1..(5 - số lá đang chọn) lá trên tay, nên gợi ý được cả bộ cần nhiều lá (Sảnh, Cù lũ, Lèo, Tôm, Phu dọc...).
+  // Ưu tiên: bộ mà mọi lá đều ghi điểm → bộ mạnh hơn → cần thêm ít lá hơn. Các cách hoà nhau cùng được tô sáng.
+  const hintMemo = { key: '', plan: null };
+  function hintPlan() {
+    const none = { ids: new Set(), type: null, add: 0 };
+    if (!isHintMode() || ui.sel.size === 0 || ui.sel.size >= 5 || !run.round || run.phase !== 'playing') return none;
     const sel = [...ui.sel];
+    const key = sel.join(',') + '|' + run.round.hand.map((c) => `${c.id}:${c.rank}:${c.color}:${c.enh || ''}`).join(',');
+    if (hintMemo.key === key && hintMemo.plan) return hintMemo.plan;
     const ord = DATA.hands.map((h) => h.id); // mạnh → yếu, index nhỏ = mạnh hơn
-    const curIdx = ord.indexOf(run.preview(sel).type);
-    const hinted = new Set();
-    for (const c of run.round.hand) {
-      if (ui.sel.has(c.id) || c.rank === 'junk' || c.rank === 'n10') continue;
-      if (ord.indexOf(run.preview([...sel, c.id]).type) < curIdx) hinted.add(c.id);
-    }
-    return hinted;
+    const cur = run.preview(sel);
+    if (!cur) return none;
+    const curIdx = ord.indexOf(cur.type);
+    const pool = run.round.hand.filter((c) => !ui.sel.has(c.id) && c.rank !== 'junk').map((c) => c.id);
+    const maxAdd = Math.min(5 - sel.length, pool.length);
+    let best = null;
+    const rec = (start, picked) => {
+      if (picked.length) {
+        const p = run.preview([...sel, ...picked]); const idx = ord.indexOf(p.type);
+        // chỉ gợi ý khi mọi lá (đang chọn lẫn thêm vào) đều nằm trong bộ; không thì lá đang chọn bị bỏ rơi, gợi ý thành ra sai
+        if (idx < curIdx && p.unscored.length === 0) {
+          const clean = true; const add = picked.length;
+          const wins = !best || (clean !== best.clean ? clean : idx !== best.idx ? idx < best.idx : add < best.add);
+          if (wins) best = { clean, idx, add, sets: [picked.slice()] };
+          else if (clean === best.clean && idx === best.idx && add === best.add) best.sets.push(picked.slice());
+        }
+      }
+      if (picked.length >= maxAdd) return;
+      for (let i = start; i < pool.length; i++) { picked.push(pool[i]); rec(i + 1, picked); picked.pop(); }
+    };
+    rec(0, []);
+    const plan = best ? { ids: new Set(best.sets.flat()), type: ord[best.idx], add: best.add } : none;
+    hintMemo.key = key; hintMemo.plan = plan;
+    return plan;
   }
+  // Set id các lá trên tay nên chọn thêm
+  function getHintCards() { return hintPlan().ids; }
 
   function calcState() {
     if (ui.sel.size && run.round && run.phase === 'playing') {
@@ -3568,7 +3677,8 @@ function __require(name) {
       if (p.banned) warns.push('Trùm phạt bộ này: còn nửa chip, nửa hệ số');
       if (p.debuffed.length) warns.push(`${p.debuffed.length} quân bị trùm vô hiệu`);
       if (p.lockedBetter) warns.push(`🔒 Đủ quân cho <b>${H[p.lockedBetter].vi}</b> nhưng bộ này chưa mở khóa`);
-      const est = `Cấp ${p.level} · dự kiến <b class="est">${fmt(p.estimate)}</b> điểm (đã tính bùa)`;
+      const hp = hintPlan();
+      const est = `Cấp ${p.level} · dự kiến <b class="est">${fmt(p.estimate)}</b> điểm (đã tính bùa)${hp.type ? `<br><span class="hintline">Gợi ý: thêm ${hp.add} ${hp.ids.size > hp.add ? 'trong các lá' : 'lá'} đang sáng →<b>${H[hp.type].vi}</b></span>` : ''}`;
       return { name: H[p.type].vi, sub: warns.length ? `<span class="warn">${warns.join('. ')}</span><br>${est}` : est, chips: p.chips, mult: p.mult, tier: HAND_TIER[p.type] };
     }
     return { name: 'Chọn quân để đánh', sub: 'Tối đa 5 quân', chips: 0, mult: 0, tier: '' };
@@ -3931,7 +4041,7 @@ function __require(name) {
   // Hai bố cục dùng chung một bộ thành phần (GDD mục 10): ngang nếu rộng/cao >= 1,2; dọc nếu nhỏ hơn. ?layout=land|port để thử.
   function setLayout() {
     const forced = (location.search.match(/[?&]layout=(land|port)/) || [])[1] || (settings.layout !== 'auto' ? settings.layout : undefined);
-    const next = forced || (window.innerWidth >= 720 && window.innerWidth / Math.max(1, window.innerHeight) >= 1.2 ? 'land' : 'port');
+    const next = forced || (window.innerWidth >= 560 && window.innerWidth / Math.max(1, window.innerHeight) >= 1.2 ? 'land' : 'port');
     document.documentElement.dataset.layout = next;
     if (ui.layout !== next) { ui.layout = next; render(); }
   }
@@ -3952,6 +4062,17 @@ function __require(name) {
     st.setProperty('--cols', cols); st.setProperty('--cw', cw.toFixed(1) + 'px');
     // thu nhỏ lá cho đến khi cả màn chơi vừa một khung hình, không phải cuộn (tối thiểu 46 px)
     const root = $('#app');
+    // màn ngang thấp (điện thoại xoay ngang): lá to hết mức mà cột giữa vẫn vừa chiều cao, đo thật thay vì ước lượng
+    if (root.dataset.view === 'play' && ui.layout === 'land' && window.innerHeight <= 520) {
+      const pc = $('.pc');
+      if (pc) {
+        let lo = 30; let hi = Math.min(92, (W - 24) / (n - (n - 1) * 0.14)); // chừa 24px vì lá ngoài cùng xoè nghiêng
+        const ctl = $('.controls'); const top = $('.pc-charms'); const ratio = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ratio')) || 2.4;
+        // không dùng scrollHeight: lá bài xoè bằng transform nên luôn bị tính là tràn
+        const fitsL = (v) => { st.setProperty('--cw', v.toFixed(1) + 'px'); const need = (top ? top.offsetHeight : 0) + (v * ratio * 0.6 + 8) + h.offsetHeight + (ctl ? ctl.offsetHeight + 4 : 0) + 18; return need <= pc.clientHeight + 1; };
+        if (!fitsL(hi)) { for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; if (fitsL(mid)) lo = mid; else hi = mid; } fitsL(lo); }
+      }
+    }
     if (root.dataset.view === 'play' && ui.layout === 'port') {
       let lo = 38; let hi = cw;
       const fits = (v) => { st.setProperty('--cw', v.toFixed(1) + 'px'); const m = $('.meta'); return m ? m.offsetTop + m.offsetHeight + 8 <= root.clientHeight + 1 : root.scrollHeight - root.clientHeight <= 1; };
@@ -4593,7 +4714,7 @@ function __require(name) {
     return `<div class="overlay still" data-act="close-bg"><div class="panel sheet set" role="dialog" aria-label="Cài đặt"><h2>${gicon('cai_dat')}Cài đặt</h2>
       <div class="srow"><div><b>Nhạc nền</b><span>Nhạc Shop — Bà Hàng Mã</span></div><div class="sctl">${slider('set-mvol', settings.musicVol, false, 'Âm lượng nhạc nền')}</div></div>
       <div class="srow"><div><b>Hiệu ứng âm thanh</b><span>Tiếng chọn bài, ghi điểm, qua ải</span></div><div class="sctl">${slider('set-vol', settings.sfxVol, false, 'Âm lượng hiệu ứng')}</div></div>
-      <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
+      <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy${REDUCED ? '<br><b class="warn">Thiết bị đang bật giảm chuyển động trong cài đặt hệ thống nên hiệu ứng vẫn tắt dù mục này để Tắt.</b>' : ''}</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
       <div class="srow"><div><b>Bố cục</b><span>Tự theo màn hình, hoặc ép dọc hay ngang</span></div><div class="chips">${chip('set-layout', 'auto', settings.layout === 'auto', 'Tự động')}${chip('set-layout', 'port', settings.layout === 'port', 'Dọc')}${chip('set-layout', 'land', settings.layout === 'land', 'Ngang')}</div></div>
       <div class="srow"><div><b>Mở đầu và hướng dẫn</b><span>Xem lại câu chuyện, hoặc hướng dẫn trong ván</span></div><div class="chips"><button class="mini" data-act="replay-story" type="button">${gicon('cuon_giay')}Mở đầu</button><button class="mini" data-act="replay-tut" type="button">${gicon('den_long')}Hướng dẫn</button></div></div>
       ${clear}
@@ -4695,7 +4816,9 @@ function __require(name) {
     el.innerHTML = '<div class="tut-ring"></div><div class="tut-tip"><img class="tut-face" src="assets/brand/app_icon.png" alt=""><div class="tut-body"><p class="tut-text"></p><div class="tut-foot"><small class="tut-n"></small><span><button class="mini" data-tut="skip" type="button">Bỏ qua</button><button class="mini on" data-tut="next" type="button"></button></span></div></div></div>';
     document.body.appendChild(el);
     const ring = $('.tut-ring', el), tip = $('.tut-tip', el);
-    const show = () => { $('.tut-text', el).textContent = shopSteps[k].text; $('.tut-n', el).textContent = `${k + 1}/${shopSteps.length}`; $('[data-tut=next]', el).textContent = k === shopSteps.length - 1 ? 'Xong' : 'Tiếp'; };
+    const show = () => { $('.tut-text', el).textContent = shopSteps[k].text; $('.tut-n', el).textContent = `${k + 1}/${shopSteps.length}`; $('[data-tut=next]', el).textContent = k === shopSteps.length - 1 ? 'Xong' : 'Tiếp';
+      // cuộn trang tới vùng đang được chỉ, kẻo ô hướng dẫn nằm ngoài màn hình và người chơi chỉ thấy nền tối
+      const t = $(shopSteps[k].sel); if (t && t.scrollIntoView) t.scrollIntoView({ block: 'center', inline: 'nearest', behavior: REDUCED || settings.reduce ? 'auto' : 'smooth' }); };
     el.addEventListener('click', (e) => {
       const a = e.target.closest('[data-tut]'); if (!a) return;
       if (a.dataset.tut === 'skip' || k >= shopSteps.length - 1) { store.set('shopTutDone', true); stopTutorial(false); return; }

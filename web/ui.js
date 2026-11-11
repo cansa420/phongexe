@@ -13,7 +13,9 @@
   const fmt = (n) => Math.round(n).toLocaleString('vi-VN');
   const fmtM = (m) => (Math.abs(m - Math.round(m)) < 1e-9 ? String(Math.round(m)) : String(Math.round(m * 10) / 10).replace('.', ','));
   const root = $('#app');
-  const REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const RM_MQ = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  let REDUCED = !!(RM_MQ && RM_MQ.matches); // cài đặt hệ thống; theo dõi trực tiếp để không kẹt giá trị lúc tải trang
+  if (RM_MQ && RM_MQ.addEventListener) RM_MQ.addEventListener('change', (e) => { REDUCED = e.matches; if (typeof ui !== 'undefined' && ui.settings) render(); });
   const store = { get(k, d) { try { const v = localStorage.getItem('phongexe.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem('phongexe.' + k, JSON.stringify(v)); } catch (e) { /* không lưu được thì thôi */ } } };
   const settings = Object.assign({ musicOn: true, musicVol: 30, sfxOn: true, sfxVol: 85, reduce: false, layout: 'auto', dev: false, devUnlock: true, devOpen: true }, store.get('settings', {}));
   if (/[?&]dev\b/.test(location.search)) { settings.dev = true; if (window.innerWidth < 900 && !('devOpen' in store.get('settings', {}))) settings.devOpen = false; }
@@ -480,11 +482,8 @@
       return `<button class="cons-item${sel ? ' sel' : ''}${active ? ' active' : ''}" data-act="use-cons" data-uid="${c.uid}" type="button">
         <img class="px gi" src="assets/icons/${def.icon}.png" alt="" draggable="false"><span class="cname">${def.vi}</span></button>`;
     }).join('');
-    if (dock) {
-      const empty = '<span class="cons-slot" aria-hidden="true"></span>'.repeat(Math.max(0, run.consumableSlots - run.consumables.length));
-      return `<div class="cons-bar cons-dock" role="group" aria-label="Vật phẩm tiêu hao"><span class="cons-cap"><span>Tiêu hao</span><b>${run.consumables.length}/${run.consumableSlots}</b></span><div class="cons-list">${items}${empty}</div></div>`;
-    }
-    return `<div class="cons-bar"><span class="cons-bar-label">Tiêu Hao</span><div class="cons-list">${items}</div><span class="cons-bar-slots">${run.consumables.length}/${run.consumableSlots}</span></div>`;
+    const empty = '<span class="cons-slot" aria-hidden="true"></span>'.repeat(Math.max(0, run.consumableSlots - run.consumables.length));
+    return `<div class="cons-bar${dock ? ' cons-dock' : ''}" role="group" aria-label="Vật phẩm tiêu hao"><span class="cons-cap"><span>Tiêu hao</span><b>${run.consumables.length}/${run.consumableSlots}</b></span><div class="cons-list">${items}${empty}</div></div>`;
   }
   const sortDeck = (cards) => cards.slice().sort((a, b) => R[b.rank].order - R[a.rank].order || HO.indexOf(a.color) - HO.indexOf(b.color));
   function charmsRowHTML() {
@@ -552,18 +551,43 @@
     return !!(run && run.difficultyId === 'de' && run.deckId === 'chuan' && run.chang <= 2);
   }
   // Trả về Set id các lá trên tay sẽ cải thiện bộ khi thêm vào (1–4 lá đang chọn)
-  function getHintCards() {
-    if (!isHintMode() || ui.sel.size === 0 || ui.sel.size >= 5 || !run.round || run.phase !== 'playing') return new Set();
+  // Thử mọi cách thêm 1..(5 - số lá đang chọn) lá trên tay, nên gợi ý được cả bộ cần nhiều lá (Sảnh, Cù lũ, Lèo, Tôm, Phu dọc...).
+  // Ưu tiên: bộ mà mọi lá đều ghi điểm → bộ mạnh hơn → cần thêm ít lá hơn. Các cách hoà nhau cùng được tô sáng.
+  const hintMemo = { key: '', plan: null };
+  function hintPlan() {
+    const none = { ids: new Set(), type: null, add: 0 };
+    if (!isHintMode() || ui.sel.size === 0 || ui.sel.size >= 5 || !run.round || run.phase !== 'playing') return none;
     const sel = [...ui.sel];
+    const key = sel.join(',') + '|' + run.round.hand.map((c) => `${c.id}:${c.rank}:${c.color}:${c.enh || ''}`).join(',');
+    if (hintMemo.key === key && hintMemo.plan) return hintMemo.plan;
     const ord = DATA.hands.map((h) => h.id); // mạnh → yếu, index nhỏ = mạnh hơn
-    const curIdx = ord.indexOf(run.preview(sel).type);
-    const hinted = new Set();
-    for (const c of run.round.hand) {
-      if (ui.sel.has(c.id) || c.rank === 'junk' || c.rank === 'n10') continue;
-      if (ord.indexOf(run.preview([...sel, c.id]).type) < curIdx) hinted.add(c.id);
-    }
-    return hinted;
+    const cur = run.preview(sel);
+    if (!cur) return none;
+    const curIdx = ord.indexOf(cur.type);
+    const pool = run.round.hand.filter((c) => !ui.sel.has(c.id) && c.rank !== 'junk').map((c) => c.id);
+    const maxAdd = Math.min(5 - sel.length, pool.length);
+    let best = null;
+    const rec = (start, picked) => {
+      if (picked.length) {
+        const p = run.preview([...sel, ...picked]); const idx = ord.indexOf(p.type);
+        // chỉ gợi ý khi mọi lá (đang chọn lẫn thêm vào) đều nằm trong bộ; không thì lá đang chọn bị bỏ rơi, gợi ý thành ra sai
+        if (idx < curIdx && p.unscored.length === 0) {
+          const clean = true; const add = picked.length;
+          const wins = !best || (clean !== best.clean ? clean : idx !== best.idx ? idx < best.idx : add < best.add);
+          if (wins) best = { clean, idx, add, sets: [picked.slice()] };
+          else if (clean === best.clean && idx === best.idx && add === best.add) best.sets.push(picked.slice());
+        }
+      }
+      if (picked.length >= maxAdd) return;
+      for (let i = start; i < pool.length; i++) { picked.push(pool[i]); rec(i + 1, picked); picked.pop(); }
+    };
+    rec(0, []);
+    const plan = best ? { ids: new Set(best.sets.flat()), type: ord[best.idx], add: best.add } : none;
+    hintMemo.key = key; hintMemo.plan = plan;
+    return plan;
   }
+  // Set id các lá trên tay nên chọn thêm
+  function getHintCards() { return hintPlan().ids; }
 
   function calcState() {
     if (ui.sel.size && run.round && run.phase === 'playing') {
@@ -573,7 +597,8 @@
       if (p.banned) warns.push('Trùm phạt bộ này: còn nửa chip, nửa hệ số');
       if (p.debuffed.length) warns.push(`${p.debuffed.length} quân bị trùm vô hiệu`);
       if (p.lockedBetter) warns.push(`🔒 Đủ quân cho <b>${H[p.lockedBetter].vi}</b> nhưng bộ này chưa mở khóa`);
-      const est = `Cấp ${p.level} · dự kiến <b class="est">${fmt(p.estimate)}</b> điểm (đã tính bùa)`;
+      const hp = hintPlan();
+      const est = `Cấp ${p.level} · dự kiến <b class="est">${fmt(p.estimate)}</b> điểm (đã tính bùa)${hp.type ? `<br><span class="hintline">Gợi ý: thêm ${hp.add} ${hp.ids.size > hp.add ? 'trong các lá' : 'lá'} đang sáng →<b>${H[hp.type].vi}</b></span>` : ''}`;
       return { name: H[p.type].vi, sub: warns.length ? `<span class="warn">${warns.join('. ')}</span><br>${est}` : est, chips: p.chips, mult: p.mult, tier: HAND_TIER[p.type] };
     }
     return { name: 'Chọn quân để đánh', sub: 'Tối đa 5 quân', chips: 0, mult: 0, tier: '' };
@@ -936,7 +961,7 @@
   // Hai bố cục dùng chung một bộ thành phần (GDD mục 10): ngang nếu rộng/cao >= 1,2; dọc nếu nhỏ hơn. ?layout=land|port để thử.
   function setLayout() {
     const forced = (location.search.match(/[?&]layout=(land|port)/) || [])[1] || (settings.layout !== 'auto' ? settings.layout : undefined);
-    const next = forced || (window.innerWidth >= 720 && window.innerWidth / Math.max(1, window.innerHeight) >= 1.2 ? 'land' : 'port');
+    const next = forced || (window.innerWidth >= 560 && window.innerWidth / Math.max(1, window.innerHeight) >= 1.2 ? 'land' : 'port');
     document.documentElement.dataset.layout = next;
     if (ui.layout !== next) { ui.layout = next; render(); }
   }
@@ -957,6 +982,17 @@
     st.setProperty('--cols', cols); st.setProperty('--cw', cw.toFixed(1) + 'px');
     // thu nhỏ lá cho đến khi cả màn chơi vừa một khung hình, không phải cuộn (tối thiểu 46 px)
     const root = $('#app');
+    // màn ngang thấp (điện thoại xoay ngang): lá to hết mức mà cột giữa vẫn vừa chiều cao, đo thật thay vì ước lượng
+    if (root.dataset.view === 'play' && ui.layout === 'land' && window.innerHeight <= 520) {
+      const pc = $('.pc');
+      if (pc) {
+        let lo = 30; let hi = Math.min(92, (W - 24) / (n - (n - 1) * 0.14)); // chừa 24px vì lá ngoài cùng xoè nghiêng
+        const ctl = $('.controls'); const top = $('.pc-charms'); const ratio = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ratio')) || 2.4;
+        // không dùng scrollHeight: lá bài xoè bằng transform nên luôn bị tính là tràn
+        const fitsL = (v) => { st.setProperty('--cw', v.toFixed(1) + 'px'); const need = (top ? top.offsetHeight : 0) + (v * ratio * 0.6 + 8) + h.offsetHeight + (ctl ? ctl.offsetHeight + 4 : 0) + 18; return need <= pc.clientHeight + 1; };
+        if (!fitsL(hi)) { for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; if (fitsL(mid)) lo = mid; else hi = mid; } fitsL(lo); }
+      }
+    }
     if (root.dataset.view === 'play' && ui.layout === 'port') {
       let lo = 38; let hi = cw;
       const fits = (v) => { st.setProperty('--cw', v.toFixed(1) + 'px'); const m = $('.meta'); return m ? m.offsetTop + m.offsetHeight + 8 <= root.clientHeight + 1 : root.scrollHeight - root.clientHeight <= 1; };
@@ -1598,7 +1634,7 @@
     return `<div class="overlay still" data-act="close-bg"><div class="panel sheet set" role="dialog" aria-label="Cài đặt"><h2>${gicon('cai_dat')}Cài đặt</h2>
       <div class="srow"><div><b>Nhạc nền</b><span>Nhạc Shop — Bà Hàng Mã</span></div><div class="sctl">${slider('set-mvol', settings.musicVol, false, 'Âm lượng nhạc nền')}</div></div>
       <div class="srow"><div><b>Hiệu ứng âm thanh</b><span>Tiếng chọn bài, ghi điểm, qua ải</span></div><div class="sctl">${slider('set-vol', settings.sfxVol, false, 'Âm lượng hiệu ứng')}</div></div>
-      <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
+      <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy${REDUCED ? '<br><b class="warn">Thiết bị đang bật giảm chuyển động trong cài đặt hệ thống nên hiệu ứng vẫn tắt dù mục này để Tắt.</b>' : ''}</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
       <div class="srow"><div><b>Bố cục</b><span>Tự theo màn hình, hoặc ép dọc hay ngang</span></div><div class="chips">${chip('set-layout', 'auto', settings.layout === 'auto', 'Tự động')}${chip('set-layout', 'port', settings.layout === 'port', 'Dọc')}${chip('set-layout', 'land', settings.layout === 'land', 'Ngang')}</div></div>
       <div class="srow"><div><b>Mở đầu và hướng dẫn</b><span>Xem lại câu chuyện, hoặc hướng dẫn trong ván</span></div><div class="chips"><button class="mini" data-act="replay-story" type="button">${gicon('cuon_giay')}Mở đầu</button><button class="mini" data-act="replay-tut" type="button">${gicon('den_long')}Hướng dẫn</button></div></div>
       ${clear}
@@ -1700,7 +1736,9 @@
     el.innerHTML = '<div class="tut-ring"></div><div class="tut-tip"><img class="tut-face" src="assets/brand/app_icon.png" alt=""><div class="tut-body"><p class="tut-text"></p><div class="tut-foot"><small class="tut-n"></small><span><button class="mini" data-tut="skip" type="button">Bỏ qua</button><button class="mini on" data-tut="next" type="button"></button></span></div></div></div>';
     document.body.appendChild(el);
     const ring = $('.tut-ring', el), tip = $('.tut-tip', el);
-    const show = () => { $('.tut-text', el).textContent = shopSteps[k].text; $('.tut-n', el).textContent = `${k + 1}/${shopSteps.length}`; $('[data-tut=next]', el).textContent = k === shopSteps.length - 1 ? 'Xong' : 'Tiếp'; };
+    const show = () => { $('.tut-text', el).textContent = shopSteps[k].text; $('.tut-n', el).textContent = `${k + 1}/${shopSteps.length}`; $('[data-tut=next]', el).textContent = k === shopSteps.length - 1 ? 'Xong' : 'Tiếp';
+      // cuộn trang tới vùng đang được chỉ, kẻo ô hướng dẫn nằm ngoài màn hình và người chơi chỉ thấy nền tối
+      const t = $(shopSteps[k].sel); if (t && t.scrollIntoView) t.scrollIntoView({ block: 'center', inline: 'nearest', behavior: REDUCED || settings.reduce ? 'auto' : 'smooth' }); };
     el.addEventListener('click', (e) => {
       const a = e.target.closest('[data-tut]'); if (!a) return;
       if (a.dataset.tut === 'skip' || k >= shopSteps.length - 1) { store.set('shopTutDone', true); stopTutorial(false); return; }
