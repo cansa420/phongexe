@@ -548,11 +548,12 @@
   function getHintCards() {
     if (!isHintMode() || ui.sel.size === 0 || ui.sel.size >= 5 || !run.round || run.phase !== 'playing') return new Set();
     const sel = [...ui.sel];
-    const curIdx = HAND_ORDER.indexOf(run.preview(sel).type);
+    const ord = DATA.hands.map((h) => h.id); // mạnh → yếu, index nhỏ = mạnh hơn
+    const curIdx = ord.indexOf(run.preview(sel).type);
     const hinted = new Set();
     for (const c of run.round.hand) {
       if (ui.sel.has(c.id) || c.rank === 'junk') continue;
-      if (HAND_ORDER.indexOf(run.preview([...sel, c.id]).type) < curIdx) hinted.add(c.id);
+      if (ord.indexOf(run.preview([...sel, c.id]).type) < curIdx) hinted.add(c.id);
     }
     return hinted;
   }
