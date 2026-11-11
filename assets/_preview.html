@@ -1,0 +1,6 @@
+﻿<!doctype html><meta charset=utf-8><body style="background:#293C4A;color:#e7dcc2;font:12px sans-serif;margin:8px"><style>img{image-rendering:pixelated;margin:2px;background:#232f39}</style><div id=a></div><script>
+const s=['van','sach','wan'];let h='';
+for(const k of s){for(let i=1;i<=10;i++)h+=`<img src=cards/${k}_${i}.png width=96>`;h+='<br>'}
+h+='<img src=cards/junk.png width=96><hr>';
+fetch('../src/data/charms.json').then(r=>r.json()).then(c=>{c.forEach(x=>h+=`<img src=charms/${x.id}.png width=64 title=${x.id}>`);h+='<hr>';for(let i=1;i<=8;i++)h+=`<img src=bg/stage${i}_p.png height=300> `;h+='<br>';for(let i=1;i<=8;i++)h+=`<img src=bg/stage${i}_l.png width=300> `;document.getElementById('a').innerHTML=h}).catch(()=>{document.getElementById('a').innerHTML=h})
+</script>

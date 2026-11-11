@@ -1,0 +1,25 @@
+{
+  "name": "PHỖNG.EXE",
+  "short_name": "PHỖNG",
+  "description": "Roguelike xếp bài trên bộ Tổ tôm 120 lá",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#150b08",
+  "theme_color": "#150b08",
+  "lang": "vi",
+  "icons": [
+    {
+      "src": "assets/brand/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/brand/icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
