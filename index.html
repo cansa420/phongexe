@@ -1956,6 +1956,7 @@ html[data-layout="port"] #app[data-view="title"] { height: auto; min-height: 100
 html[data-layout="port"] #app .title { height: auto; min-height: calc(100svh - 28px); overflow: visible; gap: 12px; }
 html[data-layout="port"] #app .title > * { flex-shrink: 0; }
 html[data-layout="port"] #app[data-view="play"] .hand { margin-left: -12px; margin-right: -12px; }
+html[data-layout="port"] #app[data-view="play"] { overflow: visible; }
 
 </style>
 </head>
@@ -4177,7 +4178,7 @@ function __require(name) {
     if (ui.layout === 'land') {
       cols = n; cw = Math.min(92, W / (n - (n - 1) * 0.14), (window.innerHeight - 250) / 5.8);
     } else {
-      cols = n; cw = Math.min(92, (W - 8) / (n - (n - 1) * 0.36 + 0.62)); // chừa chỗ cho lá ngoài cùng xoè nghiêng và lá được chọn phóng to
+      cols = n; cw = Math.min(92, (W - 8) / (n - (n - 1) * 0.36 + 0.78)); // chừa chỗ cho lá ngoài cùng xoè nghiêng và lá được chọn phóng to
     }
     const st = document.documentElement.style;
     cw = Math.max(ui.layout === 'port' ? 44 : 38, cw);
@@ -4208,7 +4209,7 @@ function __require(name) {
           const m = $('.meta'); const need = m ? m.offsetTop + m.offsetHeight + 8 : root.scrollHeight;
           z = Math.max(0.55, Math.min(1, z * (VH / z) / need));
           root.style.zoom = z.toFixed(3); root.style.height = (VH / z).toFixed(1) + 'px';
-          const W2 = h.clientWidth || W; shrink(Math.min(92, (W2 - 8) / (n - (n - 1) * 0.36 + 0.62)));
+          const W2 = h.clientWidth || W; shrink(Math.min(92, (W2 - 8) / (n - (n - 1) * 0.36 + 0.78)));
           if (fits(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cw')) || 38)) break;
         }
       }
