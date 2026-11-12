@@ -5187,24 +5187,28 @@ function __require(name) {
   // ---- nhạc nền từ file MP3
   const music = { el: null, gain: null };
   const musicLevel = () => settings.musicVol / 100;
+  // iOS Safari bỏ qua audio.volume (luôn là 1), nên nhạc phải đi qua GainNode của AudioContext.
+  // Phần tử audio có thể được tạo trước khi AudioContext tồn tại (chưa có thao tác chạm), nên nối lại ở mỗi lần gọi.
+  function attachMusicGain() {
+    if (!music.el || music.gain || music.failed || !actx) return;
+    try {
+      const src = actx.createMediaElementSource(music.el);
+      music.gain = actx.createGain();
+      src.connect(music.gain);
+      music.gain.connect(actx.destination);
+    } catch (e) { music.gain = null; music.failed = true; }
+  }
   function setMusicVol() {
     if (!music.el) return;
+    attachMusicGain();
     if (music.gain) music.gain.gain.value = musicLevel();
-    else try { music.el.volume = musicLevel(); } catch(e) {}
+    else try { music.el.volume = musicLevel(); } catch (e) { /* iOS: chỉ đọc */ }
   }
   function musicStart() {
     if (!settings.musicOn) return;
-    if (!music.el) {
-      music.el = new Audio('assets/music/bgm.mp3');
-      music.el.loop = true;
-      if (actx) try {
-        const src = actx.createMediaElementSource(music.el);
-        music.gain = actx.createGain();
-        src.connect(music.gain);
-        music.gain.connect(actx.destination);
-      } catch(e) {}
-    }
+    if (!music.el) { music.el = new Audio('assets/music/bgm.mp3'); music.el.loop = true; }
     setMusicVol();
+    if (actx && actx.state === 'suspended') { try { actx.resume(); } catch (e) { /* bỏ qua */ } }
     music.el.play().catch(() => {});
   }
   function musicStop() {
