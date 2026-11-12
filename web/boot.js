@@ -39,6 +39,7 @@
   const fan = FACES.map((f, i) => `<div class="bc" style="--i:${i};--o:${i - 2}"><div class="bc-in"><div class="bc-back"></div><div class="bc-front card ${f[0]}${f[5] ? ' yeu' : ''}"><i class="frame"></i><i class="glint"></i><div class="band"><span class="b1${f[2].length >= 6 ? ' long' : ''}">${f[2]}</span></div><div class="art"><img class="px" src="assets/cards/${f[1]}.png" alt="" draggable="false"></div><div class="foot"><span class="chipv num">${f[3]}</span><span class="b2">${f[4]}</span><i></i></div>${f[5] ? '<i class="yeu-mark">YÊU</i>' : ''}</div></div></div>`).join('');
   const ui = document.createElement('div'); ui.className = 'boot-ui';
   ui.innerHTML = `<div class="boot-logo-wrap"><img class="boot-logo" src="assets/brand/logo.png" alt="PHỖNG.EXE, game xếp bài Tổ Tôm" draggable="false"><i class="boot-sweep"></i></div>
+    <div class="boot-icon"><img src="assets/brand/app_icon.png" alt="" draggable="false"><i class="ic-eye e1"></i><i class="ic-eye e2"></i><i class="ic-sweep"></i></div>
     <div class="boot-fan">${fan}</div>
     <div class="boot-load"><div class="boot-bar"><i></i></div><p class="boot-pct">Đang tải <b>0%</b></p></div>
     <p class="boot-tap">Chạm để bắt đầu</p>`;
