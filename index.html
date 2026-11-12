@@ -2014,7 +2014,7 @@ html[data-layout="port"] #app[data-view="play"] .calc { padding: 10px 18px; min-
 .boot-sweep { position: absolute; inset: 0; -webkit-mask: url(assets/brand/logo.png) center / contain no-repeat; mask: url(assets/brand/logo.png) center / contain no-repeat; background: linear-gradient(100deg, transparent 42%, rgba(255, 255, 255, .85) 50%, transparent 58%) no-repeat; background-size: 260% 100%; background-position: 160% 0; animation: bootSweep 3s ease-in-out 1.9s infinite; mix-blend-mode: soft-light; pointer-events: none; }
 @keyframes bootSweep { 0% { background-position: 160% 0; } 55%, 100% { background-position: -60% 0; } }
 
-.boot-fan { --cw: clamp(44px, min(11.5vw, 9.5vh), 72px); --rt: 2.4; position: absolute; left: 50%; top: 68%; width: min(88vw, 480px); height: calc(var(--cw) * var(--rt)); translate: -50% -50%; }
+.boot-fan { --cw: clamp(53px, min(13.8vw, 11.4vh), 86px); --rt: 2.4; position: absolute; left: 50%; top: 74%; width: min(88vw, 480px); height: calc(var(--cw) * var(--rt)); translate: -50% -50%; }
 .bc { position: absolute; left: 50%; top: 0; width: var(--cw); height: calc(var(--cw) * var(--rt)); margin-left: calc(var(--cw) / -2); perspective: 700px; transform: translateX(calc(var(--o) * var(--cw) * .62)) translateY(calc(var(--o) * var(--o) * var(--cw) * .06)) rotate(calc(var(--o) * 7deg)); animation: bootDeal .75s var(--ease-pop) calc(1.05s + var(--i) * .09s) both, bootBob 3.2s ease-in-out calc(2s + var(--i) * .22s) infinite; }
 @keyframes bootDeal { from { opacity: 0; transform: translateX(0) translateY(-70px) rotate(-20deg) scale(.4); } }
 @keyframes bootBob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
@@ -2039,7 +2039,7 @@ html[data-layout="port"] #app[data-view="play"] .calc { padding: 10px 18px; min-
 html.reduce .boot *, html.reduce .boot-scene { animation: none !important; }
 html.reduce .boot-ready .boot-tap { opacity: 1; }
 html.reduce .boot-bar i { animation: none; }
-@media (max-height: 520px) { .boot-logo-wrap { top: 17%; } .boot-fan { top: 66%; } }
+@media (max-height: 520px) { .boot-logo-wrap { top: 17%; } .boot-fan { top: 72%; } }
 
 /* =====================================================================
    POPUP / BẢNG / THÔNG BÁO: cùng một kiểu hiện ra (lò xo) và đóng lại
