@@ -1951,6 +1951,11 @@ html[data-layout="port"] #app[data-view="play"] .stage { flex: 0 0 auto; }
 html[data-layout="port"] .calc .hname b { white-space: normal; overflow: visible; text-overflow: clip; font-size: 16px; line-height: 1.15; }
 html[data-layout="port"] #app .calc .hname b { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; font-size: 16px !important; line-height: 1.15; }
 
+/* ===== Sảnh dọc: màn thấp thì cho cuộn, không để các khối đè lên nhau ===== */
+html[data-layout="port"] #app[data-view="title"] { height: auto; min-height: 100svh; overflow: visible; }
+html[data-layout="port"] #app .title { height: auto; min-height: calc(100svh - 28px); overflow: visible; gap: 12px; }
+html[data-layout="port"] #app .title > * { flex-shrink: 0; }
+
 </style>
 </head>
 <body>
