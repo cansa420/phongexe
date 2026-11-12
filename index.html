@@ -1938,6 +1938,19 @@ html[data-layout] #app .title .tfoot .mini img.gi { width: 22px; height: 22px; }
 .sheet .btn[data-act="quit"] small { color: var(--den); opacity: .8; letter-spacing: 0; text-transform: none; font-size: 11px; }
 .sheet .btn[data-act="quit"] small { white-space: normal; }
 
+/* ===== Sảnh ngang: cụm 3 nút sát ngay dưới khung Bộ bài khởi đầu ===== */
+@media (min-height: 521px) {
+  html[data-layout="land"] #app .title .tfoot { grid-column: 2; grid-row: 5; align-self: start; justify-self: stretch; max-width: none; padding: 12px 0 0; }
+}
+/* ===== Màn chơi dọc: chia đều khoảng trống giữa các khung cho thoáng ===== */
+html[data-layout="port"] #app[data-view="play"] { justify-content: space-between; }
+html[data-layout="port"] #app[data-view="play"] .stage { flex: 0 0 auto; }
+/* ===== Ô tên bộ bài: căn lề trái, không chừa chỗ cho huy hiệu khi trống ===== */
+.calc .htier:empty { display: none; }
+.calc .hname { align-items: flex-start; text-align: left; justify-content: center; }
+html[data-layout="port"] .calc .hname b { white-space: normal; overflow: visible; text-overflow: clip; font-size: 16px; line-height: 1.15; }
+html[data-layout="port"] #app .calc .hname b { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; font-size: 16px !important; line-height: 1.15; }
+
 </style>
 </head>
 <body>
