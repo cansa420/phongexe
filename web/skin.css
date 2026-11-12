@@ -1489,3 +1489,12 @@ html[data-layout="port"] #app[data-view="play"] .stage { min-height: calc(var(--
 html[data-layout="port"] #app[data-view="play"] .hand { padding-top: 18px; padding-bottom: 6px; }
 html[data-layout="port"] #app[data-view="play"] .hand .card { margin-left: calc(var(--cw) * -.36); }
 html[data-layout="port"] #app[data-view="play"] .hand .card:first-child { margin-left: 0; }
+
+/* ===== Sảnh: Điểm kỷ lục - Thành Tích - Cài đặt thành một hàng, cao bằng nhau ===== */
+html[data-layout] #app .title .tfoot { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-items: stretch; width: 100%; max-width: 520px; justify-self: center; }
+html[data-layout] #app .title .tfoot > * { min-height: 48px; height: 100%; box-sizing: border-box; margin: 0; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 4px 6px; font-size: 14px; white-space: nowrap; }
+html[data-layout] #app .title .tfoot .hscore { flex-direction: column; gap: 0; line-height: 1.1; } html[data-layout] #app .title .tfoot .hscore img { display: none; } html[data-layout] #app .title .tfoot .hscore b { font-size: 18px; } html[data-layout] #app .title .tfoot .hscore span { font-size: 11px; }
+html[data-layout] #app .title .tfoot .mini img.gi { width: 22px; height: 22px; }
+.sheet .btn[data-act="quit"] { border-image-source: url(assets/frames/ui/b_gold.png); color: var(--den); }
+.sheet .btn[data-act="quit"] small { color: var(--den); opacity: .8; letter-spacing: 0; text-transform: none; font-size: 11px; }
+.sheet .btn[data-act="quit"] small { white-space: normal; }

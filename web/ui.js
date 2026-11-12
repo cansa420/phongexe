@@ -543,7 +543,7 @@
       <div class="panel howto" role="group" aria-label="Cách chơi"><small>Cách chơi · 8 chặng, mỗi chặng 3 ải, ải cuối có trùm</small>
         <ul>${HOWTO.map(([ic, t, d]) => `<li>${gicon(ic)}<div><b>${t}</b><span>${d}</span></div></li>`).join('')}</ul></div>
       </div>
-      <div class="tfoot">${(() => { const hs = store.get('highScore', 0); return hs > 0 ? `<div class="hscore">${gicon('tui_loc')}<span>Điểm kỷ lục</span><b>${fmt(hs)}</b></div>` : ''; })()}<div class="tfoot-btns"><button class="mini" data-act="settings" type="button">${gicon('cai_dat')}Cài đặt</button><button class="mini" data-act="achievements" type="button">${gicon('the_bai')}Thành Tích</button></div></div></div>${overlays()}`;
+      <div class="tfoot"><div class="hscore">${gicon('tui_loc')}<span>Điểm kỷ lục</span><b>${fmt(store.get('highScore', 0))}</b></div><button class="mini" data-act="achievements" type="button">${gicon('the_bai')}Thành Tích</button><button class="mini" data-act="settings" type="button">${gicon('cai_dat')}Cài đặt</button></div></div>${overlays()}`;
   }
 
   // Điều kiện bật chế độ gợi ý: Dễ + Bộ Chuẩn + chặng 1-2
@@ -1730,7 +1730,7 @@
       ${A2HS ? '<div class="srow"><div><b>Lưu game ra màn hình chính</b><span>Hướng dẫn từng bước trên iPhone, iPad và Android</span></div><div class="chips"><button class="mini" data-act="ios-guide" type="button">Xem hướng dẫn</button></div></div>' : ''}
       <div class="srow"><div><b>Mở đầu và hướng dẫn</b><span>Xem lại câu chuyện, hoặc hướng dẫn trong ván</span></div><div class="chips"><button class="mini" data-act="replay-story" type="button">${gicon('cuon_giay')}Mở đầu</button><button class="mini" data-act="replay-tut" type="button">${gicon('den_long')}Hướng dẫn</button></div></div>
       ${clear}
-      ${run && ui.view !== 'title' ? '<div class="srow"><div><b>Thoát ra sảnh</b><span>Về màn hình chính. Ván đang chơi được lưu, bấm Tiếp tục để chơi tiếp</span></div><div class="chips"><button class="mini" data-act="quit" type="button">Thoát</button></div></div>' : ''}
+      ${run && ui.view !== 'title' ? '<button class="btn discard" data-act="quit" type="button">Thoát ra sảnh<small>Ván được lưu, bấm Tiếp tục để chơi tiếp</small></button>' : ''}
       <button class="btn play" data-act="close" type="button">Đóng</button></div></div>`;
   }
   root.addEventListener('input', (e) => {
