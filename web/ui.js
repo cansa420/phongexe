@@ -1415,6 +1415,7 @@
       case 'set-reduce': settings.reduce = t.dataset.id === '1'; applySettings(); saveSettings(); render(); break;
       case 'set-layout': settings.layout = t.dataset.id; saveSettings(); setLayout(); render(); break;
       case 'replay-story': ui.settings = false; render(); showStory(); break;
+      case 'quit': clearTimeout(saveTimer); saveRun(); stopTutorial(false); playSfx('card_select', 0.2, 0.85); run = null; ui.view = 'title'; ui.intro = false; ui.unlockMsg = null; ui.settings = false; ui.sel.clear(); ui.stage = null; ui.busy = false; render(); break;
       case 'ios-guide': ui.settings = false; render(); openIosGuide(); break;
       case 'replay-tut': ui.settings = false; store.set('tutDone', false); store.set('tutForce', true); render(); if (run && ui.view === 'play' && !ui.intro) startTutorial(); else toast('Hướng dẫn sẽ hiện ở ván tới'); break;
       case 'mute': ui.muted = !ui.muted; if (!ui.muted) unlockAudio(); render(); break;
@@ -1729,6 +1730,7 @@
       ${A2HS ? '<div class="srow"><div><b>Lưu game ra màn hình chính</b><span>Hướng dẫn từng bước trên iPhone, iPad và Android</span></div><div class="chips"><button class="mini" data-act="ios-guide" type="button">Xem hướng dẫn</button></div></div>' : ''}
       <div class="srow"><div><b>Mở đầu và hướng dẫn</b><span>Xem lại câu chuyện, hoặc hướng dẫn trong ván</span></div><div class="chips"><button class="mini" data-act="replay-story" type="button">${gicon('cuon_giay')}Mở đầu</button><button class="mini" data-act="replay-tut" type="button">${gicon('den_long')}Hướng dẫn</button></div></div>
       ${clear}
+      ${run && ui.view !== 'title' ? '<div class="srow"><div><b>Thoát ra sảnh</b><span>Về màn hình chính. Ván đang chơi được lưu, bấm Tiếp tục để chơi tiếp</span></div><div class="chips"><button class="mini" data-act="quit" type="button">Thoát</button></div></div>' : ''}
       <button class="btn play" data-act="close" type="button">Đóng</button></div></div>`;
   }
   root.addEventListener('input', (e) => {
