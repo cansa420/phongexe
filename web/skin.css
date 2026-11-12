@@ -1516,3 +1516,4 @@ html[data-layout="port"] #app .calc .hname b { white-space: normal !important; o
 html[data-layout="port"] #app[data-view="title"] { height: auto; min-height: 100svh; overflow: visible; }
 html[data-layout="port"] #app .title { height: auto; min-height: calc(100svh - 28px); overflow: visible; gap: 12px; }
 html[data-layout="port"] #app .title > * { flex-shrink: 0; }
+html[data-layout="port"] #app[data-view="play"] .hand { margin-left: -12px; margin-right: -12px; }

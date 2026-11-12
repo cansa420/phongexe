@@ -977,7 +977,7 @@
     if (ui.layout === 'land') {
       cols = n; cw = Math.min(92, W / (n - (n - 1) * 0.14), (window.innerHeight - 250) / 5.8);
     } else {
-      cols = n; cw = Math.min(92, (W - 22) / (n - (n - 1) * 0.36));
+      cols = n; cw = Math.min(92, (W - 8) / (n - (n - 1) * 0.36 + 0.62)); // chừa chỗ cho lá ngoài cùng xoè nghiêng và lá được chọn phóng to
     }
     const st = document.documentElement.style;
     cw = Math.max(ui.layout === 'port' ? 44 : 38, cw);
@@ -1008,7 +1008,7 @@
           const m = $('.meta'); const need = m ? m.offsetTop + m.offsetHeight + 8 : root.scrollHeight;
           z = Math.max(0.55, Math.min(1, z * (VH / z) / need));
           root.style.zoom = z.toFixed(3); root.style.height = (VH / z).toFixed(1) + 'px';
-          const W2 = h.clientWidth || W; shrink(Math.min(92, (W2 - 22) / (n - (n - 1) * 0.36)));
+          const W2 = h.clientWidth || W; shrink(Math.min(92, (W2 - 8) / (n - (n - 1) * 0.36 + 0.62)));
           if (fits(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cw')) || 38)) break;
         }
       }
