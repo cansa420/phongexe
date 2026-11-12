@@ -367,7 +367,7 @@
     const deb = !!(run && run.round && ui.view === 'play' && !ui.intro && !o.noDeb && run.isDebuffed(c));
     const fan = o.fan ? `--rot:${o.fan.rot.toFixed(1)}deg;--ty:${o.fan.ty.toFixed(1)}px;` : '';
     return `<div class="card ${c.color}${c.rank === 'n10' ? ' yeu' : ''}${c.enh || c.seal ? ' badged' : ''}${o.sel ? ' sel' : ''}${c.tmp ? ' tmp' : ''}${o.isNew ? ' new' : ''}${c.enh ? ' e-' + c.enh : ''}${c.junk ? ' junk' : ''}${deb ? ' deb' : ''}${o.hint ? ' hint' : ''}${o.cls ? ' ' + o.cls : ''}" data-id="${c.id}" data-rank="${c.rank}" data-color="${c.color}" data-enh="${c.enh || ''}" data-seal="${c.seal || ''}"${act} style="${fan}${o.delay ? `animation-delay:${o.delay}ms` : ''}">`
-      + `<i class="frame"></i><div class="band">${bandHTML(c)}</div><div class="art">${cardArt(c)}</div><div class="foot">${footHTML(c, chips)}</div>${enh}${c.swapped ? '<i class="stamp"></i>' : ''}${deb ? '<span class="debtag">vô hiệu</span>' : ''}</div>`;
+      + `<i class="frame"></i><i class="glint"></i><div class="band">${bandHTML(c)}</div><div class="art">${cardArt(c)}</div><div class="foot">${footHTML(c, chips)}</div>${enh}${c.swapped ? '<i class="stamp"></i>' : ''}${deb ? '<span class="debtag">vô hiệu</span>' : ''}</div>`;
   }
   function charmHTML(c, idx, tag = 'button') {
     const info = CH[c.id];
@@ -771,7 +771,9 @@
     const consOffers = run.shop.offers.filter((o) => o.kind === 'cons');
     const last = ui.cashout || { chang: run.chang, kind: 'thuong' };
     const owned = run.vouchers.map((id) => PHU[id].vi).join(', ');
-    return `${topHTMLFor(last)}
+    const bulbs = (cls) => `<div class="bulbs ${cls}">${'<i></i>'.repeat(11)}</div>`;
+    const sign = `<div class="shopsign" role="img" aria-label="Chợ">${bulbs('t')}<div class="ss-in"><b>CHỢ</b><small>Sắm sửa cho ván bài</small></div>${bulbs('b')}</div>`;
+    return `${sign}${topHTMLFor(last)}
       <div class="panel next-boss"><small>Ải kế tiếp</small><br><b style="color:var(--gold);font-size:18px">Chặng ${nextChang} · ${CFG.aiNames[nextKind]}</b>, mục tiêu <b class="num" style="font-size:22px">${fmt(tgt)}</b>.<br>
         Trùm chặng ${nextChang}: <b>${boss.vi}</b>, ${boss.text.toLowerCase()}.</div>
       <div class="panel shop-sec"><h3>Bùa<span class="reward">Làm mới ${run.rerollCost()} đồng</span></h3>
@@ -944,7 +946,8 @@
     })();
     root.dataset.view = ui.view + (sel ? '-select' : '');
     const key = ui.view + (sel ? ':select' : '');
-    if (ui.prevView !== key) { root.classList.remove('enter'); void root.offsetWidth; root.classList.add('enter'); ui.prevView = key; }
+    const viewChanged = ui.prevView !== key;
+    if (viewChanged) { root.classList.remove('enter'); void root.offsetWidth; root.classList.add('enter'); ui.prevView = key; }
     // tiền nhấp nháy khi đổi
     const coin = $('.coin');
     if (coin && run && ui.lastMoney != null && run.money !== ui.lastMoney) {
@@ -954,6 +957,7 @@
     ui.justBought = null;
     if (ui.view === 'cashout') $$('[data-count]').forEach((el, i) => setTimeout(() => countUp(el, +el.dataset.count, 380), (FAST ? 1 : 1000) * i * 0.42 * (FAST ? 0.01 : 1) + 80));
     fit(); requestAnimationFrame(fit); setTimeout(fit, 450);
+    if (viewChanged) viewIn(); dealIn();
     if (ui.view === 'end') clearSave(); else queueSave();
     updateDev(); updateGear();
     document.body.classList.toggle('scoring', !!ui.stage && ui.view === 'play');
@@ -1008,7 +1012,9 @@
     if (anim) { rollTo(c, chips, (v) => String(Math.round(v)), 300); rollTo(m, mult, fmtM, 300); }
     else { c._v = chips; m._v = mult; c._rid = (c._rid || 0) + 1; m._rid = (m._rid || 0) + 1; c.textContent = Math.round(chips); m.textContent = fmtM(mult); heatBox(c, 0, 1); heatBox(m, 0, 1); }
     if (bump === 'c' || bump === 'm') {
-      const el = bump === 'c' ? c : m; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), anim ? 260 : 140);
+      const el = bump === 'c' ? c : m;
+      if (anim && !NOFX()) punch(el, bump === 'm' ? 0.26 : 0.18, 2.5, 460);
+      else { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), anim ? 260 : 140); }
     }
   }
   function refreshSel() {
@@ -1032,9 +1038,82 @@
     d.className = 'float ' + cls; d.textContent = text;
     if (REDUCED) d.style.animationDuration = '.01s';
     d.style.left = b.left + b.width / 2 + 'px'; d.style.top = b.top + b.height * 0.15 + dy + 'px';
-    document.body.appendChild(d); setTimeout(() => d.remove(), 950);
+    document.body.appendChild(d);
+    if (!NOFX() && (cls === 'c' || cls === 'm' || cls === 'x' || cls === 'again')) { springTag(d, cls); setTimeout(() => d.remove(), 1100); } else setTimeout(() => d.remove(), 950);
   }
-  function popEl(el) { if (!el) return; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); setTimeout(() => el.classList.remove('pop'), 420); }
+  // ---- chuyển động lò xo: lấy mẫu đáp ứng bậc thang có nảy (overshoot) thành keyframes cho WAAPI, chạy trên GPU
+  const NOFX = () => FAST || REDUCED || settings.reduce;
+  const SPR = (() => { const n = 20; const w = 16; const z = 0.42; const wd = w * Math.sqrt(1 - z * z); const T = 0.5; const a = []; for (let i = 0; i <= n; i++) { const t = (i / n) * T; a.push(1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t))); } return a; })();
+  // nhãn số: bật ra có nảy, xoay lệch rồi chính lại, nằm yên một nhịp, bay lên và mờ
+  function springTag(d, cls) {
+    d.style.animation = 'none';
+    const r0 = (Math.random() < 0.5 ? -1 : 1) * (14 + Math.random() * 10); const r1 = (Math.random() < 0.5 ? -1 : 1) * (2 + Math.random() * 3);
+    const big = cls === 'x' ? 1.12 : 1; const n = SPR.length - 1; const kf = [];
+    SPR.forEach((x, i) => kf.push({ offset: (i / n) * 0.4, opacity: Math.min(1, x * 3), transform: `translate(-50%, ${(14 - 24 * x).toFixed(1)}px) scale(${(x * big).toFixed(3)}) rotate(${(r0 + (r1 - r0) * x).toFixed(2)}deg)` }));
+    kf.push({ offset: 0.78, opacity: 1, transform: `translate(-50%, -10px) scale(${big}) rotate(${r1}deg)` });
+    kf.push({ offset: 1, opacity: 0, transform: `translate(-50%, -44px) scale(${(0.9 * big).toFixed(2)}) rotate(${r1}deg)` });
+    d.animate(kf, { duration: ui.skip ? 420 : 1000, fill: 'forwards', easing: 'linear' });
+  }
+  // nhấn nảy: phóng to rồi lò xo về, kèm lắc nhẹ (dùng cho ô chip/hệ số, tên bộ)
+  function punch(el, amp = 0.2, rot = 2, dur = 440) {
+    if (!el || NOFX()) return;
+    const s = rot ? (Math.random() < 0.5 ? -1 : 1) : 0; const n = SPR.length - 1;
+    el.animate(SPR.map((x, i) => ({ offset: i / n, scale: String((1 + amp * (1 - x)).toFixed(3)), rotate: `${(s * rot * (1 - x)).toFixed(2)}deg` })), { duration: dur, easing: 'linear' });
+  }
+  // lá bài / bùa nhảy lên khi ghi điểm: bật lên, dãn dọc, rơi xuống và nén lại như có trọng lượng
+  function popEl(el) {
+    if (!el) return;
+    if (NOFX()) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); setTimeout(() => el.classList.remove('pop'), 420); return; }
+    const charm = !!el.closest('#charms'); const H0 = charm ? 12 : 22; const wob = charm ? 9 : 3; const n = SPR.length - 1; const s = Math.random() < 0.5 ? -1 : 1;
+    const kf = [{ offset: 0, translate: '0 0', scale: '1 1', rotate: '0deg' }, { offset: 0.16, translate: `0 ${-H0}px`, scale: '0.94 1.1', rotate: `${s * wob}deg` }];
+    SPR.forEach((x, i) => { if (i === 0) return; kf.push({ offset: 0.16 + (i / n) * 0.84, translate: `0 ${(-H0 * (1 - x)).toFixed(2)}px`, scale: `${(1 + 0.08 * (1 - x)).toFixed(3)} ${(1 - 0.08 * (1 - x)).toFixed(3)}`, rotate: `${(s * wob * (1 - x)).toFixed(2)}deg` }); });
+    el.animate(kf, { duration: charm ? 520 : 460, easing: 'linear' });
+  }
+  // điểm xuất phát/đích của lá bài: chồng bài (ngang) hoặc ô Bộ rút (dọc, khi chồng bài bị ẩn)
+  function deckRect() {
+    for (const el of $$('.pile, .st-p')) { const b = el.getBoundingClientRect(); if (b.width > 0) return b; }
+    const h = $('#hand'); if (h) { const b = h.getBoundingClientRect(); return { left: b.right - 20, top: b.top + b.height * 0.5, width: 0, height: 0 }; }
+    return { left: innerWidth - 40, top: innerHeight - 80, width: 0, height: 0 };
+  }
+  // chia bài: từng lá bay từ chồng bài ra vị trí, xoay thẳng dần, lò xo nảy khi đến nơi
+  function dealIn() {
+    if (NOFX() || ui.view !== 'play') return;
+    const cards = $$('#hand .card.new'); if (!cards.length) return;
+    const pb = deckRect();
+    const px = pb.left + pb.width / 2; const py = pb.top + pb.height / 2; const n = SPR.length - 1;
+    cards.forEach((el, i) => {
+      const b = el.getBoundingClientRect(); if (!b.width) return;
+      const dx = px - (b.left + b.width / 2); const dy = py - (b.top + b.height / 2); const r0 = (Math.random() < 0.5 ? -1 : 1) * (16 + Math.random() * 16);
+      el.animate(SPR.map((x, j) => ({ offset: j / n, translate: `${(dx * (1 - x)).toFixed(1)}px ${(dy * (1 - x)).toFixed(1)}px`, rotate: `${(r0 * (1 - x)).toFixed(2)}deg`, scale: (0.5 + 0.5 * x).toFixed(3), opacity: Math.min(1, x * 4) })), { duration: 520, delay: i * 70, easing: 'linear', fill: 'backwards' });
+      if (i < 8) setTimeout(() => playSfx('card_select', 0.1, 1 + i * 0.05), i * 70);
+    });
+  }
+  // vào màn mới: các khối trượt lên lần lượt bằng lò xo; chợ thì các món hàng bật ra thêm một nhịp; bảng tổng kết đếm từng dòng
+  function viewIn() {
+    if (NOFX() || !['cashout', 'shop', 'pack', 'than', 'skip', 'end'].includes(ui.view)) return;
+    const n = SPR.length - 1;
+    const rise = (el, delay, dy, from) => el.animate(SPR.map((x, j) => ({ offset: j / n, translate: `0 ${(dy * (1 - x)).toFixed(1)}px`, scale: (from + (1 - from) * x).toFixed(3), opacity: Math.min(1, x * 3.5) })), { duration: 560, delay, easing: 'linear', fill: 'backwards' });
+    $$('#app > *').slice(0, 9).forEach((el, i) => rise(el, i * 55, 46, 0.97));
+    if (ui.view === 'shop') $$('#app .offer').slice(0, 14).forEach((el, i) => rise(el, 260 + i * 45, 18, 0.88));
+    if (ui.view === 'cashout') $$('#app .rowin').forEach((el, i) => {
+      const d = (parseFloat(el.style.getPropertyValue('--d')) || 0) * 1000;
+      el.animate(SPR.map((x, j) => ({ offset: j / n, translate: `${(-26 * (1 - x)).toFixed(1)}px 0`, scale: (0.92 + 0.08 * x).toFixed(3), opacity: Math.min(1, x * 4) })), { duration: 520, delay: d, easing: 'linear', fill: 'backwards' });
+      if (!el.classList.contains('total') && el.tagName !== 'BUTTON') setTimeout(() => playSfx('chip', 0.3, 1 + i * 0.07), d + 60);
+    });
+  }
+  // lá đã ghi điểm bay xéo vào chồng bỏ bài, lần lượt từng lá
+  async function flyAway() {
+    if (NOFX() || ui.skip) return;
+    const cards = $$('#stage .card'); if (!cards.length) return;
+    const pb = deckRect();
+    const tx = pb.left + pb.width / 2; const ty = pb.top + pb.height / 2;
+    cards.forEach((el, i) => {
+      const b = el.getBoundingClientRect(); const dx = tx - (b.left + b.width / 2); const dy = ty - (b.top + b.height / 2); const rot = (Math.random() < 0.5 ? -1 : 1) * (25 + Math.random() * 35);
+      el.style.zIndex = 60;
+      el.animate([{ translate: '0 0', rotate: '0deg', scale: '1', opacity: 1 }, { offset: 0.22, translate: '0 -18px', rotate: `${-rot * 0.2}deg`, scale: '1.06', opacity: 1 }, { translate: `${dx}px ${dy}px`, rotate: `${rot}deg`, scale: '0.35', opacity: 0.1 }], { duration: 430, delay: i * 55, easing: 'cubic-bezier(.5,0,.8,.45)', fill: 'forwards' });
+    });
+    await new Promise((r) => setTimeout(r, 430 + cards.length * 55));
+  }
 
   async function animateScore(res, before) {
     const steps = res.steps; const r = run.round;
@@ -1054,7 +1133,7 @@
       await sleep(st.kind === 'hand' ? 300 : delay);
       if (st.kind === 'hand') {
         setCalc(H[st.type].vi, `Cấp ${st.level}`, st.chips, st.mult, null, false, HAND_TIER[st.type]);
-        playSfx('card_flip', 0.6);
+        playSfx('card_flip', 0.6); punch($('#hname'), grand ? 0.5 : mid ? 0.35 : 0.2, 3, 520);
         if (mid) {
           fanfare(H[st.type].vi, grand);
           if (grand) { arpeggio(5); playSfx('fanfare', 0.7, 1, 2.5); flash(false); shake(9); const c = $('#calc').getBoundingClientRect(); burst(c.left + c.width / 2, c.top + 30, 26); await sleep(800); }
@@ -1181,6 +1260,7 @@
       });
     }
     await animateScore(res, before);
+    await flyAway();
     ui.stage = null;
     const handScore = res.total - before;
     if (handScore > 0) {
