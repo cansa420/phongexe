@@ -1404,6 +1404,7 @@
       case 'set-reduce': settings.reduce = t.dataset.id === '1'; applySettings(); saveSettings(); render(); break;
       case 'set-layout': settings.layout = t.dataset.id; saveSettings(); setLayout(); render(); break;
       case 'replay-story': ui.settings = false; render(); showStory(); break;
+      case 'ios-guide': ui.settings = false; render(); openIosGuide(); break;
       case 'replay-tut': ui.settings = false; store.set('tutDone', false); store.set('tutForce', true); render(); if (run && ui.view === 'play' && !ui.intro) startTutorial(); else toast('Hướng dẫn sẽ hiện ở ván tới'); break;
       case 'mute': ui.muted = !ui.muted; if (!ui.muted) unlockAudio(); render(); break;
       case 'intro-go': {
@@ -1714,6 +1715,7 @@
       <div class="srow"><div><b>Hiệu ứng âm thanh</b><span>Tiếng chọn bài, ghi điểm, qua ải</span></div><div class="sctl">${slider('set-vol', settings.sfxVol, false, 'Âm lượng hiệu ứng')}</div></div>
       <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
       <div class="srow"><div><b>Bố cục</b><span>Tự theo màn hình, hoặc ép dọc hay ngang</span></div><div class="chips">${chip('set-layout', 'auto', settings.layout === 'auto', 'Tự động')}${chip('set-layout', 'port', settings.layout === 'port', 'Dọc')}${chip('set-layout', 'land', settings.layout === 'land', 'Ngang')}</div></div>
+      ${IOS_A2HS ? '<div class="srow"><div><b>Lưu game ra màn hình chính</b><span>Hướng dẫn từng bước trên iPhone, iPad</span></div><div class="chips"><button class="mini" data-act="ios-guide" type="button">Xem hướng dẫn</button></div></div>' : ''}
       <div class="srow"><div><b>Mở đầu và hướng dẫn</b><span>Xem lại câu chuyện, hoặc hướng dẫn trong ván</span></div><div class="chips"><button class="mini" data-act="replay-story" type="button">${gicon('cuon_giay')}Mở đầu</button><button class="mini" data-act="replay-tut" type="button">${gicon('den_long')}Hướng dẫn</button></div></div>
       ${clear}
       <button class="btn play" data-act="close" type="button">Đóng</button></div></div>`;
@@ -1900,18 +1902,63 @@
     if (ui.info || ui.deckView || ui.items || ui.settings || ui.detail != null || ui.consDetail != null) { ui.info = false; ui.deckView = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.consDetail = null; render(); }
   });
 
-  // ------------------------------------------------------------------ iOS install banner
-  (function iosInstallBanner() {
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-    if (!isIOS || isStandalone) return;
-    if (store.get('iosBannerDismissed', false)) return;
-    const bar = document.createElement('div');
-    bar.className = 'ios-banner';
-    bar.innerHTML = '<span>Nhấn <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><polyline points="8 6 12 2 16 6"/><line x1="12" y1="2" x2="12" y2="16"/><polyline points="6 18 18 18"/><polyline points="4 20 20 20"/></svg> rồi chọn <b>Thêm vào MH chính</b> để lưu game</span><button class="ios-banner-x" type="button" aria-label="Đóng">✕</button>';
-    document.body.appendChild(bar);
-    bar.querySelector('.ios-banner-x').addEventListener('click', () => { bar.remove(); store.set('iosBannerDismissed', true); });
+  // ------------------------------------------------------------------ hướng dẫn lưu game ra màn hình chính (iOS)
+  const UA = navigator.userAgent;
+  const IOS = /iphone|ipad|ipod/i.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const IOS_A2HS = IOS && !(window.matchMedia('(display-mode: standalone)').matches || navigator.standalone);
+  const IOS_INAPP = /FBAN|FBAV|Instagram|Zalo|Line\/|MicroMessenger|TikTok|Messenger|GSA\//i.test(UA);
+  const IOS_CHROME = /CriOS|EdgiOS|FxiOS/.test(UA);
+  const ICO = {
+    share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="8 7 12 3 16 7"/><path d="M6 11H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/></svg>',
+    menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="7" x2="19" y2="7"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="5" y1="17" x2="19" y2="17"/></svg>',
+    add: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+  };
+  function iosGuideHTML() {
+    const mock1 = `<div class="ig-mock"><div class="ig-bar"><span class="ig-hl">${ICO.menu}</span><em>cansa420.github.io</em><span class="ig-hl alt">${ICO.share}</span></div><small>Thanh địa chỉ ở <b>dưới cùng</b> màn hình. Chạm nút sáng nhấp nháy (≡ hoặc ⬆)</small></div>`;
+    const mock2 = `<div class="ig-mock"><div class="ig-menu"><div>Dịch trang web…</div><div class="ig-hl row">${ICO.share}<b>Chia sẻ</b></div><div>Thêm vào Dấu trang</div></div></div>`;
+    const mock3 = `<div class="ig-mock"><div class="ig-menu"><div>Thêm vào Mục ưa thích</div><div>Tìm trên trang</div><div class="ig-hl row">${ICO.add}<b>Thêm vào Màn hình chính</b></div></div><small>Không thấy? <b>Vuốt lên</b> để cuộn danh sách xuống</small></div>`;
+    const mock4 = `<div class="ig-mock"><div class="ig-top"><span>Hủy</span><b>Thêm vào MH chính</b><span class="ig-hl">Thêm</span></div><small>Nút <b>Thêm</b> ở góc trên bên phải</small></div>`;
+    const step = (n, title, mock) => `<li class="ig-step" style="--i:${n}"><i class="ig-n">${n}</i><div><b>${title}</b>${mock}</div></li>`;
+    const warn = IOS_INAPP ? `<div class="ig-warn"><b>Bạn đang mở trong ứng dụng khác (Zalo, Facebook…)</b>Hãy mở link này bằng <b>Safari</b> trước: nhấn <b>⋯</b> hoặc biểu tượng la bàn ở góc rồi chọn <b>Mở bằng trình duyệt</b>.<button class="ig-copy" type="button">Sao chép link game</button></div>` : '';
+    return `<div class="ig-back" data-ig="close"></div><div class="ig-sheet" role="dialog" aria-label="Lưu game ra màn hình chính">
+      <button class="ig-x" data-ig="close" type="button" aria-label="Đóng">✕</button>
+      <div class="ig-head"><span class="ig-ico">${ICO.add}</span><div><h3>Lưu game ra màn hình chính</h3><p>Chơi toàn màn hình như một ứng dụng, mở nhanh bằng một chạm</p></div></div>
+      ${warn}<ol class="ig-steps">
+        ${step(1, IOS_CHROME ? 'Chạm nút Chia sẻ ở thanh địa chỉ' : 'Chạm nút ≡ ở thanh địa chỉ phía dưới', mock1)}
+        ${step(2, 'Chọn “Chia sẻ”', mock2)}
+        ${step(3, 'Chọn “Thêm vào Màn hình chính”', mock3)}
+        ${step(4, 'Chạm “Thêm” để hoàn tất', mock4)}
+      </ol>
+      <div class="ig-done">Xong! Từ giờ hãy mở game bằng <b>biểu tượng mới trên màn hình chính</b>. Tiến trình ván chơi được giữ lại.</div>
+      <button class="ig-ok" data-ig="close" type="button">Đã hiểu</button>
+      <div class="ig-arrow" aria-hidden="true">▼<small>Nút nằm ngay dưới đây</small></div>
+    </div>`;
+  }
+  let igEl = null;
+  function openIosGuide() {
+    if (igEl) return;
+    igEl = document.createElement('div'); igEl.className = 'iosg'; igEl.innerHTML = iosGuideHTML(); document.body.appendChild(igEl);
+    const close = () => { if (!igEl) return; const e = igEl; igEl = null; e.classList.add('out'); setTimeout(() => e.remove(), 260); store.set('iosBannerDismissed', true); const p = $('.ios-pill'); if (p) p.classList.remove('pulse'); };
+    igEl.addEventListener('click', (e) => { if (e.target.closest('[data-ig="close"]')) close(); });
+    const cp = igEl.querySelector('.ig-copy');
+    if (cp) cp.addEventListener('click', () => { const url = location.href.split('#')[0]; (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => { cp.textContent = 'Đã sao chép! Dán vào Safari'; }, () => { cp.textContent = 'Giữ vào thanh địa chỉ để sao chép'; }); });
+    if (!NOFX()) {
+      const sh = igEl.querySelector('.ig-sheet'); const n = SPR.length - 1;
+      sh.animate(SPR.map((x, i) => ({ offset: i / n, translate: `0 ${(60 * (1 - x)).toFixed(1)}%`, opacity: Math.min(1, x * 4) })), { duration: 600, easing: 'linear' });
+      igEl.querySelectorAll('.ig-step').forEach((el, i) => el.animate(SPR.map((x, j) => ({ offset: j / n, translate: `0 ${(26 * (1 - x)).toFixed(1)}px`, opacity: Math.min(1, x * 4) })), { duration: 520, delay: 220 + i * 110, easing: 'linear', fill: 'backwards' }));
+    }
+  }
+  // nút nổi bật ở đáy màn hình: luôn thấy cho tới khi người chơi đã xem hướng dẫn
+  (function iosInstallPill() {
+    if (!IOS_A2HS) return;
+    const seen = store.get('iosBannerDismissed', false);
+    const pill = document.createElement('button'); pill.type = 'button'; pill.className = 'ios-pill' + (seen ? '' : ' pulse');
+    pill.innerHTML = `<span class="ios-pill-ico">${ICO.add}</span><span><b>Lưu game ra màn hình chính</b><small>Chạm để xem cách làm, chỉ 4 bước</small></span><i class="ios-pill-x" aria-label="Ẩn">✕</i>`;
+    pill.addEventListener('click', (e) => { if (e.target.closest('.ios-pill-x')) { pill.remove(); store.set('iosPillHidden', true); return; } openIosGuide(); });
+    if (!store.get('iosPillHidden', false)) document.body.appendChild(pill);
+    if (!seen) setTimeout(openIosGuide, FAST ? 10 : 1800);
   })();
+  window.__openIosGuide = openIosGuide;
 
   // ------------------------------------------------------------------ khởi động
   applySettings();
