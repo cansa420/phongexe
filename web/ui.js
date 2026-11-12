@@ -540,7 +540,7 @@
     const demo = [{ id: 'a', color: 'van', rank: 'n10' }, { id: 'b', color: 'sach', rank: 'n5' }, { id: 'c', color: 'wan', rank: 'n9' }, { id: 'd', color: 'van', rank: 'n3' }, { id: 'e', color: 'sach', rank: 'n8' }];
     const sv = savedGame();
     return `<div class="title"><div class="lg"><h1 class="logo" aria-label="PHỖNG.EXE"><img src="assets/brand/logo.png" alt="PHỖNG.EXE, game xếp bài Tổ Tôm" draggable="false"></h1></div>
-      <div class="tl"><div class="cards">${demo.map((c) => cardHTML(c)).join('')}</div></div>
+      <div class="tl"><div class="cards">${demo.map((c) => cardHTML(c).replace(/<\/div>\s*$/, '<i class="cback"></i></div>')).join('')}</div></div>
       <div class="tbtns">${continueHTML()}<button class="btn ${sv ? 'discard' : 'play'} big" data-act="start" type="button">${gicon('trong_boi')}<span class="bl">Bắt đầu ván mới${sv ? '<small>Thay ván đang lưu</small>' : ''}</span></button></div>
       <div class="tr">
       <div class="panel diff" role="group" aria-label="Độ khó"><small>Độ khó</small>
