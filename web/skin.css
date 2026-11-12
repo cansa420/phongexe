@@ -1458,3 +1458,10 @@ html.reduce .shopsign, html.reduce .bulbs i { animation: none; }
 .ig-arrow { margin-top: 16px; text-align: center; color: var(--vang-l); font-size: 28px; line-height: 1; animation: igBob 1s ease-in-out infinite; } .ig-arrow small { display: block; margin-top: 2px; font-size: 12px; letter-spacing: .06em; }
 @keyframes igBob { 0%, 100% { translate: 0 0; } 50% { translate: 0 8px; } }
 html.reduce .ios-pill.pulse, html.reduce .ig-hl, html.reduce .ig-arrow { animation: none; }
+/* ===== Hướng dẫn lưu game: phần dành cho Android ===== */
+.ig-dlg { display: flex; flex-direction: column; gap: 4px; background: #2c2f36; padding: 12px; font-size: 14px; } .ig-dlg b { font-size: 16px; } .ig-dlg span { opacity: .75; }
+.ig-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; } .ig-btns i { font-style: normal; padding: 8px 14px; opacity: .75; } .ig-btns .ig-hl { opacity: 1; }
+.ig-native { display: flex; align-items: center; gap: 12px; width: 100%; margin: 0 0 14px; padding: 12px 14px; border: 0; text-align: left; background: var(--ngoc); color: var(--den); box-shadow: inset 0 3px 0 var(--ngoc-l), 0 0 0 3px var(--den), 0 6px 0 3px var(--den); } .ig-native[hidden] { display: none; }
+.ig-native svg { flex: none; width: 34px; height: 34px; } .ig-native b { display: block; font-size: 19px; } .ig-native small { display: block; letter-spacing: 0; text-transform: none; color: var(--den); opacity: .85; font-size: 12.5px; }
+.ig-alt { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; padding: 10px 12px; font-size: 13px; line-height: 1.45; background: rgba(0, 0, 0, .25); } .ig-alt b { color: var(--vang-l); }
+.ig-arrow.up { animation-name: igBobUp; } @keyframes igBobUp { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }

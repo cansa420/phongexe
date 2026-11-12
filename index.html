@@ -1821,6 +1821,89 @@ html[data-layout="land"] #app .controls .btn { min-height: min(44px, 10svh); pad
 }
 /* dòng gợi ý bộ trong bảng tính điểm */
 .hintline { color: #35d9c0; font-weight: 700; } .hintline b { color: #8ff5e4; }
+/* ===== Chú giải lá bài (gọn): tên + chip, mỗi bộ một dòng ===== */
+.tip { max-width: min(260px, calc(100vw - 12px)); padding: 8px 10px; font-size: 12.5px; gap: 4px; }
+.tip .tipname { justify-content: space-between; font-size: 15px; }
+.tip .tipname > span { flex: 1; }
+.tip .tipchip { font-style: normal; font-size: 11px; background: var(--vang); color: var(--den); padding: 1px 6px; white-space: nowrap; }
+.tipsets { margin-top: 4px; padding-top: 5px; gap: 4px; }
+.tiprow { grid-template-columns: 64px 1fr; gap: 6px; }
+.tiprow > b { font-size: 11.5px; } .tiprow > span { font-size: 12px; line-height: 1.35; }
+.tiprow > span small { display: block; font-size: 10.5px; color: var(--kem-d); opacity: .85; }
+/* ===== Giai đoạn 1: nền khói, đom đóm, bài nghiêng 3D, ánh bóng ===== */
+.bgfx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.bgsmoke { mix-blend-mode: screen; opacity: .9; }
+.bgfly { mix-blend-mode: screen; }
+#hand, #stage { perspective: 900px; }
+.hand .card, .stage .card { will-change: rotate, scale; }
+.card .glint { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; opacity: 0; transition: opacity .18s; background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 246, 210, .55), rgba(255, 246, 210, 0) 58%); mix-blend-mode: overlay; }
+.card.tilting .glint { opacity: 1; }
+.card .glint::before { content: ''; position: absolute; top: -25%; bottom: -25%; left: -70%; width: 40%; background: linear-gradient(105deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .5) 40%, rgba(150, 255, 235, .35) 60%, rgba(255, 255, 255, 0)); transform: translateX(0) skewX(-18deg); opacity: 0; }
+.card.badged .glint { opacity: 1; mix-blend-mode: normal; background: none; }
+.card.badged .glint::before { opacity: 1; animation: glintSweep 3.6s ease-in-out infinite; }
+.hand .card.badged:nth-child(2n) .glint::before { animation-delay: -1.2s; } .hand .card.badged:nth-child(3n) .glint::before { animation-delay: -2.4s; }
+@keyframes glintSweep { 0%, 55% { transform: translateX(0) skewX(-18deg); } 100% { transform: translateX(520%) skewX(-18deg); } }
+html.reduce .bgfx, html.reduce .card .glint::before { display: none; }
+/* ===== Giai đoạn 3: chia bài, vào màn, tổng kết, gói bài (chuyển động lò xo do JS điều khiển) ===== */
+.card.new { animation: none !important; }
+#app[data-view='cashout'].enter, #app[data-view='shop'].enter, #app[data-view='pack'].enter, #app[data-view='than'].enter, #app[data-view='skip'].enter, #app[data-view='end'].enter { animation: none !important; }
+.rowin { animation: none !important; opacity: 1; }
+@keyframes packBob { 0%, 100% { translate: 0 0; rotate: -.8deg; } 50% { translate: 0 -7px; rotate: .8deg; } }
+.packrow .offer.pcard { animation: packBob 3.4s ease-in-out infinite; }
+.packrow .offer.pcard:nth-child(2n) { animation-delay: -1.1s; } .packrow .offer.pcard:nth-child(3n) { animation-delay: -2.2s; }
+html.reduce .packrow .offer.pcard { animation: none; }
+/* ===== Biển CHỢ: bóng đèn chạy và đu đưa ===== */
+.shopsign { position: relative; display: flex; flex-direction: column; gap: 7px; padding: 9px 12px 8px; margin: 2px 8px 6px; text-align: center; background: linear-gradient(var(--son), var(--son-d, #7a1f12)); box-shadow: inset 0 0 0 3px var(--vang), 0 0 0 3px var(--den), 0 7px 0 3px var(--den); transform-origin: 50% 0; animation: signSwing 3.8s ease-out .55s both; }
+.shopsign .ss-in b { display: block; font-family: var(--f-disp); font-weight: 800; font-size: 38px; line-height: 1; letter-spacing: .18em; padding-left: .18em; color: var(--vang-l, #f4cf72); text-shadow: 0 3px 0 var(--den), 2px 0 0 var(--den), -2px 0 0 var(--den), 0 -2px 0 var(--den); }
+.shopsign .ss-in small { display: block; margin-top: 3px; font-size: 12px; letter-spacing: .1em; color: var(--kem); text-transform: none; text-shadow: 0 2px 0 var(--den); }
+.bulbs { display: flex; justify-content: space-between; padding: 0 2px; }
+.bulbs i { width: 8px; height: 8px; background: var(--vang-l, #f4cf72); box-shadow: 0 0 7px 2px rgba(244, 207, 114, .75), 0 0 0 1px var(--den); animation: bulbChase 1.2s steps(1) infinite; }
+.bulbs i:nth-child(3n+2) { animation-delay: -.4s; } .bulbs i:nth-child(3n) { animation-delay: -.8s; }
+.bulbs.b i { animation-direction: reverse; }
+@keyframes bulbChase { 0% { opacity: 1; } 34% { opacity: .22; } }
+@keyframes signSwing { 0% { rotate: 3.2deg; } 18% { rotate: -2.4deg; } 38% { rotate: 1.6deg; } 58% { rotate: -.9deg; } 78% { rotate: .4deg; } 100% { rotate: 0deg; } }
+html.reduce .shopsign, html.reduce .bulbs i { animation: none; }
+/* ===== Hướng dẫn lưu game trên iOS: nút nổi + bảng từng bước ===== */
+.ios-banner { display: none; }
+.ios-pill { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 9990; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 0; text-align: left; background: var(--vang); color: var(--den); box-shadow: inset 0 3px 0 var(--vang-l), inset 0 -3px 0 var(--vang-d), 0 0 0 3px var(--den), 0 6px 0 3px var(--den); cursor: pointer; }
+.ios-pill b { display: block; font-size: 16px; font-weight: 800; line-height: 1.2; } .ios-pill small { display: block; margin-top: 2px; font-size: 12px; letter-spacing: 0; text-transform: none; color: var(--den); opacity: .8; }
+.ios-pill .ios-pill-ico { flex: none; width: 38px; height: 38px; display: grid; place-items: center; background: var(--den); color: var(--vang-l); } .ios-pill-ico svg { width: 26px; height: 26px; }
+.ios-pill .ios-pill-x { flex: none; margin-left: auto; font-style: normal; font-size: 16px; padding: 4px 6px; opacity: .65; }
+.ios-pill.pulse { animation: pillPulse 1.6s ease-in-out infinite; }
+@keyframes pillPulse { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+.iosg { position: fixed; inset: 0; z-index: 10000; }
+.iosg.out { opacity: 0; transition: opacity .25s; }
+.ig-back { position: absolute; inset: 0; background: rgba(8, 10, 14, .78); }
+.ig-sheet { position: absolute; left: 0; right: 0; bottom: 0; max-height: 94%; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 18px 16px calc(34px + env(safe-area-inset-bottom)); background: var(--cham-d); color: var(--kem); box-shadow: 0 -4px 0 var(--vang), 0 -10px 30px rgba(0, 0, 0, .6); max-width: 560px; margin: 0 auto; }
+.ig-x { position: absolute; top: 10px; right: 10px; width: 38px; height: 38px; border: 0; background: rgba(0, 0, 0, .35); color: var(--kem); font-size: 18px; }
+.ig-head { display: flex; align-items: center; gap: 12px; padding-right: 40px; margin-bottom: 14px; }
+.ig-head h3 { margin: 0; font-size: 21px; line-height: 1.15; color: var(--vang-l); } .ig-head p { margin: 4px 0 0; font-size: 13px; opacity: .85; }
+.ig-ico { flex: none; width: 46px; height: 46px; display: grid; place-items: center; background: var(--vang); color: var(--den); } .ig-ico svg { width: 30px; height: 30px; }
+.ig-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.ig-step { display: flex; gap: 12px; align-items: flex-start; }
+.ig-n { flex: none; width: 34px; height: 34px; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 20px; background: var(--son); color: var(--kem); box-shadow: 0 0 0 3px var(--den); }
+.ig-step > div { flex: 1; min-width: 0; } .ig-step > div > b { display: block; font-size: 17px; line-height: 1.25; margin: 4px 0 8px; }
+.ig-mock { background: rgba(10, 12, 16, .7); padding: 10px; box-shadow: inset 0 0 0 2px rgba(226, 173, 60, .25); } .ig-mock small { display: block; margin-top: 8px; font-size: 12.5px; letter-spacing: 0; text-transform: none; color: var(--kem); opacity: .9; } .ig-mock small b { color: var(--vang-l); }
+.ig-bar { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 22px; background: #000; } .ig-bar em { flex: 1; text-align: center; font-style: normal; font-size: 13px; opacity: .85; }
+.ig-hl { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-width: 34px; min-height: 34px; padding: 0 8px; color: var(--den); background: var(--vang); font-weight: 800; animation: igGlow 1.3s ease-in-out infinite; }
+.ig-hl svg { width: 22px; height: 22px; } .ig-hl.row { justify-content: flex-start; padding: 8px 12px; } .ig-hl.row b { font-size: 15px; } .ig-hl.alt { animation-delay: -.65s; }
+@keyframes igGlow { 0%, 100% { box-shadow: 0 0 0 3px #ff4d4d, 0 0 0 0 rgba(255, 77, 77, .7); } 50% { box-shadow: 0 0 0 3px #ff4d4d, 0 0 0 9px rgba(255, 77, 77, 0); } }
+.ig-menu { background: #2c2f36; display: flex; flex-direction: column; gap: 2px; font-size: 14px; } .ig-menu > div { padding: 9px 12px; opacity: .75; } .ig-menu > .ig-hl { opacity: 1; }
+.ig-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #2c2f36; padding: 8px 10px; font-size: 14px; } .ig-top b { font-size: 14px; } .ig-top span { opacity: .7; } .ig-top .ig-hl { opacity: 1; padding: 4px 14px; }
+.ig-warn { margin: 0 0 14px; padding: 12px; background: var(--son); color: var(--kem); font-size: 14px; line-height: 1.45; } .ig-warn b { display: block; margin-bottom: 4px; } .ig-warn b + b { display: inline; }
+.ig-copy { display: block; margin-top: 10px; width: 100%; min-height: 44px; border: 0; font-weight: 800; font-size: 15px; background: var(--vang); color: var(--den); }
+.ig-done { margin-top: 16px; padding: 12px; background: rgba(53, 163, 148, .2); box-shadow: inset 0 0 0 2px var(--ngoc); font-size: 14px; line-height: 1.45; } .ig-done b { color: var(--vang-l); }
+.ig-ok { display: block; width: 100%; margin-top: 14px; min-height: 52px; border: 0; font-weight: 800; font-size: 18px; background: var(--son); color: var(--kem); box-shadow: inset 0 4px 0 var(--son-l), 0 0 0 3px var(--den), 0 6px 0 3px var(--den); }
+.ig-arrow { margin-top: 16px; text-align: center; color: var(--vang-l); font-size: 28px; line-height: 1; animation: igBob 1s ease-in-out infinite; } .ig-arrow small { display: block; margin-top: 2px; font-size: 12px; letter-spacing: .06em; }
+@keyframes igBob { 0%, 100% { translate: 0 0; } 50% { translate: 0 8px; } }
+html.reduce .ios-pill.pulse, html.reduce .ig-hl, html.reduce .ig-arrow { animation: none; }
+/* ===== Hướng dẫn lưu game: phần dành cho Android ===== */
+.ig-dlg { display: flex; flex-direction: column; gap: 4px; background: #2c2f36; padding: 12px; font-size: 14px; } .ig-dlg b { font-size: 16px; } .ig-dlg span { opacity: .75; }
+.ig-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; } .ig-btns i { font-style: normal; padding: 8px 14px; opacity: .75; } .ig-btns .ig-hl { opacity: 1; }
+.ig-native { display: flex; align-items: center; gap: 12px; width: 100%; margin: 0 0 14px; padding: 12px 14px; border: 0; text-align: left; background: var(--ngoc); color: var(--den); box-shadow: inset 0 3px 0 var(--ngoc-l), 0 0 0 3px var(--den), 0 6px 0 3px var(--den); } .ig-native[hidden] { display: none; }
+.ig-native svg { flex: none; width: 34px; height: 34px; } .ig-native b { display: block; font-size: 19px; } .ig-native small { display: block; letter-spacing: 0; text-transform: none; color: var(--den); opacity: .85; font-size: 12.5px; }
+.ig-alt { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; padding: 10px 12px; font-size: 13px; line-height: 1.45; background: rgba(0, 0, 0, .25); } .ig-alt b { color: var(--vang-l); }
+.ig-arrow.up { animation-name: igBobUp; } @keyframes igBobUp { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
 
 </style>
 </head>
@@ -3432,7 +3515,7 @@ function __require(name) {
     const deb = !!(run && run.round && ui.view === 'play' && !ui.intro && !o.noDeb && run.isDebuffed(c));
     const fan = o.fan ? `--rot:${o.fan.rot.toFixed(1)}deg;--ty:${o.fan.ty.toFixed(1)}px;` : '';
     return `<div class="card ${c.color}${c.rank === 'n10' ? ' yeu' : ''}${c.enh || c.seal ? ' badged' : ''}${o.sel ? ' sel' : ''}${c.tmp ? ' tmp' : ''}${o.isNew ? ' new' : ''}${c.enh ? ' e-' + c.enh : ''}${c.junk ? ' junk' : ''}${deb ? ' deb' : ''}${o.hint ? ' hint' : ''}${o.cls ? ' ' + o.cls : ''}" data-id="${c.id}" data-rank="${c.rank}" data-color="${c.color}" data-enh="${c.enh || ''}" data-seal="${c.seal || ''}"${act} style="${fan}${o.delay ? `animation-delay:${o.delay}ms` : ''}">`
-      + `<i class="frame"></i><div class="band">${bandHTML(c)}</div><div class="art">${cardArt(c)}</div><div class="foot">${footHTML(c, chips)}</div>${enh}${c.swapped ? '<i class="stamp"></i>' : ''}${deb ? '<span class="debtag">vô hiệu</span>' : ''}</div>`;
+      + `<i class="frame"></i><i class="glint"></i><div class="band">${bandHTML(c)}</div><div class="art">${cardArt(c)}</div><div class="foot">${footHTML(c, chips)}</div>${enh}${c.swapped ? '<i class="stamp"></i>' : ''}${deb ? '<span class="debtag">vô hiệu</span>' : ''}</div>`;
   }
   function charmHTML(c, idx, tag = 'button') {
     const info = CH[c.id];
@@ -3836,7 +3919,9 @@ function __require(name) {
     const consOffers = run.shop.offers.filter((o) => o.kind === 'cons');
     const last = ui.cashout || { chang: run.chang, kind: 'thuong' };
     const owned = run.vouchers.map((id) => PHU[id].vi).join(', ');
-    return `${topHTMLFor(last)}
+    const bulbs = (cls) => `<div class="bulbs ${cls}">${'<i></i>'.repeat(11)}</div>`;
+    const sign = `<div class="shopsign" role="img" aria-label="Chợ">${bulbs('t')}<div class="ss-in"><b>CHỢ</b><small>Sắm sửa cho ván bài</small></div>${bulbs('b')}</div>`;
+    return `${sign}${topHTMLFor(last)}
       <div class="panel next-boss"><small>Ải kế tiếp</small><br><b style="color:var(--gold);font-size:18px">Chặng ${nextChang} · ${CFG.aiNames[nextKind]}</b>, mục tiêu <b class="num" style="font-size:22px">${fmt(tgt)}</b>.<br>
         Trùm chặng ${nextChang}: <b>${boss.vi}</b>, ${boss.text.toLowerCase()}.</div>
       <div class="panel shop-sec"><h3>Bùa<span class="reward">Làm mới ${run.rerollCost()} đồng</span></h3>
@@ -4009,7 +4094,8 @@ function __require(name) {
     })();
     root.dataset.view = ui.view + (sel ? '-select' : '');
     const key = ui.view + (sel ? ':select' : '');
-    if (ui.prevView !== key) { root.classList.remove('enter'); void root.offsetWidth; root.classList.add('enter'); ui.prevView = key; }
+    const viewChanged = ui.prevView !== key;
+    if (viewChanged) { root.classList.remove('enter'); void root.offsetWidth; root.classList.add('enter'); ui.prevView = key; }
     // tiền nhấp nháy khi đổi
     const coin = $('.coin');
     if (coin && run && ui.lastMoney != null && run.money !== ui.lastMoney) {
@@ -4019,6 +4105,7 @@ function __require(name) {
     ui.justBought = null;
     if (ui.view === 'cashout') $$('[data-count]').forEach((el, i) => setTimeout(() => countUp(el, +el.dataset.count, 380), (FAST ? 1 : 1000) * i * 0.42 * (FAST ? 0.01 : 1) + 80));
     fit(); requestAnimationFrame(fit); setTimeout(fit, 450);
+    if (viewChanged) viewIn(); dealIn();
     if (ui.view === 'end') clearSave(); else queueSave();
     updateDev(); updateGear();
     document.body.classList.toggle('scoring', !!ui.stage && ui.view === 'play');
@@ -4073,7 +4160,9 @@ function __require(name) {
     if (anim) { rollTo(c, chips, (v) => String(Math.round(v)), 300); rollTo(m, mult, fmtM, 300); }
     else { c._v = chips; m._v = mult; c._rid = (c._rid || 0) + 1; m._rid = (m._rid || 0) + 1; c.textContent = Math.round(chips); m.textContent = fmtM(mult); heatBox(c, 0, 1); heatBox(m, 0, 1); }
     if (bump === 'c' || bump === 'm') {
-      const el = bump === 'c' ? c : m; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), anim ? 260 : 140);
+      const el = bump === 'c' ? c : m;
+      if (anim && !NOFX()) punch(el, bump === 'm' ? 0.26 : 0.18, 2.5, 460);
+      else { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), anim ? 260 : 140); }
     }
   }
   function refreshSel() {
@@ -4097,9 +4186,82 @@ function __require(name) {
     d.className = 'float ' + cls; d.textContent = text;
     if (REDUCED) d.style.animationDuration = '.01s';
     d.style.left = b.left + b.width / 2 + 'px'; d.style.top = b.top + b.height * 0.15 + dy + 'px';
-    document.body.appendChild(d); setTimeout(() => d.remove(), 950);
+    document.body.appendChild(d);
+    if (!NOFX() && (cls === 'c' || cls === 'm' || cls === 'x' || cls === 'again')) { springTag(d, cls); setTimeout(() => d.remove(), 1100); } else setTimeout(() => d.remove(), 950);
   }
-  function popEl(el) { if (!el) return; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); setTimeout(() => el.classList.remove('pop'), 420); }
+  // ---- chuyển động lò xo: lấy mẫu đáp ứng bậc thang có nảy (overshoot) thành keyframes cho WAAPI, chạy trên GPU
+  const NOFX = () => FAST || REDUCED || settings.reduce;
+  const SPR = (() => { const n = 20; const w = 16; const z = 0.42; const wd = w * Math.sqrt(1 - z * z); const T = 0.5; const a = []; for (let i = 0; i <= n; i++) { const t = (i / n) * T; a.push(1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t))); } return a; })();
+  // nhãn số: bật ra có nảy, xoay lệch rồi chính lại, nằm yên một nhịp, bay lên và mờ
+  function springTag(d, cls) {
+    d.style.animation = 'none';
+    const r0 = (Math.random() < 0.5 ? -1 : 1) * (14 + Math.random() * 10); const r1 = (Math.random() < 0.5 ? -1 : 1) * (2 + Math.random() * 3);
+    const big = cls === 'x' ? 1.12 : 1; const n = SPR.length - 1; const kf = [];
+    SPR.forEach((x, i) => kf.push({ offset: (i / n) * 0.4, opacity: Math.min(1, x * 3), transform: `translate(-50%, ${(14 - 24 * x).toFixed(1)}px) scale(${(x * big).toFixed(3)}) rotate(${(r0 + (r1 - r0) * x).toFixed(2)}deg)` }));
+    kf.push({ offset: 0.78, opacity: 1, transform: `translate(-50%, -10px) scale(${big}) rotate(${r1}deg)` });
+    kf.push({ offset: 1, opacity: 0, transform: `translate(-50%, -44px) scale(${(0.9 * big).toFixed(2)}) rotate(${r1}deg)` });
+    d.animate(kf, { duration: ui.skip ? 420 : 1000, fill: 'forwards', easing: 'linear' });
+  }
+  // nhấn nảy: phóng to rồi lò xo về, kèm lắc nhẹ (dùng cho ô chip/hệ số, tên bộ)
+  function punch(el, amp = 0.2, rot = 2, dur = 440) {
+    if (!el || NOFX()) return;
+    const s = rot ? (Math.random() < 0.5 ? -1 : 1) : 0; const n = SPR.length - 1;
+    el.animate(SPR.map((x, i) => ({ offset: i / n, scale: String((1 + amp * (1 - x)).toFixed(3)), rotate: `${(s * rot * (1 - x)).toFixed(2)}deg` })), { duration: dur, easing: 'linear' });
+  }
+  // lá bài / bùa nhảy lên khi ghi điểm: bật lên, dãn dọc, rơi xuống và nén lại như có trọng lượng
+  function popEl(el) {
+    if (!el) return;
+    if (NOFX()) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); setTimeout(() => el.classList.remove('pop'), 420); return; }
+    const charm = !!el.closest('#charms'); const H0 = charm ? 12 : 22; const wob = charm ? 9 : 3; const n = SPR.length - 1; const s = Math.random() < 0.5 ? -1 : 1;
+    const kf = [{ offset: 0, translate: '0 0', scale: '1 1', rotate: '0deg' }, { offset: 0.16, translate: `0 ${-H0}px`, scale: '0.94 1.1', rotate: `${s * wob}deg` }];
+    SPR.forEach((x, i) => { if (i === 0) return; kf.push({ offset: 0.16 + (i / n) * 0.84, translate: `0 ${(-H0 * (1 - x)).toFixed(2)}px`, scale: `${(1 + 0.08 * (1 - x)).toFixed(3)} ${(1 - 0.08 * (1 - x)).toFixed(3)}`, rotate: `${(s * wob * (1 - x)).toFixed(2)}deg` }); });
+    el.animate(kf, { duration: charm ? 520 : 460, easing: 'linear' });
+  }
+  // điểm xuất phát/đích của lá bài: chồng bài (ngang) hoặc ô Bộ rút (dọc, khi chồng bài bị ẩn)
+  function deckRect() {
+    for (const el of $$('.pile, .st-p')) { const b = el.getBoundingClientRect(); if (b.width > 0) return b; }
+    const h = $('#hand'); if (h) { const b = h.getBoundingClientRect(); return { left: b.right - 20, top: b.top + b.height * 0.5, width: 0, height: 0 }; }
+    return { left: innerWidth - 40, top: innerHeight - 80, width: 0, height: 0 };
+  }
+  // chia bài: từng lá bay từ chồng bài ra vị trí, xoay thẳng dần, lò xo nảy khi đến nơi
+  function dealIn() {
+    if (NOFX() || ui.view !== 'play') return;
+    const cards = $$('#hand .card.new'); if (!cards.length) return;
+    const pb = deckRect();
+    const px = pb.left + pb.width / 2; const py = pb.top + pb.height / 2; const n = SPR.length - 1;
+    cards.forEach((el, i) => {
+      const b = el.getBoundingClientRect(); if (!b.width) return;
+      const dx = px - (b.left + b.width / 2); const dy = py - (b.top + b.height / 2); const r0 = (Math.random() < 0.5 ? -1 : 1) * (16 + Math.random() * 16);
+      el.animate(SPR.map((x, j) => ({ offset: j / n, translate: `${(dx * (1 - x)).toFixed(1)}px ${(dy * (1 - x)).toFixed(1)}px`, rotate: `${(r0 * (1 - x)).toFixed(2)}deg`, scale: (0.5 + 0.5 * x).toFixed(3), opacity: Math.min(1, x * 4) })), { duration: 520, delay: i * 70, easing: 'linear', fill: 'backwards' });
+      if (i < 8) setTimeout(() => playSfx('card_select', 0.1, 1 + i * 0.05), i * 70);
+    });
+  }
+  // vào màn mới: các khối trượt lên lần lượt bằng lò xo; chợ thì các món hàng bật ra thêm một nhịp; bảng tổng kết đếm từng dòng
+  function viewIn() {
+    if (NOFX() || !['cashout', 'shop', 'pack', 'than', 'skip', 'end'].includes(ui.view)) return;
+    const n = SPR.length - 1;
+    const rise = (el, delay, dy, from) => el.animate(SPR.map((x, j) => ({ offset: j / n, translate: `0 ${(dy * (1 - x)).toFixed(1)}px`, scale: (from + (1 - from) * x).toFixed(3), opacity: Math.min(1, x * 3.5) })), { duration: 560, delay, easing: 'linear', fill: 'backwards' });
+    $$('#app > *').slice(0, 9).forEach((el, i) => rise(el, i * 55, 46, 0.97));
+    if (ui.view === 'shop') $$('#app .offer').slice(0, 14).forEach((el, i) => rise(el, 260 + i * 45, 18, 0.88));
+    if (ui.view === 'cashout') $$('#app .rowin').forEach((el, i) => {
+      const d = (parseFloat(el.style.getPropertyValue('--d')) || 0) * 1000;
+      el.animate(SPR.map((x, j) => ({ offset: j / n, translate: `${(-26 * (1 - x)).toFixed(1)}px 0`, scale: (0.92 + 0.08 * x).toFixed(3), opacity: Math.min(1, x * 4) })), { duration: 520, delay: d, easing: 'linear', fill: 'backwards' });
+      if (!el.classList.contains('total') && el.tagName !== 'BUTTON') setTimeout(() => playSfx('chip', 0.3, 1 + i * 0.07), d + 60);
+    });
+  }
+  // lá đã ghi điểm bay xéo vào chồng bỏ bài, lần lượt từng lá
+  async function flyAway() {
+    if (NOFX() || ui.skip) return;
+    const cards = $$('#stage .card'); if (!cards.length) return;
+    const pb = deckRect();
+    const tx = pb.left + pb.width / 2; const ty = pb.top + pb.height / 2;
+    cards.forEach((el, i) => {
+      const b = el.getBoundingClientRect(); const dx = tx - (b.left + b.width / 2); const dy = ty - (b.top + b.height / 2); const rot = (Math.random() < 0.5 ? -1 : 1) * (25 + Math.random() * 35);
+      el.style.zIndex = 60;
+      el.animate([{ translate: '0 0', rotate: '0deg', scale: '1', opacity: 1 }, { offset: 0.22, translate: '0 -18px', rotate: `${-rot * 0.2}deg`, scale: '1.06', opacity: 1 }, { translate: `${dx}px ${dy}px`, rotate: `${rot}deg`, scale: '0.35', opacity: 0.1 }], { duration: 430, delay: i * 55, easing: 'cubic-bezier(.5,0,.8,.45)', fill: 'forwards' });
+    });
+    await new Promise((r) => setTimeout(r, 430 + cards.length * 55));
+  }
 
   async function animateScore(res, before) {
     const steps = res.steps; const r = run.round;
@@ -4119,7 +4281,7 @@ function __require(name) {
       await sleep(st.kind === 'hand' ? 300 : delay);
       if (st.kind === 'hand') {
         setCalc(H[st.type].vi, `Cấp ${st.level}`, st.chips, st.mult, null, false, HAND_TIER[st.type]);
-        playSfx('card_flip', 0.6);
+        playSfx('card_flip', 0.6); punch($('#hname'), grand ? 0.5 : mid ? 0.35 : 0.2, 3, 520);
         if (mid) {
           fanfare(H[st.type].vi, grand);
           if (grand) { arpeggio(5); playSfx('fanfare', 0.7, 1, 2.5); flash(false); shake(9); const c = $('#calc').getBoundingClientRect(); burst(c.left + c.width / 2, c.top + 30, 26); await sleep(800); }
@@ -4246,6 +4408,7 @@ function __require(name) {
       });
     }
     await animateScore(res, before);
+    await flyAway();
     ui.stage = null;
     const handScore = res.total - before;
     if (handScore > 0) {
@@ -4307,29 +4470,29 @@ function __require(name) {
   }
   // ------------------------------------------------------------------ chú giải quân bài (di chuột, hoặc nhấn giữ trên điện thoại)
   let tipEl = null; let tipFor = null; let pressTimer = null; let pressXY = null; let noClickUntil = 0;
-  const TOM = { 'van-n7': 'Tôm', 'sach-n3': 'Tôm', 'wan-n3': 'Tôm', 'sach-n8': 'Lèo', 'wan-n9': 'Lèo', 'van-n10': 'Lèo' };
-  const tipRankNote = (rank, color) => {
-    if (rank === 'junk') return 'Lá Tạp: không ghép được bộ nào, chỉ chiếm chỗ trên tay.';
-    const sp = TOM[color + '-' + rank]; const extra = sp ? ` Thuộc bộ ${sp}.` : '';
-    if (rank === 'n10') return `Lá Yêu, là số 10 của họ ${HO_VI[color]}: nối được sảnh sau số Cửu, và góp Tam Yêu cùng hai lá Yêu kia.${extra}`;
-    return `Số ${rank.slice(1)} của họ ${HO_VI[color]}; mỗi lá có 4 bản. Hai lá giống hệt nhau (cùng số, cùng họ) ra bộ "cùng họ" cao điểm hơn.${extra}`;
+  // Bộ đặc biệt của Tổ tôm: đúng 3 lá cụ thể (khớp SPECIAL trong engine)
+  const SPECIAL_SETS = {
+    tom: [['van', 'n7'], ['sach', 'n3'], ['wan', 'n3']],
+    leo: [['sach', 'n8'], ['wan', 'n9'], ['van', 'n10']],
+    tam_yeu: [['van', 'n10'], ['sach', 'n10'], ['wan', 'n10']],
   };
-  // Bộ nào có thể gồm lá này: cùng số, sảnh liền, cùng họ, và các bộ riêng (Tôm, Lèo, Tam Yêu)
+  // Các bộ có thể gồm lá này: mỗi bộ một dòng ngắn (tên bộ + lá cần ghép)
   function tipSets(rank, color) {
     const k = +rank.slice(1); const hv = HO_VI[color];
-    const nm = (n) => `<b>${cardName({ rank: 'n' + n, color })}</b>`;
-    const prev = k > 1 ? nm(k - 1) : null; const next = k < 10 ? nm(k + 1) : null;
+    const nm = (n) => cardName({ rank: 'n' + n, color });
+    const lock = (id) => (run.handLevels[id] === 0 ? ' <i class="tag-lock">chưa mở</i>' : '');
     const row = (label, html) => `<div class="tiprow"><b>${label}</b><span>${html}</span></div>`;
-    const open = (id) => (run.handLevels[id] === 0 ? ' <i class="tag-lock">chưa mở</i>' : '');
     const out = [];
-    out.push(row('Cùng số', `Đôi, Phu bí, Tứ quý với các lá <b>${cardName({ rank, color })}</b> khác họ. Hai lá giống hệt (cùng họ ${hv}) ra Đôi cùng họ hoặc Khàn.`));
-    out.push(row('Phu dọc', `Sảnh liền cùng họ ${hv}: ${[prev, '<em>lá này</em>', next].filter(Boolean).join(' › ')}`));
-    out.push(row('Cùng họ', `Bộ nhiều lá đều họ ${hv}: Phu dọc, Thuần họ, Cù lũ cùng họ.`));
-    const sp = TOM[color + '-' + rank];
-    if (sp === 'Tôm') out.push(row('Tôm' + open('tom'), 'Thất Văn + Tam Sách + Tam Vạn, đủ ba lá này.'));
-    if (sp === 'Lèo') out.push(row('Lèo' + open('leo'), 'Bát Sách + Cửu Vạn + Chi Chi, đủ ba lá này.'));
-    if (rank === 'n10') out.push(row('Tam Yêu' + open('tam_yeu'), 'Chi Chi + Thang Thang + Ông Lão, đủ ba lá Yêu.'));
-    return `<div class="tipsets"><div class="tiphd">Lá này đi trong các bộ</div>${out.join('')}</div>`;
+    out.push(row('Cùng số', `${H.pair_mixed.vi} · ${H.three.vi} · ${H.four.vi}`));
+    const run3 = [k > 1 ? nm(k - 1) : null, '<em>' + nm(k) + '</em>', k < 10 ? nm(k + 1) : null].filter(Boolean).join(' › ');
+    out.push(row('Sảnh', `${run3}<small>3–5 lá liền số. Cùng họ ${hv} = ${H.run3_same.vi}</small>`));
+    out.push(row(H.flush5.vi, `5 lá cùng họ ${hv}`));
+    for (const [id, need] of Object.entries(SPECIAL_SETS)) {
+      if (!need.some(([h, r]) => h === color && r === rank)) continue;
+      const names = need.map(([h, r]) => { const n = cardName({ rank: r, color: h }) + (r === 'n10' ? '' : ' ' + HO_VI[h]); return h === color && r === rank ? '<em>' + n + '</em>' : n; });
+      out.push(row(H[id].vi + lock(id), names.join(' + ')));
+    }
+    return `<div class="tipsets">${out.join('')}</div>`;
   }
   function hideTip() { if (tipEl) { tipEl.remove(); tipEl = null; tipFor = null; } }
   function showTip(card) {
@@ -4339,14 +4502,12 @@ function __require(name) {
     const colorVi = HO_VI[d.color];
     const chips = (card.querySelector('.chipv') || {}).textContent;
     const lines = [];
-    lines.push(d.rank === 'junk' ? '' : `<span>Cho <b>${chips}</b> chip khi ghi điểm.</span>`);
     if (d.enh && CFG.enhancements[d.enh]) lines.push(`<span><b class="tg">${CFG.enhancements[d.enh].vi}:</b> ${CFG.enhancements[d.enh].text}.</span>`);
     if (d.seal && CFG.seals[d.seal]) lines.push(`<span><b class="tg">${CFG.seals[d.seal].vi}:</b> ${CFG.seals[d.seal].text}.</span>`);
-    if (card.classList.contains('deb')) lines.push('<span class="warn">Đang bị trùm vô hiệu: không ghi điểm.</span>');
-    if (d.rank !== 'junk') lines.splice(0, 0, `<span class="tipfig">${figName(d.color, d.rank)}</span>`);
-    lines.push(d.rank === 'junk' ? `<small>${tipRankNote(d.rank, d.color)}</small>` : tipSets(d.rank, d.color));
+    if (card.classList.contains('deb')) lines.push('<span class="warn">Bị trùm vô hiệu: không ghi điểm.</span>');
+    lines.push(d.rank === 'junk' ? '<small>Lá Tạp: không ghép được bộ nào.</small>' : tipSets(d.rank, d.color));
     const t = document.createElement('div'); t.className = 'tip';
-    t.innerHTML = `<div class="tipname"><i class="dot ${d.color}"></i>${cardName({ rank: d.rank, color: d.color })} ${colorVi}</div>${lines.join('')}`;
+    t.innerHTML = `<div class="tipname"><i class="dot ${d.color}"></i><span>${cardName({ rank: d.rank, color: d.color })} ${colorVi}</span>${d.rank === 'junk' ? '' : `<em class="tipchip">${chips} chip</em>`}</div>${lines.join('')}`;
     document.body.appendChild(t); tipEl = t;
     const b = card.getBoundingClientRect(); const w = t.offsetWidth; const h = t.offsetHeight;
     let x = b.left + b.width / 2 - w / 2; x = Math.max(6, Math.min(innerWidth - w - 6, x));
@@ -4391,6 +4552,7 @@ function __require(name) {
       case 'set-reduce': settings.reduce = t.dataset.id === '1'; applySettings(); saveSettings(); render(); break;
       case 'set-layout': settings.layout = t.dataset.id; saveSettings(); setLayout(); render(); break;
       case 'replay-story': ui.settings = false; render(); showStory(); break;
+      case 'ios-guide': ui.settings = false; render(); openIosGuide(); break;
       case 'replay-tut': ui.settings = false; store.set('tutDone', false); store.set('tutForce', true); render(); if (run && ui.view === 'play' && !ui.intro) startTutorial(); else toast('Hướng dẫn sẽ hiện ở ván tới'); break;
       case 'mute': ui.muted = !ui.muted; if (!ui.muted) unlockAudio(); render(); break;
       case 'intro-go': {
@@ -4701,6 +4863,7 @@ function __require(name) {
       <div class="srow"><div><b>Hiệu ứng âm thanh</b><span>Tiếng chọn bài, ghi điểm, qua ải</span></div><div class="sctl">${slider('set-vol', settings.sfxVol, false, 'Âm lượng hiệu ứng')}</div></div>
       <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
       <div class="srow"><div><b>Bố cục</b><span>Tự theo màn hình, hoặc ép dọc hay ngang</span></div><div class="chips">${chip('set-layout', 'auto', settings.layout === 'auto', 'Tự động')}${chip('set-layout', 'port', settings.layout === 'port', 'Dọc')}${chip('set-layout', 'land', settings.layout === 'land', 'Ngang')}</div></div>
+      ${A2HS ? '<div class="srow"><div><b>Lưu game ra màn hình chính</b><span>Hướng dẫn từng bước trên iPhone, iPad và Android</span></div><div class="chips"><button class="mini" data-act="ios-guide" type="button">Xem hướng dẫn</button></div></div>' : ''}
       <div class="srow"><div><b>Mở đầu và hướng dẫn</b><span>Xem lại câu chuyện, hoặc hướng dẫn trong ván</span></div><div class="chips"><button class="mini" data-act="replay-story" type="button">${gicon('cuon_giay')}Mở đầu</button><button class="mini" data-act="replay-tut" type="button">${gicon('den_long')}Hướng dẫn</button></div></div>
       ${clear}
       <button class="btn play" data-act="close" type="button">Đóng</button></div></div>`;
@@ -4887,18 +5050,84 @@ function __require(name) {
     if (ui.info || ui.deckView || ui.items || ui.settings || ui.detail != null || ui.consDetail != null) { ui.info = false; ui.deckView = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.consDetail = null; render(); }
   });
 
-  // ------------------------------------------------------------------ iOS install banner
-  (function iosInstallBanner() {
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-    if (!isIOS || isStandalone) return;
-    if (store.get('iosBannerDismissed', false)) return;
-    const bar = document.createElement('div');
-    bar.className = 'ios-banner';
-    bar.innerHTML = '<span>Nhấn <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><polyline points="8 6 12 2 16 6"/><line x1="12" y1="2" x2="12" y2="16"/><polyline points="6 18 18 18"/><polyline points="4 20 20 20"/></svg> rồi chọn <b>Thêm vào MH chính</b> để lưu game</span><button class="ios-banner-x" type="button" aria-label="Đóng">✕</button>';
-    document.body.appendChild(bar);
-    bar.querySelector('.ios-banner-x').addEventListener('click', () => { bar.remove(); store.set('iosBannerDismissed', true); });
+  // ------------------------------------------------------------------ hướng dẫn lưu game ra màn hình chính (chỉ trình duyệt di động: iOS và Android)
+  const UA = navigator.userAgent;
+  const IOS = /iphone|ipad|ipod/i.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const ANDROID = /Android/i.test(UA);
+  const PLATFORM = IOS ? 'ios' : ANDROID ? 'android' : null;
+  const IS_APP = window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true;
+  const A2HS = !!PLATFORM && !IS_APP; // máy tính hoặc đã mở từ biểu tượng ngoài màn hình chính: không hiện gì
+  const INAPP = /FBAN|FBAV|Instagram|Zalo|Line\/|MicroMessenger|TikTok|Messenger|GSA\/|; wv\)/i.test(UA);
+  const IOS_CHROME = /CriOS|EdgiOS|FxiOS/.test(UA);
+  const ICO = {
+    share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="8 7 12 3 16 7"/><path d="M6 11H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/></svg>',
+    menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="7" x2="19" y2="7"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="5" y1="17" x2="19" y2="17"/></svg>',
+    dots: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.3"/><circle cx="12" cy="12" r="2.3"/><circle cx="12" cy="19" r="2.3"/></svg>',
+    install: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M12 7v7"/><polyline points="9 11.5 12 14.5 15 11.5"/></svg>',
+    add: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+  };
+  let deferredInstall = null; // Android Chrome: cho phép cài bằng một chạm khi trình duyệt báo sẵn sàng
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredInstall = e; if (igEl) showNativeInstall(); });
+  window.addEventListener('appinstalled', () => { deferredInstall = null; const p = $('.ios-pill'); if (p) p.remove(); if (igEl) igEl.querySelector('[data-ig="close"]').click(); toast('Đã cài game. Hãy mở bằng biểu tượng mới!'); });
+  function showNativeInstall() { const b = igEl && igEl.querySelector('.ig-native'); if (b) b.hidden = false; }
+
+  function guideSteps() {
+    if (PLATFORM === 'android') {
+      return [
+        ['Chạm nút ⋮ ở góc trên bên phải trình duyệt', `<div class="ig-mock"><div class="ig-bar"><em>cansa420.github.io</em><span class="ig-hl">${ICO.dots}</span></div><small>Ba chấm dọc <b>⋮</b>, cạnh thanh địa chỉ. Nút đang <b>sáng nhấp nháy</b></small></div>`],
+        ['Chọn “Cài đặt ứng dụng”', `<div class="ig-mock"><div class="ig-menu"><div>Thẻ mới</div><div class="ig-hl row">${ICO.install}<b>Cài đặt ứng dụng</b></div><div class="ig-hl alt row">${ICO.add}<b>Thêm vào Màn hình chính</b></div><div>Chia sẻ…</div></div><small>Thấy dòng nào trong hai dòng sáng thì chọn dòng đó</small></div>`],
+        ['Chạm “Cài đặt” (hoặc “Thêm”)', `<div class="ig-mock"><div class="ig-dlg"><b>Cài đặt ứng dụng?</b><span>PHỖNG.EXE</span><div class="ig-btns"><i>Hủy</i><i class="ig-hl">Cài đặt</i></div></div><small>Nếu hiện “Thêm vào Màn hình chính”, chạm <b>Thêm</b></small></div>`],
+      ];
+    }
+    return [
+      [IOS_CHROME ? 'Chạm nút Chia sẻ ở thanh địa chỉ' : 'Chạm nút ≡ ở thanh địa chỉ phía dưới', `<div class="ig-mock"><div class="ig-bar"><span class="ig-hl">${ICO.menu}</span><em>cansa420.github.io</em><span class="ig-hl alt">${ICO.share}</span></div><small>Thanh địa chỉ ở <b>dưới cùng</b> màn hình. Chạm nút sáng nhấp nháy (≡ hoặc ⬆)</small></div>`],
+      ['Chọn “Chia sẻ”', `<div class="ig-mock"><div class="ig-menu"><div>Dịch trang web…</div><div class="ig-hl row">${ICO.share}<b>Chia sẻ</b></div><div>Thêm vào Dấu trang</div></div></div>`],
+      ['Chọn “Thêm vào Màn hình chính”', `<div class="ig-mock"><div class="ig-menu"><div>Thêm vào Mục ưa thích</div><div>Tìm trên trang</div><div class="ig-hl row">${ICO.add}<b>Thêm vào Màn hình chính</b></div></div><small>Không thấy? <b>Vuốt lên</b> để cuộn danh sách xuống</small></div>`],
+      ['Chạm “Thêm” để hoàn tất', `<div class="ig-mock"><div class="ig-top"><span>Hủy</span><b>Thêm vào MH chính</b><span class="ig-hl">Thêm</span></div><small>Nút <b>Thêm</b> ở góc trên bên phải</small></div>`],
+    ];
+  }
+  function guideHTML() {
+    const step = (n, [title, mock]) => `<li class="ig-step"><i class="ig-n">${n + 1}</i><div><b>${title}</b>${mock}</div></li>`;
+    const browser = PLATFORM === 'android' ? 'Chrome' : 'Safari';
+    const warn = INAPP ? `<div class="ig-warn"><b>Bạn đang mở trong ứng dụng khác (Zalo, Facebook…)</b>Hãy mở link này bằng <b>${browser}</b> trước: nhấn <b>⋯</b> (hoặc <b>⋮</b>) ở góc rồi chọn <b>Mở bằng trình duyệt</b>.<button class="ig-copy" type="button">Sao chép link game</button></div>` : '';
+    const native = PLATFORM === 'android' ? `<button class="ig-native" type="button" hidden>${ICO.install}<span><b>Cài đặt ngay</b><small>Chỉ một chạm, không cần làm theo các bước</small></span></button>` : '';
+    const alt = PLATFORM === 'android' ? `<div class="ig-alt"><b>Dùng trình duyệt khác?</b><span><b>Samsung Internet:</b> nút ≡ ở dưới cùng → <b>Thêm trang vào</b> → <b>Màn hình chính</b>.</span><span><b>Firefox:</b> nút ⋮ → <b>Cài đặt</b>.</span></div>` : '';
+    return `<div class="ig-back" data-ig="close"></div><div class="ig-sheet" role="dialog" aria-label="Lưu game ra màn hình chính">
+      <button class="ig-x" data-ig="close" type="button" aria-label="Đóng">✕</button>
+      <div class="ig-head"><span class="ig-ico">${ICO.add}</span><div><h3>Lưu game ra màn hình chính</h3><p>Chơi toàn màn hình như một ứng dụng, mở nhanh bằng một chạm</p></div></div>
+      ${warn}${native}<ol class="ig-steps">${guideSteps().map((s, i) => step(i, s)).join('')}</ol>${alt}
+      <div class="ig-done">Xong! Từ giờ hãy mở game bằng <b>biểu tượng mới trên màn hình chính</b>. Tiến trình ván chơi được giữ lại.</div>
+      <button class="ig-ok" data-ig="close" type="button">Đã hiểu</button>
+      ${PLATFORM === 'ios' ? '<div class="ig-arrow" aria-hidden="true">▼<small>Nút nằm ngay dưới đây</small></div>' : ''}
+    </div>`;
+  }
+  let igEl = null;
+  function openIosGuide() {
+    if (igEl || !A2HS) return;
+    igEl = document.createElement('div'); igEl.className = 'iosg'; igEl.innerHTML = guideHTML(); document.body.appendChild(igEl);
+    const close = () => { if (!igEl) return; const e = igEl; igEl = null; e.classList.add('out'); setTimeout(() => e.remove(), 260); store.set('a2hsSeen2', true); const p = $('.ios-pill'); if (p) p.classList.remove('pulse'); };
+    igEl.addEventListener('click', (e) => { if (e.target.closest('[data-ig="close"]')) close(); });
+    const cp = igEl.querySelector('.ig-copy');
+    if (cp) cp.addEventListener('click', () => { const url = location.href.split('#')[0]; (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => { cp.textContent = 'Đã sao chép! Dán vào ' + (PLATFORM === 'android' ? 'Chrome' : 'Safari'); }, () => { cp.textContent = 'Giữ vào thanh địa chỉ để sao chép'; }); });
+    const nat = igEl.querySelector('.ig-native');
+    if (nat) { if (deferredInstall) nat.hidden = false; nat.addEventListener('click', async () => { if (!deferredInstall) return; const d = deferredInstall; deferredInstall = null; try { d.prompt(); await d.userChoice; } catch (err) { /* người chơi hủy */ } nat.hidden = true; }); }
+    if (!NOFX()) {
+      const sh = igEl.querySelector('.ig-sheet'); const n = SPR.length - 1;
+      sh.animate(SPR.map((x, i) => ({ offset: i / n, translate: `0 ${(60 * (1 - x)).toFixed(1)}%`, opacity: Math.min(1, x * 4) })), { duration: 600, easing: 'linear' });
+      igEl.querySelectorAll('.ig-step').forEach((el, i) => el.animate(SPR.map((x, j) => ({ offset: j / n, translate: `0 ${(26 * (1 - x)).toFixed(1)}px`, opacity: Math.min(1, x * 4) })), { duration: 520, delay: 220 + i * 110, easing: 'linear', fill: 'backwards' }));
+    }
+  }
+  // nút nổi ở đáy màn hình: luôn thấy cho tới khi người chơi tự ẩn đi
+  (function installPill() {
+    if (!A2HS) return;
+    const seen = store.get('a2hsSeen2', false);
+    const pill = document.createElement('button'); pill.type = 'button'; pill.className = 'ios-pill' + (seen ? '' : ' pulse');
+    pill.innerHTML = `<span class="ios-pill-ico">${ICO.add}</span><span><b>Lưu game ra màn hình chính</b><small>Chạm để xem cách làm, chỉ ${PLATFORM === 'android' ? '3' : '4'} bước</small></span><i class="ios-pill-x" aria-label="Ẩn">✕</i>`;
+    pill.addEventListener('click', (e) => { if (e.target.closest('.ios-pill-x')) { pill.remove(); store.set('a2hsPillHidden2', true); return; } openIosGuide(); });
+    if (!store.get('a2hsPillHidden2', false)) document.body.appendChild(pill);
+    if (!seen) setTimeout(openIosGuide, FAST ? 10 : 1800);
   })();
+  window.__openIosGuide = openIosGuide;
 
   // ------------------------------------------------------------------ khởi động
   applySettings();
@@ -4907,6 +5136,168 @@ function __require(name) {
   render();
   if (!FAST && !store.get('storySeen', false)) showStory();
   window.__tc = { get run() { return run; }, ui, render, music, get actx() { return actx; }, recordWin, progress, settings, fanfare, blindBanner }; window.__tcData = DATA;
+})();
+
+</script>
+<script>
+(function () {
+  'use strict';
+  // Hiệu ứng nền và chất liệu (giai đoạn 1): khói loang theo cảnh, đom đóm, bài nghiêng theo chuột kèm ánh bóng.
+  // Nguyên tắc: chỉ vẽ bằng canvas và transform/opacity (chạy trên GPU), tự hạ chất lượng khi máy yếu,
+  // tắt hẳn khi bật "Giảm chuyển động" hoặc chạy thử tự động (?fast).
+  const FAST = /[?&]fast/.test(location.search);
+  const html = document.documentElement;
+  const reduced = () => FAST || html.classList.contains('reduce');
+  const bg = document.querySelector('.bg');
+  if (!bg) return;
+
+  // ---- bảng màu theo cảnh: [tối, sáng] cho khói, màu đom đóm
+  const PAL = {
+    normal: { a: [14, 58, 54], b: [96, 208, 176], fly: [255, 226, 140], alpha: 0.42, rise: 0 },
+    boss: { a: [88, 18, 18], b: [236, 84, 60], fly: [255, 150, 90], alpha: 0.5, rise: 1 },
+    shop: { a: [86, 58, 10], b: [244, 196, 86], fly: [255, 214, 120], alpha: 0.42, rise: 0 },
+    pack: { a: [38, 28, 100], b: [150, 128, 255], fly: [200, 180, 255], alpha: 0.46, rise: 0 },
+  };
+  const cur = JSON.parse(JSON.stringify(PAL.normal));
+  const lerp = (a, b, k) => a + (b - a) * k;
+  function mixPalette(target, k) {
+    for (let i = 0; i < 3; i++) { cur.a[i] = lerp(cur.a[i], target.a[i], k); cur.b[i] = lerp(cur.b[i], target.b[i], k); cur.fly[i] = lerp(cur.fly[i], target.fly[i], k); }
+    cur.alpha = lerp(cur.alpha, target.alpha, k); cur.rise = lerp(cur.rise, target.rise, k);
+  }
+
+  // ---- khói: tính ở độ phân giải thấp rồi để CSS phóng to (mịn, rẻ)
+  const smoke = document.createElement('canvas'); smoke.className = 'bgfx bgsmoke';
+  const fly = document.createElement('canvas'); fly.className = 'bgfx bgfly';
+  const shade = bg.querySelector('.bgshade');
+  bg.insertBefore(smoke, shade); bg.insertBefore(fly, shade);
+  const sctx = smoke.getContext('2d'); const fctx = fly.getContext('2d');
+  let SW = 0; let SH = 0; let img = null; let FW = 0; let FH = 0;
+  let tier = 0; // 0 đầy đủ, 1 nhẹ, 2 chỉ đom đóm ít, 3 tắt
+  const SCALE = [7, 10, 14, 14];
+  function resize() {
+    const w = innerWidth; const h = innerHeight;
+    SW = Math.max(48, Math.round(w / SCALE[tier])); SH = Math.max(36, Math.round(h / SCALE[tier]));
+    smoke.width = SW; smoke.height = SH; img = sctx.createImageData(SW, SH);
+    FW = fly.width = Math.round(w); FH = fly.height = Math.round(h);
+  }
+  let rt = 0; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 150); });
+  resize();
+
+  // sprite quầng sáng cho đom đóm
+  const spr = document.createElement('canvas'); spr.width = spr.height = 48;
+  (function () { const g = spr.getContext('2d'); const r = g.createRadialGradient(24, 24, 0, 24, 24, 24); r.addColorStop(0, 'rgba(255,255,255,1)'); r.addColorStop(0.25, 'rgba(255,255,255,.55)'); r.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = r; g.fillRect(0, 0, 48, 48); })();
+  const tinted = document.createElement('canvas'); tinted.width = tinted.height = 48; const tctx = tinted.getContext('2d');
+  let tintKey = '';
+  function retint(c) {
+    const key = c.map((v) => Math.round(v / 6)).join(',');
+    if (key === tintKey) return; tintKey = key;
+    tctx.globalCompositeOperation = 'source-over'; tctx.clearRect(0, 0, 48, 48); tctx.drawImage(spr, 0, 0);
+    tctx.globalCompositeOperation = 'source-in'; tctx.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; tctx.fillRect(0, 0, 48, 48);
+  }
+  const N = 30; const P = [];
+  for (let i = 0; i < N; i++) P.push({ x: Math.random(), y: Math.random(), s: 0.5 + Math.random() * 1.1, ph: Math.random() * 6.28, sp: 0.4 + Math.random() * 0.9, vx: (Math.random() - 0.5) * 0.004, vy: 0.002 + Math.random() * 0.004 });
+
+  function drawSmoke(t) {
+    const d = img.data; const asp = SW / SH; const al = cur.alpha * 255;
+    const ar = cur.a[0]; const ag = cur.a[1]; const ab = cur.a[2]; const br = cur.b[0] - ar; const bgc = cur.b[1] - ag; const bb = cur.b[2] - ab;
+    let i = 0;
+    for (let y = 0; y < SH; y++) {
+      const Y = (y / SH) * 3;
+      for (let x = 0; x < SW; x++) {
+        const X = (x / SW) * 3 * asp;
+        const wx = Math.sin(Y * 1.3 + t * 0.35) * 0.9; const wy = Math.cos(X * 1.1 - t * 0.3) * 0.9;
+        const a = Math.sin((X + wx) * 1.7 + t * 0.2) + Math.sin((Y + wy) * 2.1 - t * 0.25) + 0.5 * Math.sin((X + wy) * 3.1 + (Y + wx) * 2.3 + t * 0.4);
+        let v = (a + 2.5) / 5; v = v < 0 ? 0 : v > 1 ? 1 : v;
+        d[i] = ar + br * v; d[i + 1] = ag + bgc * v; d[i + 2] = ab + bb * v; d[i + 3] = al * v * v;
+        i += 4;
+      }
+    }
+    sctx.putImageData(img, 0, 0);
+  }
+  function drawFly(t, dt) {
+    fctx.clearRect(0, 0, FW, FH);
+    retint(cur.fly);
+    fctx.globalCompositeOperation = 'lighter';
+    const n = tier === 0 ? N : tier === 1 ? 20 : 12;
+    for (let i = 0; i < n; i++) {
+      const p = P[i];
+      p.x += (p.vx + Math.sin(t * p.sp + p.ph) * 0.0009) * dt * 60;
+      p.y -= (p.vy * (0.5 + cur.rise * 2.2) * (p.s)) * dt * 60 * (cur.rise > 0.5 ? 1 : -0.35);
+      if (p.y < -0.05) { p.y = 1.05; p.x = Math.random(); } if (p.y > 1.05) { p.y = -0.05; p.x = Math.random(); }
+      if (p.x < -0.05) p.x = 1.05; if (p.x > 1.05) p.x = -0.05;
+      const tw = 0.35 + 0.65 * Math.max(0, Math.sin(t * p.sp * 1.7 + p.ph));
+      const sz = (10 + p.s * 14) * (FW < 700 ? 0.8 : 1);
+      fctx.globalAlpha = tw * 0.9;
+      fctx.drawImage(tinted, p.x * FW - sz / 2, p.y * FH - sz / 2, sz, sz);
+    }
+    fctx.globalAlpha = 1; fctx.globalCompositeOperation = 'source-over';
+  }
+
+  // ---- vòng lặp chính + đo hiệu năng
+  const stats = { fps: 0, smokeMs: 0, flyMs: 0, tier: 0, frames: 0 };
+  window.__fx = stats;
+  let last = performance.now(); let frame = 0; let acc = 0; let accN = 0; let slow = 0;
+  function loop(now) {
+    requestAnimationFrame(loop);
+    const dt = Math.min(0.1, (now - last) / 1000); last = now;
+    if (document.hidden) return;
+    const off = reduced() || tier >= 3;
+    smoke.style.display = fly.style.display = off ? 'none' : '';
+    if (off) return;
+    const mood = PAL[document.body.dataset.mood] || PAL.normal;
+    mixPalette(mood, Math.min(1, dt * 1.6));
+    frame++;
+    const t = now / 1000;
+    const every = tier === 0 ? 2 : 3;
+    if (tier < 2 && frame % every === 0) { const a = performance.now(); drawSmoke(t); stats.smokeMs = stats.smokeMs * 0.9 + (performance.now() - a) * 0.1; }
+    const b = performance.now(); drawFly(t, dt); stats.flyMs = stats.flyMs * 0.9 + (performance.now() - b) * 0.1;
+    // tự hạ chất lượng nếu khung hình trung bình quá chậm (trên ~28ms) trong khoảng 2 giây
+    acc += dt; accN++; stats.frames++;
+    if (acc >= 2) {
+      stats.fps = accN / acc;
+      slow = stats.fps < 36 ? slow + 1 : 0;
+      if (slow >= 2 && tier < 3) { tier++; stats.tier = tier; slow = 0; resize(); }
+      acc = 0; accN = 0;
+    }
+  }
+  requestAnimationFrame(loop);
+
+  // ---- bài nghiêng theo chuột (lò xo) + ánh bóng
+  const MAXA = 9; const state = new Map(); let hovered = null; let running = false;
+  const tiltable = (c) => c && (c.closest('#hand') || c.closest('#stage')) && !c.classList.contains('discarding');
+  function ensure() { if (!running) { running = true; requestAnimationFrame(tick); } }
+  function entry(el) { let s = state.get(el); if (!s) { s = { rx: 0, ry: 0, vx: 0, vy: 0, tx: 0, ty: 0, sc: 1, vs: 0, ts: 1 }; state.set(el, s); } return s; }
+  function release(el) { const s = state.get(el); if (s) { s.tx = 0; s.ty = 0; s.ts = 1; } el.classList.remove('tilting'); }
+  document.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse' || reduced()) return;
+    const c = e.target.closest && e.target.closest('.card');
+    const ok = tiltable(c) ? c : null;
+    if (ok !== hovered) { if (hovered) release(hovered); hovered = ok; if (hovered) hovered.classList.add('tilting'); }
+    if (!hovered) return;
+    const r = hovered.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width - 0.5; const ny = (e.clientY - r.top) / r.height - 0.5;
+    const s = entry(hovered); s.ty = nx * 2 * MAXA; s.tx = -ny * 2 * MAXA; s.ts = 1.07;
+    hovered.style.setProperty('--gx', ((nx + 0.5) * 100).toFixed(0) + '%'); hovered.style.setProperty('--gy', ((ny + 0.5) * 100).toFixed(0) + '%');
+    ensure();
+  }, { passive: true });
+  document.addEventListener('pointerleave', () => { if (hovered) { release(hovered); hovered = null; ensure(); } });
+  document.addEventListener('pointerdown', () => { if (hovered) { const s = entry(hovered); s.ts = 0.97; ensure(); } }, { passive: true });
+  function tick() {
+    let alive = false;
+    for (const [el, s] of state) {
+      if (!el.isConnected) { state.delete(el); continue; }
+      s.vx += (s.tx - s.rx) * 0.2; s.vx *= 0.76; s.rx += s.vx;
+      s.vy += (s.ty - s.ry) * 0.2; s.vy *= 0.76; s.ry += s.vy;
+      s.vs += (s.ts - s.sc) * 0.22; s.vs *= 0.74; s.sc += s.vs;
+      const ang = Math.hypot(s.rx, s.ry);
+      const rest = ang < 0.05 && Math.abs(s.sc - 1) < 0.002 && Math.abs(s.vx) + Math.abs(s.vy) + Math.abs(s.vs) < 0.01 && s.tx === 0 && s.ty === 0;
+      if (rest) { el.style.removeProperty('rotate'); el.style.removeProperty('scale'); state.delete(el); continue; }
+      el.style.rotate = `${s.rx.toFixed(3)} ${s.ry.toFixed(3)} 0 ${ang.toFixed(2)}deg`;
+      el.style.scale = s.sc.toFixed(3);
+      alive = true;
+    }
+    if (alive || state.size) requestAnimationFrame(tick); else running = false;
+  }
 })();
 
 </script>
