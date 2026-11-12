@@ -1531,3 +1531,124 @@ html[data-layout="port"] #app[data-view="play"] .blindbar { padding: 12px 70px 1
 html[data-layout="port"] #app[data-view="play"] .target { padding: 12px 18px 14px; }
 html[data-layout="port"] #app[data-view="play"] .target .bar { margin-top: 8px; }
 html[data-layout="port"] #app[data-view="play"] .calc { padding: 10px 18px; min-height: 88px; }
+
+/* =====================================================================
+   MÀN TẢI ĐẦU GAME (web/boot.js): cảnh pixel nhiều lớp, logo rơi, xoè bài, thanh tải, lật bài
+   ===================================================================== */
+:root { --ease-spring: cubic-bezier(.3, 1.45, .5, 1); --ease-pop: cubic-bezier(.2, 1.25, .35, 1); }
+.boot { position: fixed; inset: 0; z-index: 9999; overflow: hidden; background: #050814; color: var(--kem); cursor: default; -webkit-tap-highlight-color: transparent; user-select: none; transition: opacity .7s ease-in, transform .8s cubic-bezier(.5, 0, .2, 1); will-change: transform, opacity; }
+.boot.boot-ready { cursor: pointer; }
+.boot.boot-leave { opacity: 0; transform: scale(1.22); pointer-events: none; }
+.boot-scene { position: absolute; inset: 0; transform-origin: 50% 62%; animation: bootZoom 9s cubic-bezier(.2, .6, .2, 1) both, bootFade 1s ease-out both; }
+@keyframes bootZoom { from { transform: scale(1.2); } to { transform: scale(1.02); } }
+@keyframes bootFade { from { opacity: 0; } }
+.bz { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+.bz.far { animation: bootDrift 26s ease-in-out infinite alternate; transform: scale(1.04); }
+.bz.near { animation: bootDrift 18s ease-in-out infinite alternate-reverse; transform: scale(1.04); }
+@keyframes bootDrift { from { translate: -6px 0; } to { translate: 6px 0; } }
+.bz.stars.a { animation: bootTw 2.6s ease-in-out infinite; } .bz.stars.b { animation: bootTw 3.4s ease-in-out -1.4s infinite reverse; }
+@keyframes bootTw { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
+.bz.moon { animation: moonRise 2.6s cubic-bezier(.2, .8, .2, 1) .2s both; }
+@keyframes moonRise { from { opacity: 0; translate: 0 18px; } }
+.boot-halo { position: absolute; width: calc(var(--r) * 2); height: calc(var(--r) * 2); transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255, 232, 170, .42), rgba(255, 232, 170, 0) 66%); animation: bootHalo 5s ease-in-out infinite; pointer-events: none; }
+@keyframes bootHalo { 0%, 100% { opacity: .65; scale: .94; } 50% { opacity: 1; scale: 1.06; } }
+.bz.lit.a { animation: bootBlink 5.2s steps(1) infinite; } .bz.lit.b { animation: bootBlink 7.1s steps(1) -2.2s infinite; }
+@keyframes bootBlink { 0%, 62%, 100% { opacity: 1; } 64%, 70% { opacity: .15; } 72% { opacity: 1; } 80%, 84% { opacity: .3; } }
+.bz.water { animation: bootShimmer 7s ease-in-out infinite alternate; }
+@keyframes bootShimmer { from { translate: -4px 0; opacity: .85; } to { translate: 4px 0; opacity: 1; } }
+.bz.mist { inset: auto; left: 0; width: 200%; image-rendering: auto; animation: bootMist 70s linear infinite; }
+.bz.mist.m2 { animation-duration: 46s; animation-direction: reverse; opacity: .8; }
+@keyframes bootMist { to { translate: -50% 0; } }
+.bz.bam { transform-origin: 50% 100%; animation: bootSway 6.5s ease-in-out infinite alternate; }
+.bz.bam.r { animation-duration: 7.5s; animation-delay: -3s; }
+@keyframes bootSway { from { rotate: -.9deg; } to { rotate: 1.1deg; } }
+.boot-lamp { position: absolute; width: calc(var(--px) * 9); transform-origin: 50% 0; animation: bootSwing 3.6s ease-in-out infinite alternate; }
+.boot-lamp canvas { display: block; width: 100%; image-rendering: pixelated; }
+@keyframes bootSwing { from { rotate: -4deg; } to { rotate: 4deg; } }
+.lamp-glow { position: absolute; left: 50%; top: 58%; width: calc(var(--px) * 46); height: calc(var(--px) * 46); transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255, 170, 70, .5), rgba(255, 170, 70, 0) 66%); animation: bootLamp 2.2s ease-in-out infinite alternate; pointer-events: none; }
+@keyframes bootLamp { from { opacity: .55; } to { opacity: 1; } }
+.boot-flies { position: absolute; inset: 0; pointer-events: none; }
+.boot-flies i { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #ffeaa0; box-shadow: 0 0 8px 3px rgba(255, 222, 120, .55); animation: bootFly 7s ease-in-out infinite alternate, bootFlyB 2s ease-in-out infinite alternate; }
+@keyframes bootFly { to { translate: var(--dx) var(--dy); } }
+@keyframes bootFlyB { from { opacity: .1; } to { opacity: 1; } }
+.boot-shade { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 100% at 50% 45%, transparent 42%, rgba(3, 5, 14, .72) 100%), linear-gradient(to bottom, rgba(3, 5, 14, .3), transparent 28%, transparent 66%, rgba(3, 5, 14, .65)); }
+
+.boot-ui { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(14px, 4.5vh, 40px); padding: 24px 20px 120px; transition: transform .75s cubic-bezier(.5, 0, .2, 1), opacity .5s ease-in; }
+.boot-leave .boot-ui { transform: scale(1.18) translateY(-18px); opacity: 0; }
+.boot-logo-wrap { position: relative; width: min(84vw, 560px); line-height: 0; }
+.boot-ready .boot-logo-wrap { animation: bootReady .7s var(--ease-pop); }
+@keyframes bootReady { 40% { scale: 1.08; } }
+.boot-logo { width: 100%; height: auto; filter: drop-shadow(0 6px 0 rgba(10, 12, 20, .75)) drop-shadow(0 0 22px rgba(255, 190, 90, .25)); animation: bootLogo 1.15s cubic-bezier(.2, 1.5, .4, 1) .5s both, bootFloat 4.2s ease-in-out 1.8s infinite; }
+@keyframes bootLogo { from { opacity: 0; transform: translateY(-140px) scale(1.3) rotate(-4deg); } 55% { opacity: 1; } }
+@keyframes bootFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.boot-sweep { position: absolute; inset: 0; -webkit-mask: url(assets/brand/logo.png) center / contain no-repeat; mask: url(assets/brand/logo.png) center / contain no-repeat; background: linear-gradient(100deg, transparent 42%, rgba(255, 255, 255, .85) 50%, transparent 58%) no-repeat; background-size: 260% 100%; background-position: 160% 0; animation: bootSweep 3s ease-in-out 1.9s infinite; mix-blend-mode: soft-light; pointer-events: none; }
+@keyframes bootSweep { 0% { background-position: 160% 0; } 55%, 100% { background-position: -60% 0; } }
+
+.boot-fan { --cw: clamp(56px, min(17vw, 16vh), 100px); position: relative; width: min(88vw, 480px); height: calc(var(--cw) * 1.42); }
+.bc { position: absolute; left: 50%; top: 0; width: var(--cw); height: calc(var(--cw) * 1.42); margin-left: calc(var(--cw) / -2); perspective: 700px; transform: translateX(calc(var(--o) * var(--cw) * .62)) translateY(calc(var(--o) * var(--o) * var(--cw) * .06)) rotate(calc(var(--o) * 7deg)); animation: bootDeal .75s var(--ease-pop) calc(1.05s + var(--i) * .09s) both, bootBob 3.2s ease-in-out calc(2s + var(--i) * .22s) infinite; }
+@keyframes bootDeal { from { opacity: 0; transform: translateX(0) translateY(-70px) rotate(-20deg) scale(.4); } }
+@keyframes bootBob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+.bc-in { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .75s var(--ease-spring) calc(var(--i) * .11s); }
+.boot-ready .bc-in { transform: rotateY(180deg); }
+.bc-back, .bc-front { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.bc-back { background: url(assets/frames/back.png) center / 100% 100% no-repeat; image-rendering: pixelated; border-radius: 7px; box-shadow: 3px 3px 0 rgba(0, 0, 0, .5); }
+.bc .bc-front.card { --w: var(--cw); width: 100%; height: 100%; transform: rotateY(180deg); margin: 0; animation: none !important; transition: none; }
+
+.boot-load, .boot-tap { position: absolute; left: 0; right: 0; bottom: calc(clamp(40px, 9vh, 90px) + env(safe-area-inset-bottom)); text-align: center; }
+.boot-load { width: min(78vw, 380px); margin: 0 auto; animation: bootUp .6s ease-out 1.1s both; transition: opacity .35s, translate .35s; }
+@keyframes bootUp { from { opacity: 0; translate: 0 14px; } }
+.boot-bar { height: 14px; background: #0d0604; border: 3px solid #0d0604; border-radius: 7px; overflow: hidden; box-shadow: 0 0 0 2px var(--vang-d), 0 4px 0 2px #0d0604; }
+.boot-bar i { display: block; height: 100%; transform-origin: 0 50%; transform: scaleX(0); background: repeating-linear-gradient(135deg, var(--vang) 0 6px, #f4cf72 6px 12px); background-size: 17px 100%; animation: bootStripe .7s linear infinite; }
+@keyframes bootStripe { to { background-position: 17px 0; } }
+.boot-pct { margin: 10px 0 0; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; opacity: .9; text-shadow: 0 2px 0 rgba(0, 0, 0, .6); } .boot-pct b { color: var(--vang-l); }
+.boot-ready .boot-load { opacity: 0; translate: 0 10px; pointer-events: none; }
+.boot-tap { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: .04em; color: var(--vang-l); text-shadow: 0 3px 0 rgba(0, 0, 0, .7); opacity: 0; }
+.boot-ready .boot-tap { animation: bootTapIn .55s var(--ease-pop) .35s both, bootTap 1.5s ease-in-out .9s infinite; }
+@keyframes bootTapIn { from { opacity: 0; translate: 0 14px; } to { opacity: 1; } }
+@keyframes bootTap { 0%, 100% { opacity: 1; scale: 1; } 50% { opacity: .55; scale: .97; } }
+html.reduce .boot *, html.reduce .boot-scene { animation: none !important; }
+html.reduce .boot-ready .boot-tap { opacity: 1; }
+html.reduce .boot-bar i { animation: none; }
+@media (max-height: 520px) { .boot-ui { gap: 8px; padding-bottom: 70px; } .boot-logo-wrap { width: min(50vw, 360px); } }
+
+/* =====================================================================
+   POPUP / BẢNG / THÔNG BÁO: cùng một kiểu hiện ra (lò xo) và đóng lại
+   ===================================================================== */
+@keyframes ovIn { from { opacity: 0; } }
+@keyframes ovOut { to { opacity: 0; } }
+@keyframes sheetPop { from { opacity: 0; transform: translateY(28px) scale(.9); } 60% { opacity: 1; } }
+@keyframes sheetOut { to { opacity: 0; transform: translateY(12px) scale(.95); } }
+.overlay { animation: ovIn .24s ease-out both; }
+.overlay > .sheet, .overlay > .panel, .overlay > .diff, .overlay > .detail { animation: sheetPop .45s var(--ease-pop) both; }
+.overlay.still, .overlay.still > * { animation: none !important; }
+.overlay.leaving { animation: ovOut .2s ease-in forwards !important; }
+.overlay.leaving > * { animation: sheetOut .2s ease-in forwards !important; }
+.iosg { animation: ovIn .24s ease-out both; }
+.iosg > * { animation: sheetPop .45s var(--ease-pop) both; }
+html.reduce .overlay, html.reduce .overlay > *, html.reduce .iosg, html.reduce .iosg > * { animation: none !important; }
+
+/* thông báo (toast, kỷ lục, thành tích): xếp ở trên cùng, không che nút chơi */
+.notifs { position: fixed; top: max(10px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); z-index: 9998; display: flex; flex-direction: column; align-items: center; gap: 8px; width: min(92vw, 440px); pointer-events: none; }
+.notifs .toast, .notifs .ach-popup { position: relative; inset: auto; top: auto; left: auto; bottom: auto; transform: none; z-index: auto; max-width: 100%; margin: 0; animation: notifIn .5s var(--ease-pop) both; }
+.notifs .toast { padding: 10px 18px; background: #14171c; border: 3px solid var(--vang); box-shadow: 0 5px 0 rgba(0, 0, 0, .55), 0 0 0 2px #0b0d10; font-size: 15px; line-height: 1.3; color: var(--kem); text-align: center; }
+.notifs .ach-popup { overflow: hidden; border-width: 3px; border-radius: 0; box-shadow: 0 5px 0 rgba(0, 0, 0, .55), 0 0 0 2px #0b0d10, 0 0 24px rgba(226, 173, 60, .35); }
+.notifs .ach-popup::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 40%, rgba(255, 240, 190, .45) 50%, transparent 60%); translate: -120% 0; animation: notifShine 1.2s ease-out .45s both; pointer-events: none; }
+.notifs .ach-popup.rec .ach-popup-icon { font-size: 26px; }
+.notifs .toast.out, .notifs .ach-popup.out { animation: notifOut .35s ease-in forwards; }
+@keyframes notifIn { from { opacity: 0; transform: translateY(-34px) scale(.9); } 60% { opacity: 1; } }
+@keyframes notifOut { to { opacity: 0; transform: translateY(-16px) scale(.94); } }
+@keyframes notifShine { to { translate: 120% 0; } }
+html.reduce .notifs .toast, html.reduce .notifs .ach-popup, html.reduce .notifs .ach-popup::after { animation: none !important; }
+
+/* =====================================================================
+   NÚT BẤM: nhấc nhẹ khi rê chuột, lún xuống khi bấm (chuột và cảm ứng), bật lại kiểu lò xo
+   Dùng thuộc tính translate/scale riêng nên không đụng các hoạt ảnh transform sẵn có
+   ===================================================================== */
+button, [data-act]:not(.card):not(.overlay):not(.locked) { -webkit-tap-highlight-color: transparent; transition: translate .26s var(--ease-spring), scale .26s var(--ease-spring), filter .15s ease-out, background-color .15s; touch-action: manipulation; }
+@media (hover: hover) and (pointer: fine) {
+  button:not(:disabled):hover, [data-act]:not(.card):not(.overlay):not(.locked):not(:disabled):hover { translate: 0 -2px; }
+}
+button:not(:disabled):active, button.pressed:not(:disabled), [data-act]:not(.card):not(.overlay):not(.locked):not(:disabled):active, [data-act].pressed:not(.card):not(.overlay):not(.locked) { translate: 0 2px; scale: .955; transition-duration: .06s, .06s, .06s, .06s; }
+button:focus-visible { outline: 3px solid var(--vang-l); outline-offset: 2px; }
+html.reduce button, html.reduce [data-act] { transition: none; }
+.bc-front .art { grid-template-rows: minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); } .bc-front .art img.px { min-height: 0; max-height: 100%; }

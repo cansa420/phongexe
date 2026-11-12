@@ -41,9 +41,13 @@ for (const dir of INLINE_DIRS) {
   }
 }
 
+// danh sách ảnh nạp trước cho màn tải
+const PRELOAD = [];
+for (const d of ['cards', 'frames/ui', 'icons']) { const dp = path.join(__dirname, 'assets', d); if (fs.existsSync(dp)) for (const f of fs.readdirSync(dp)) if (/\.(png|webp)$/i.test(f)) PRELOAD.push(`assets/${d}/${f}`); }
 // Script: inject asset map + patch img src (MutationObserver) + patch CSS setProperty
 const assetScript = `<script>
 var __A=${JSON.stringify(assetMap)};
+window.__PRELOAD=${JSON.stringify(PRELOAD)};
 (function(){
   // 1. Thay src <img> được inject qua innerHTML
   function patchImgs(root){
@@ -72,11 +76,13 @@ var __A=${JSON.stringify(assetMap)};
 const tpl = fs.readFileSync(path.join(__dirname, 'web/index.template.html'), 'utf8');
 const ui = fs.readFileSync(path.join(__dirname, 'web/ui.js'), 'utf8');
 const fx = fs.readFileSync(path.join(__dirname, 'web/fx.js'), 'utf8');
+const boot = fs.readFileSync(path.join(__dirname, 'web/boot.js'), 'utf8');
+
 // Inject asset script trước khi thay /*__BUNDLE__*/ để placeholder vẫn còn
 const tplPatched = tpl.replace('<script>\n/*__BUNDLE__*/', assetScript + '<script>\n/*__BUNDLE__*/');
 let skinCss = fs.readFileSync(path.join(__dirname, 'web/skin.css'), 'utf8');
 skinCss = skinCss.replace(/url\(['"]?(assets\/[^'")\s]+)['"]?\)/g, (_, key) => assetMap[key] ? `url(${assetMap[key]})` : `url(${key})`);
-let out = tplPatched.replace('/*__BUNDLE__*/', () => bundle).replace('/*__UI__*/', () => ui).replace('/*__FX__*/', () => fx).replace('/*__SKIN__*/', () => skinCss);
+let out = tplPatched.replace('/*__BUNDLE__*/', () => bundle).replace('/*__UI__*/', () => ui).replace('/*__FX__*/', () => fx).replace('/*__BOOT__*/', () => boot).replace('/*__SKIN__*/', () => skinCss);
 
 fs.mkdirSync(path.join(__dirname, 'dist'), { recursive: true });
 fs.writeFileSync(path.join(__dirname, 'dist/index.html'), out);

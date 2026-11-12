@@ -340,20 +340,29 @@
     requestAnimationFrame(tick);
   }
 
+  function notifBox() { let b = document.querySelector('.notifs'); if (!b) { b = document.createElement('div'); b.className = 'notifs'; document.body.appendChild(b); } return b; }
+  function dismissNotif(el, after) { setTimeout(() => el.classList.add('out'), after); setTimeout(() => { el.remove(); const b = document.querySelector('.notifs'); if (b && !b.children.length) b.remove(); }, after + 380); }
   function showAch(a) {
-    $$('.ach-popup').forEach((e) => e.remove());
+    $$('.ach-popup:not(.rec)').forEach((e) => e.remove());
     const icon = ACH_ICON[a.id];
-    const pop = document.createElement('div'); pop.className = 'ach-popup';
+    const pop = document.createElement('div'); pop.className = 'ach-popup'; pop.setAttribute('role', 'status');
     pop.innerHTML = `<div class="ach-popup-icon">${icon ? `<img src="assets/icons/${icon}.png">` : '★'}</div><div><b>Thành tích mở khóa!</b><span>${a.vi}</span></div>`;
-    document.body.appendChild(pop);
+    notifBox().appendChild(pop);
     playSfx('fanfare', 0.5, 1.2, 2.5);
-    setTimeout(() => pop.classList.add('out'), 2800);
-    setTimeout(() => pop.remove(), 3400);
+    dismissNotif(pop, 3200);
+  }
+  function showRecord(title, sub) {
+    $$('.ach-popup.rec').forEach((e) => e.remove());
+    const pop = document.createElement('div'); pop.className = 'ach-popup rec'; pop.setAttribute('role', 'status');
+    pop.innerHTML = `<div class="ach-popup-icon">🏆</div><div><b>${title}</b><span>${sub}</span></div>`;
+    notifBox().appendChild(pop);
+    playSfx('fanfare', 0.5, 1.2, 2.5);
+    dismissNotif(pop, 3200);
   }
   function toast(msg) {
-    $$('.toast').forEach((t) => t.remove());
+    $$('.notifs .toast').forEach((t) => t.remove());
     const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; t.setAttribute('role', 'status');
-    document.body.appendChild(t); clearTimeout(ui.toastTimer); ui.toastTimer = setTimeout(() => t.remove(), 2200);
+    notifBox().appendChild(t); dismissNotif(t, 2300);
   }
 
   // ------------------------------------------------------------------ mảnh giao diện
@@ -957,6 +966,7 @@
     ui.justBought = null;
     if (ui.view === 'cashout') $$('[data-count]').forEach((el, i) => setTimeout(() => countUp(el, +el.dataset.count, 380), (FAST ? 1 : 1000) * i * 0.42 * (FAST ? 0.01 : 1) + 80));
     fit(); requestAnimationFrame(fit); setTimeout(fit, 450);
+    { const ov = root.querySelector(':scope > .overlay'); const okey = ov ? ((ov.querySelector('[role="dialog"]') || ov).getAttribute('aria-label') || ov.className) : ''; const now = performance.now(); if (okey !== ui.ovKey) ui.ovT = now; if (ov && okey === ui.ovKey && now - (ui.ovT || 0) > 150) ov.classList.add('still'); ui.ovKey = okey; }
     if (viewChanged) viewIn(); dealIn();
     if (ui.view === 'end') clearSave(); else queueSave();
     updateDev(); updateGear();
@@ -1278,8 +1288,8 @@
       const hs = store.get('highScore', 0);
       if (handScore > hs) {
         store.set('highScore', handScore);
-        if (hs > 0) toast(`🏆 Kỷ lục mới! ${fmt(handScore)} điểm (hơn ${fmt(hs)})`);
-        else toast(`🏆 Kỷ lục đầu tiên! ${fmt(handScore)} điểm trong 1 lần đánh`);
+        if (hs > 0) showRecord('Kỷ lục mới!', `${fmt(handScore)} điểm (hơn ${fmt(hs)})`);
+        else showRecord('Kỷ lục đầu tiên!', `${fmt(handScore)} điểm trong 1 lần đánh`);
       }
     }
     const out = res.outcome;
@@ -1484,7 +1494,13 @@
       case 'discard': doDiscard(); break;
       case 'info': playSfx('card_select', 0.18, 1.2); ui.info = true; render(); break;
       case 'items': playSfx('card_select', 0.18, 1.2); ui.items = true; render(); break;
-      case 'close': case 'close-bg': ui.info = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.consDetail = null; ui.deckView = false; ui.selCons = null; playSfx('card_select', 0.18, 1.3); render(); break;
+      case 'close': case 'close-bg': {
+        const ov = $('.overlay'); if (ov && ov.classList.contains('leaving')) break;
+        const fin = () => { ui.info = false; ui.items = false; ui.settings = false; ui.confirmClear = false; ui.detail = null; ui.consDetail = null; ui.deckView = false; ui.selCons = null; render(); };
+        playSfx('card_select', 0.18, 1.3);
+        if (ov && !NOFX()) { ov.classList.add('leaving'); setTimeout(fin, 190); } else fin();
+        break;
+      }
       case 'charm': playSfx('card_select', 0.15, 1.25); ui.detail = +t.dataset.uid; render(); break;
       case 'sell': { run.sell(ui.detail); ui.detail = null; playSfx('buy', 0.6, 0.78); render(); break; }
       case 'move-l': case 'move-r': {
@@ -1722,7 +1738,7 @@
     const clear = ui.confirmClear
       ? `<div class="srow danger"><div><b>Xóa toàn bộ dữ liệu?</b><span>Mất ván đang lưu, cài đặt và tiến trình hướng dẫn. Không hoàn tác được.</span></div><div class="chips"><button class="mini" data-act="clear-cancel" type="button">Hủy</button><button class="mini red" data-act="clear-do" type="button">Xóa hết</button></div></div>`
       : `<div class="srow"><div><b>Dữ liệu</b><span>Xóa ván đã lưu và cài đặt để chơi lại từ đầu</span></div><div class="chips"><button class="mini" data-act="clear-ask" type="button">Xóa dữ liệu</button></div></div>`;
-    return `<div class="overlay still" data-act="close-bg"><div class="panel sheet set" role="dialog" aria-label="Cài đặt"><h2>${gicon('cai_dat')}Cài đặt</h2>
+    return `<div class="overlay" data-act="close-bg"><div class="panel sheet set" role="dialog" aria-label="Cài đặt"><h2>${gicon('cai_dat')}Cài đặt</h2>
       <div class="srow"><div><b>Nhạc nền</b><span>Nhạc Shop — Bà Hàng Mã</span></div><div class="sctl">${slider('set-mvol', settings.musicVol, false, 'Âm lượng nhạc nền')}</div></div>
       <div class="srow"><div><b>Hiệu ứng âm thanh</b><span>Tiếng chọn bài, ghi điểm, qua ải</span></div><div class="sctl">${slider('set-vol', settings.sfxVol, false, 'Âm lượng hiệu ứng')}</div></div>
       <div class="srow"><div><b>Giảm chuyển động</b><span>Tắt rung màn hình, hạt và hoạt ảnh dài; số điểm vẫn chạy</span></div><div class="chips">${onoff('set-reduce', settings.reduce)}</div></div>
@@ -1764,7 +1780,7 @@
   function finishStory() { store.set('storySeen', true); closeStory(); }
   function showStory() {
     closeStory();
-    let i = -1; let busy = false;
+    let i = 0; let busy = false;
     const el = storyEl = document.createElement('div');
     el.className = 'story'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Mở đầu');
     document.body.appendChild(el); document.addEventListener('keydown', storyKey);
@@ -1990,7 +2006,7 @@
     pill.innerHTML = `<span class="ios-pill-ico">${ICO.add}</span><span><b>Lưu game ra màn hình chính</b><small>Chạm để xem cách làm, chỉ ${PLATFORM === 'android' ? '3' : '4'} bước</small></span><i class="ios-pill-x" aria-label="Ẩn">✕</i>`;
     pill.addEventListener('click', (e) => { if (e.target.closest('.ios-pill-x')) { pill.remove(); store.set('a2hsPillHidden2', true); return; } openIosGuide(); });
     if (!store.get('a2hsPillHidden2', false)) document.body.appendChild(pill);
-    if (!seen) setTimeout(openIosGuide, FAST ? 10 : 1800);
+    if (!seen) (window.__whenBoot || ((f) => f()))(() => setTimeout(openIosGuide, FAST ? 10 : 1800));
   })();
   window.__openIosGuide = openIosGuide;
 
@@ -1999,6 +2015,16 @@
   setLayout();
   window.addEventListener('resize', () => { setLayout(); fit(); });
   render();
-  if (!FAST && !store.get('storySeen', false)) showStory();
+  (function pressFx() {
+    // :active không chạy trên iOS nếu không có touchstart; thêm lớp .pressed để cảm ứng cũng lún xuống rõ ràng
+    document.addEventListener('touchstart', () => {}, { passive: true });
+    let cur = null;
+    const release = () => { if (!cur) return; const e = cur; cur = null; setTimeout(() => e.classList.remove('pressed'), 90); };
+    document.addEventListener('pointerdown', (e) => { const b = e.target.closest && e.target.closest('button:not(:disabled), [data-act]'); if (!b || b.classList.contains('card') || b.classList.contains('overlay')) return; cur = b; b.classList.add('pressed'); }, { passive: true });
+    ['pointerup', 'pointercancel', 'dragend'].forEach((ev) => document.addEventListener(ev, release, { passive: true }));
+    window.addEventListener('blur', release);
+  })();
+  window.__bootTap = () => { try { unlockAudio(); } catch (e) { /* chưa có âm thanh */ } };
+  if (!FAST) window.__whenBoot((() => { if (!store.get('storySeen', false)) showStory(); }));
   window.__tc = { get run() { return run; }, ui, render, music, get actx() { return actx; }, recordWin, progress, settings, fanfare, blindBanner }; window.__tcData = DATA;
 })();
