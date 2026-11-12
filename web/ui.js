@@ -997,10 +997,21 @@
         if (!fitsL(hi)) { for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; if (fitsL(mid)) lo = mid; else hi = mid; } fitsL(lo); }
       }
     }
+    root.style.zoom = ''; root.style.height = '';
     if (root.dataset.view === 'play' && ui.layout === 'port') {
-      let lo = 38; let hi = cw;
       const fits = (v) => { st.setProperty('--cw', v.toFixed(1) + 'px'); const m = $('.meta'); return m ? m.offsetTop + m.offsetHeight + 8 <= root.clientHeight + 1 : root.scrollHeight - root.clientHeight <= 1; };
-      if (!fits(hi)) { for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; } fits(lo); }
+      const shrink = (top) => { let lo = 38; let hi = top; if (!fits(hi)) { for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; } fits(lo); } return fits(lo) || fits(hi); };
+      if (!shrink(cw)) {
+        // màn hình thấp (Safari có thanh công cụ, máy nhỏ): lá đã nhỏ hết mức mà vẫn tràn thì thu nhỏ cả màn chơi cho vừa khung nhìn
+        const VH = window.innerHeight; let z = 1;
+        for (let pass = 0; pass < 4; pass++) {
+          const m = $('.meta'); const need = m ? m.offsetTop + m.offsetHeight + 8 : root.scrollHeight;
+          z = Math.max(0.55, Math.min(1, z * (VH / z) / need));
+          root.style.zoom = z.toFixed(3); root.style.height = (VH / z).toFixed(1) + 'px';
+          const W2 = h.clientWidth || W; shrink(Math.min(92, (W2 - 28) / (n - (n - 1) * 0.3)));
+          if (fits(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cw')) || 38)) break;
+        }
+      }
     }
   }
 

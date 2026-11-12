@@ -1209,7 +1209,7 @@ html.reduce .bar i, html.reduce .bar i::after, html.reduce .hand .card .art img.
 html.reduce #btnPlay, html.reduce .rowin { animation: none !important; } html.reduce .rowin { opacity: 1; }
 .panel.top { padding: 12px 18px 16px; }
 .panel.cash, .panel.sheet { padding: 18px 20px 20px; }
-html, body { min-width: 360px; } #app { min-width: 360px; }
+html, body { min-width: 300px; } #app { min-width: 300px; }
 body { overflow-x: auto; }
 
 /* ===== Màn dọc: nút Đánh / Bỏ bài nhỏ lại, lá bài to hơn và cách xa hai nút ===== */
@@ -1904,6 +1904,9 @@ html.reduce .ios-pill.pulse, html.reduce .ig-hl, html.reduce .ig-arrow { animati
 .ig-native svg { flex: none; width: 34px; height: 34px; } .ig-native b { display: block; font-size: 19px; } .ig-native small { display: block; letter-spacing: 0; text-transform: none; color: var(--den); opacity: .85; font-size: 12.5px; }
 .ig-alt { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; padding: 10px 12px; font-size: 13px; line-height: 1.45; background: rgba(0, 0, 0, .25); } .ig-alt b { color: var(--vang-l); }
 .ig-arrow.up { animation-name: igBobUp; } @keyframes igBobUp { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+
+/* Thanh "Lưu game" không đè lên nút bài ở màn chơi */
+body:has(#app[data-view="play"]) .ios-pill { display: none; }
 
 </style>
 </head>
@@ -4145,10 +4148,21 @@ function __require(name) {
         if (!fitsL(hi)) { for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; if (fitsL(mid)) lo = mid; else hi = mid; } fitsL(lo); }
       }
     }
+    root.style.zoom = ''; root.style.height = '';
     if (root.dataset.view === 'play' && ui.layout === 'port') {
-      let lo = 38; let hi = cw;
       const fits = (v) => { st.setProperty('--cw', v.toFixed(1) + 'px'); const m = $('.meta'); return m ? m.offsetTop + m.offsetHeight + 8 <= root.clientHeight + 1 : root.scrollHeight - root.clientHeight <= 1; };
-      if (!fits(hi)) { for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; } fits(lo); }
+      const shrink = (top) => { let lo = 38; let hi = top; if (!fits(hi)) { for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; } fits(lo); } return fits(lo) || fits(hi); };
+      if (!shrink(cw)) {
+        // màn hình thấp (Safari có thanh công cụ, máy nhỏ): lá đã nhỏ hết mức mà vẫn tràn thì thu nhỏ cả màn chơi cho vừa khung nhìn
+        const VH = window.innerHeight; let z = 1;
+        for (let pass = 0; pass < 4; pass++) {
+          const m = $('.meta'); const need = m ? m.offsetTop + m.offsetHeight + 8 : root.scrollHeight;
+          z = Math.max(0.55, Math.min(1, z * (VH / z) / need));
+          root.style.zoom = z.toFixed(3); root.style.height = (VH / z).toFixed(1) + 'px';
+          const W2 = h.clientWidth || W; shrink(Math.min(92, (W2 - 28) / (n - (n - 1) * 0.3)));
+          if (fits(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cw')) || 38)) break;
+        }
+      }
     }
   }
 

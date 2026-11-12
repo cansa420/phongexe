@@ -770,7 +770,7 @@ html.reduce .bar i, html.reduce .bar i::after, html.reduce .hand .card .art img.
 html.reduce #btnPlay, html.reduce .rowin { animation: none !important; } html.reduce .rowin { opacity: 1; }
 .panel.top { padding: 12px 18px 16px; }
 .panel.cash, .panel.sheet { padding: 18px 20px 20px; }
-html, body { min-width: 360px; } #app { min-width: 360px; }
+html, body { min-width: 300px; } #app { min-width: 300px; }
 body { overflow-x: auto; }
 
 /* ===== Màn dọc: nút Đánh / Bỏ bài nhỏ lại, lá bài to hơn và cách xa hai nút ===== */
@@ -1465,3 +1465,6 @@ html.reduce .ios-pill.pulse, html.reduce .ig-hl, html.reduce .ig-arrow { animati
 .ig-native svg { flex: none; width: 34px; height: 34px; } .ig-native b { display: block; font-size: 19px; } .ig-native small { display: block; letter-spacing: 0; text-transform: none; color: var(--den); opacity: .85; font-size: 12.5px; }
 .ig-alt { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; padding: 10px 12px; font-size: 13px; line-height: 1.45; background: rgba(0, 0, 0, .25); } .ig-alt b { color: var(--vang-l); }
 .ig-arrow.up { animation-name: igBobUp; } @keyframes igBobUp { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+
+/* Thanh "Lưu game" không đè lên nút bài ở màn chơi */
+body:has(#app[data-view="play"]) .ios-pill { display: none; }
