@@ -537,7 +537,7 @@
 
   function viewTitle() {
     sanitizeSel();
-    const demo = [{ id: 'a', color: 'van', rank: 'n10' }, { id: 'b', color: 'sach', rank: 'n5' }, { id: 'c', color: 'wan', rank: 'n9' }, { id: 'd', color: 'van', rank: 'n3' }];
+    const demo = [{ id: 'a', color: 'van', rank: 'n10' }, { id: 'b', color: 'sach', rank: 'n5' }, { id: 'c', color: 'wan', rank: 'n9' }, { id: 'd', color: 'van', rank: 'n3' }, { id: 'e', color: 'sach', rank: 'n8' }];
     const sv = savedGame();
     return `<div class="title"><div class="lg"><h1 class="logo" aria-label="PHỖNG.EXE"><img src="assets/brand/logo.png" alt="PHỖNG.EXE, game xếp bài Tổ Tôm" draggable="false"></h1></div>
       <div class="tl"><div class="cards">${demo.map((c) => cardHTML(c)).join('')}</div></div>

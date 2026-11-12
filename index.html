@@ -2014,7 +2014,7 @@ html[data-layout="port"] #app[data-view="play"] .calc { padding: 10px 18px; min-
 
 .boot-ui { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(14px, 4.5vh, 40px); padding: 24px 20px 120px; transition: transform .75s cubic-bezier(.5, 0, .2, 1), opacity .5s ease-in; }
 .boot-leave .boot-ui { transform: scale(1.18) translateY(-18px); opacity: 0; }
-.boot-logo-wrap { position: relative; width: min(84vw, 560px); line-height: 0; }
+.boot-logo-wrap { position: absolute; left: 50%; top: 19%; width: min(92vw, 616px, 72vh); translate: -50% -50%; line-height: 0; }
 .boot-ready .boot-logo-wrap { animation: bootReady .7s var(--ease-pop); }
 @keyframes bootReady { 40% { scale: 1.08; } }
 .boot-logo { width: 100%; height: auto; filter: drop-shadow(0 6px 0 rgba(10, 12, 20, .75)) drop-shadow(0 0 22px rgba(255, 190, 90, .25)); animation: bootLogo 1.15s cubic-bezier(.2, 1.5, .4, 1) .5s both, bootFloat 4.2s ease-in-out 1.8s infinite; }
@@ -2023,8 +2023,8 @@ html[data-layout="port"] #app[data-view="play"] .calc { padding: 10px 18px; min-
 .boot-sweep { position: absolute; inset: 0; -webkit-mask: url(assets/brand/logo.png) center / contain no-repeat; mask: url(assets/brand/logo.png) center / contain no-repeat; background: linear-gradient(100deg, transparent 42%, rgba(255, 255, 255, .85) 50%, transparent 58%) no-repeat; background-size: 260% 100%; background-position: 160% 0; animation: bootSweep 3s ease-in-out 1.9s infinite; mix-blend-mode: soft-light; pointer-events: none; }
 @keyframes bootSweep { 0% { background-position: 160% 0; } 55%, 100% { background-position: -60% 0; } }
 
-.boot-fan { --cw: clamp(56px, min(17vw, 16vh), 100px); position: relative; width: min(88vw, 480px); height: calc(var(--cw) * 1.42); }
-.bc { position: absolute; left: 50%; top: 0; width: var(--cw); height: calc(var(--cw) * 1.42); margin-left: calc(var(--cw) / -2); perspective: 700px; transform: translateX(calc(var(--o) * var(--cw) * .62)) translateY(calc(var(--o) * var(--o) * var(--cw) * .06)) rotate(calc(var(--o) * 7deg)); animation: bootDeal .75s var(--ease-pop) calc(1.05s + var(--i) * .09s) both, bootBob 3.2s ease-in-out calc(2s + var(--i) * .22s) infinite; }
+.boot-fan { --cw: clamp(44px, min(11.5vw, 9.5vh), 72px); --rt: 2.4; position: absolute; left: 50%; top: 60%; width: min(88vw, 480px); height: calc(var(--cw) * var(--rt)); translate: -50% -50%; }
+.bc { position: absolute; left: 50%; top: 0; width: var(--cw); height: calc(var(--cw) * var(--rt)); margin-left: calc(var(--cw) / -2); perspective: 700px; transform: translateX(calc(var(--o) * var(--cw) * .62)) translateY(calc(var(--o) * var(--o) * var(--cw) * .06)) rotate(calc(var(--o) * 7deg)); animation: bootDeal .75s var(--ease-pop) calc(1.05s + var(--i) * .09s) both, bootBob 3.2s ease-in-out calc(2s + var(--i) * .22s) infinite; }
 @keyframes bootDeal { from { opacity: 0; transform: translateX(0) translateY(-70px) rotate(-20deg) scale(.4); } }
 @keyframes bootBob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
 .bc-in { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .75s var(--ease-spring) calc(var(--i) * .11s); }
@@ -2048,7 +2048,7 @@ html[data-layout="port"] #app[data-view="play"] .calc { padding: 10px 18px; min-
 html.reduce .boot *, html.reduce .boot-scene { animation: none !important; }
 html.reduce .boot-ready .boot-tap { opacity: 1; }
 html.reduce .boot-bar i { animation: none; }
-@media (max-height: 520px) { .boot-ui { gap: 8px; padding-bottom: 70px; } .boot-logo-wrap { width: min(50vw, 360px); } }
+@media (max-height: 520px) { .boot-logo-wrap { top: 17%; } .boot-fan { top: 61%; } }
 
 /* =====================================================================
    POPUP / BẢNG / THÔNG BÁO: cùng một kiểu hiện ra (lò xo) và đóng lại
@@ -2090,7 +2090,16 @@ button, [data-act]:not(.card):not(.overlay):not(.locked) { -webkit-tap-highlight
 button:not(:disabled):active, button.pressed:not(:disabled), [data-act]:not(.card):not(.overlay):not(.locked):not(:disabled):active, [data-act].pressed:not(.card):not(.overlay):not(.locked) { translate: 0 2px; scale: .955; transition-duration: .06s, .06s, .06s, .06s; }
 button:focus-visible { outline: 3px solid var(--vang-l); outline-offset: 2px; }
 html.reduce button, html.reduce [data-act] { transition: none; }
-.bc-front .art { grid-template-rows: minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); } .bc-front .art img.px { min-height: 0; max-height: 100%; }
+
+
+/* Sảnh ngang: cụm lá bài giống hệt cụm xoè ở màn loading (5 lá, xoè quạt) */
+html[data-layout="land"] .title .cards .card { margin-left: calc(var(--w) * -.38); }
+html[data-layout="land"] .title .cards .card:first-child { margin-left: 0; }
+html[data-layout="land"] .title .cards .card:nth-child(1) { transform: translateY(calc(var(--w) * .24)) rotate(-14deg); }
+html[data-layout="land"] .title .cards .card:nth-child(2) { transform: translateY(calc(var(--w) * .06)) rotate(-7deg); }
+html[data-layout="land"] .title .cards .card:nth-child(3) { transform: none; }
+html[data-layout="land"] .title .cards .card:nth-child(4) { transform: translateY(calc(var(--w) * .06)) rotate(7deg); }
+html[data-layout="land"] .title .cards .card:nth-child(5) { transform: translateY(calc(var(--w) * .24)) rotate(14deg); }
 
 </style>
 </head>
@@ -4115,7 +4124,7 @@ function __require(name) {
 
   function viewTitle() {
     sanitizeSel();
-    const demo = [{ id: 'a', color: 'van', rank: 'n10' }, { id: 'b', color: 'sach', rank: 'n5' }, { id: 'c', color: 'wan', rank: 'n9' }, { id: 'd', color: 'van', rank: 'n3' }];
+    const demo = [{ id: 'a', color: 'van', rank: 'n10' }, { id: 'b', color: 'sach', rank: 'n5' }, { id: 'c', color: 'wan', rank: 'n9' }, { id: 'd', color: 'van', rank: 'n3' }, { id: 'e', color: 'sach', rank: 'n8' }];
     const sv = savedGame();
     return `<div class="title"><div class="lg"><h1 class="logo" aria-label="PHỖNG.EXE"><img src="assets/brand/logo.png" alt="PHỖNG.EXE, game xếp bài Tổ Tôm" draggable="false"></h1></div>
       <div class="tl"><div class="cards">${demo.map((c) => cardHTML(c)).join('')}</div></div>
