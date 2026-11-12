@@ -1242,29 +1242,29 @@
   }
   // ------------------------------------------------------------------ chú giải quân bài (di chuột, hoặc nhấn giữ trên điện thoại)
   let tipEl = null; let tipFor = null; let pressTimer = null; let pressXY = null; let noClickUntil = 0;
-  const TOM = { 'van-n7': 'Tôm', 'sach-n3': 'Tôm', 'wan-n3': 'Tôm', 'sach-n8': 'Lèo', 'wan-n9': 'Lèo', 'van-n10': 'Lèo' };
-  const tipRankNote = (rank, color) => {
-    if (rank === 'junk') return 'Lá Tạp: không ghép được bộ nào, chỉ chiếm chỗ trên tay.';
-    const sp = TOM[color + '-' + rank]; const extra = sp ? ` Thuộc bộ ${sp}.` : '';
-    if (rank === 'n10') return `Lá Yêu, là số 10 của họ ${HO_VI[color]}: nối được sảnh sau số Cửu, và góp Tam Yêu cùng hai lá Yêu kia.${extra}`;
-    return `Số ${rank.slice(1)} của họ ${HO_VI[color]}; mỗi lá có 4 bản. Hai lá giống hệt nhau (cùng số, cùng họ) ra bộ "cùng họ" cao điểm hơn.${extra}`;
+  // Bộ đặc biệt của Tổ tôm: đúng 3 lá cụ thể (khớp SPECIAL trong engine)
+  const SPECIAL_SETS = {
+    tom: [['van', 'n7'], ['sach', 'n3'], ['wan', 'n3']],
+    leo: [['sach', 'n8'], ['wan', 'n9'], ['van', 'n10']],
+    tam_yeu: [['van', 'n10'], ['sach', 'n10'], ['wan', 'n10']],
   };
-  // Bộ nào có thể gồm lá này: cùng số, sảnh liền, cùng họ, và các bộ riêng (Tôm, Lèo, Tam Yêu)
+  // Các bộ có thể gồm lá này: mỗi bộ một dòng ngắn (tên bộ + lá cần ghép)
   function tipSets(rank, color) {
     const k = +rank.slice(1); const hv = HO_VI[color];
-    const nm = (n) => `<b>${cardName({ rank: 'n' + n, color })}</b>`;
-    const prev = k > 1 ? nm(k - 1) : null; const next = k < 10 ? nm(k + 1) : null;
+    const nm = (n) => cardName({ rank: 'n' + n, color });
+    const lock = (id) => (run.handLevels[id] === 0 ? ' <i class="tag-lock">chưa mở</i>' : '');
     const row = (label, html) => `<div class="tiprow"><b>${label}</b><span>${html}</span></div>`;
-    const open = (id) => (run.handLevels[id] === 0 ? ' <i class="tag-lock">chưa mở</i>' : '');
     const out = [];
-    out.push(row('Cùng số', `Đôi, Phu bí, Tứ quý với các lá <b>${cardName({ rank, color })}</b> khác họ. Hai lá giống hệt (cùng họ ${hv}) ra Đôi cùng họ hoặc Khàn.`));
-    out.push(row('Phu dọc', `Sảnh liền cùng họ ${hv}: ${[prev, '<em>lá này</em>', next].filter(Boolean).join(' › ')}`));
-    out.push(row('Cùng họ', `Bộ nhiều lá đều họ ${hv}: Phu dọc, Thuần họ, Cù lũ cùng họ.`));
-    const sp = TOM[color + '-' + rank];
-    if (sp === 'Tôm') out.push(row('Tôm' + open('tom'), 'Thất Văn + Tam Sách + Tam Vạn, đủ ba lá này.'));
-    if (sp === 'Lèo') out.push(row('Lèo' + open('leo'), 'Bát Sách + Cửu Vạn + Chi Chi, đủ ba lá này.'));
-    if (rank === 'n10') out.push(row('Tam Yêu' + open('tam_yeu'), 'Chi Chi + Thang Thang + Ông Lão, đủ ba lá Yêu.'));
-    return `<div class="tipsets"><div class="tiphd">Lá này đi trong các bộ</div>${out.join('')}</div>`;
+    out.push(row('Cùng số', `${H.pair_mixed.vi} · ${H.three.vi} · ${H.four.vi}`));
+    const run3 = [k > 1 ? nm(k - 1) : null, '<em>' + nm(k) + '</em>', k < 10 ? nm(k + 1) : null].filter(Boolean).join(' › ');
+    out.push(row('Sảnh', `${run3}<small>3–5 lá liền số. Cùng họ ${hv} = ${H.run3_same.vi}</small>`));
+    out.push(row(H.flush5.vi, `5 lá cùng họ ${hv}`));
+    for (const [id, need] of Object.entries(SPECIAL_SETS)) {
+      if (!need.some(([h, r]) => h === color && r === rank)) continue;
+      const names = need.map(([h, r]) => { const n = cardName({ rank: r, color: h }) + (r === 'n10' ? '' : ' ' + HO_VI[h]); return h === color && r === rank ? '<em>' + n + '</em>' : n; });
+      out.push(row(H[id].vi + lock(id), names.join(' + ')));
+    }
+    return `<div class="tipsets">${out.join('')}</div>`;
   }
   function hideTip() { if (tipEl) { tipEl.remove(); tipEl = null; tipFor = null; } }
   function showTip(card) {
@@ -1274,14 +1274,12 @@
     const colorVi = HO_VI[d.color];
     const chips = (card.querySelector('.chipv') || {}).textContent;
     const lines = [];
-    lines.push(d.rank === 'junk' ? '' : `<span>Cho <b>${chips}</b> chip khi ghi điểm.</span>`);
     if (d.enh && CFG.enhancements[d.enh]) lines.push(`<span><b class="tg">${CFG.enhancements[d.enh].vi}:</b> ${CFG.enhancements[d.enh].text}.</span>`);
     if (d.seal && CFG.seals[d.seal]) lines.push(`<span><b class="tg">${CFG.seals[d.seal].vi}:</b> ${CFG.seals[d.seal].text}.</span>`);
-    if (card.classList.contains('deb')) lines.push('<span class="warn">Đang bị trùm vô hiệu: không ghi điểm.</span>');
-    if (d.rank !== 'junk') lines.splice(0, 0, `<span class="tipfig">${figName(d.color, d.rank)}</span>`);
-    lines.push(d.rank === 'junk' ? `<small>${tipRankNote(d.rank, d.color)}</small>` : tipSets(d.rank, d.color));
+    if (card.classList.contains('deb')) lines.push('<span class="warn">Bị trùm vô hiệu: không ghi điểm.</span>');
+    lines.push(d.rank === 'junk' ? '<small>Lá Tạp: không ghép được bộ nào.</small>' : tipSets(d.rank, d.color));
     const t = document.createElement('div'); t.className = 'tip';
-    t.innerHTML = `<div class="tipname"><i class="dot ${d.color}"></i>${cardName({ rank: d.rank, color: d.color })} ${colorVi}</div>${lines.join('')}`;
+    t.innerHTML = `<div class="tipname"><i class="dot ${d.color}"></i><span>${cardName({ rank: d.rank, color: d.color })} ${colorVi}</span>${d.rank === 'junk' ? '' : `<em class="tipchip">${chips} chip</em>`}</div>${lines.join('')}`;
     document.body.appendChild(t); tipEl = t;
     const b = card.getBoundingClientRect(); const w = t.offsetWidth; const h = t.offsetHeight;
     let x = b.left + b.width / 2 - w / 2; x = Math.max(6, Math.min(innerWidth - w - 6, x));

@@ -1382,3 +1382,12 @@ html[data-layout="land"] #app .controls .btn { min-height: min(44px, 10svh); pad
 }
 /* dòng gợi ý bộ trong bảng tính điểm */
 .hintline { color: #35d9c0; font-weight: 700; } .hintline b { color: #8ff5e4; }
+/* ===== Chú giải lá bài (gọn): tên + chip, mỗi bộ một dòng ===== */
+.tip { max-width: min(260px, calc(100vw - 12px)); padding: 8px 10px; font-size: 12.5px; gap: 4px; }
+.tip .tipname { justify-content: space-between; font-size: 15px; }
+.tip .tipname > span { flex: 1; }
+.tip .tipchip { font-style: normal; font-size: 11px; background: var(--vang); color: var(--den); padding: 1px 6px; white-space: nowrap; }
+.tipsets { margin-top: 4px; padding-top: 5px; gap: 4px; }
+.tiprow { grid-template-columns: 64px 1fr; gap: 6px; }
+.tiprow > b { font-size: 11.5px; } .tiprow > span { font-size: 12px; line-height: 1.35; }
+.tiprow > span small { display: block; font-size: 10.5px; color: var(--kem-d); opacity: .85; }
