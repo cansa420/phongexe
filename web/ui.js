@@ -977,10 +977,10 @@
     if (ui.layout === 'land') {
       cols = n; cw = Math.min(92, W / (n - (n - 1) * 0.14), (window.innerHeight - 250) / 5.8);
     } else {
-      cols = n; cw = Math.min(92, (W - 28) / (n - (n - 1) * 0.3));
+      cols = n; cw = Math.min(92, (W - 22) / (n - (n - 1) * 0.36));
     }
     const st = document.documentElement.style;
-    cw = Math.max(38, cw);
+    cw = Math.max(ui.layout === 'port' ? 44 : 38, cw);
     const pl = $('#app[data-view="play"] .pl');
     if (pl) { pl.style.zoom = ''; pl.style.height = ''; pl.style.maxHeight = ''; if (ui.layout === 'land') { const avail = window.innerHeight - 32; const kids = Array.from(pl.children).filter((c) => c.offsetHeight > 0); const need = kids.reduce((s, c) => { const cs = getComputedStyle(c); return s + c.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom); }, 0) + Math.max(0, kids.length - 1) * 10 + 14; if (need > avail + 1) { const z = avail / need; pl.style.zoom = z.toFixed(3); pl.style.height = (avail / z).toFixed(1) + 'px'; pl.style.maxHeight = pl.style.height; } } }
     st.setProperty('--cols', cols); st.setProperty('--cw', cw.toFixed(1) + 'px');
@@ -1000,7 +1000,7 @@
     root.style.zoom = ''; root.style.height = '';
     if (root.dataset.view === 'play' && ui.layout === 'port') {
       const fits = (v) => { st.setProperty('--cw', v.toFixed(1) + 'px'); const m = $('.meta'); return m ? m.offsetTop + m.offsetHeight + 8 <= root.clientHeight + 1 : root.scrollHeight - root.clientHeight <= 1; };
-      const shrink = (top) => { let lo = 38; let hi = top; if (!fits(hi)) { for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; } fits(lo); } return fits(lo) || fits(hi); };
+      const shrink = (top) => { fits(top); return fits(top); };
       if (!shrink(cw)) {
         // màn hình thấp (Safari có thanh công cụ, máy nhỏ): lá đã nhỏ hết mức mà vẫn tràn thì thu nhỏ cả màn chơi cho vừa khung nhìn
         const VH = window.innerHeight; let z = 1;
@@ -1008,7 +1008,7 @@
           const m = $('.meta'); const need = m ? m.offsetTop + m.offsetHeight + 8 : root.scrollHeight;
           z = Math.max(0.55, Math.min(1, z * (VH / z) / need));
           root.style.zoom = z.toFixed(3); root.style.height = (VH / z).toFixed(1) + 'px';
-          const W2 = h.clientWidth || W; shrink(Math.min(92, (W2 - 28) / (n - (n - 1) * 0.3)));
+          const W2 = h.clientWidth || W; shrink(Math.min(92, (W2 - 22) / (n - (n - 1) * 0.36)));
           if (fits(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cw')) || 38)) break;
         }
       }
