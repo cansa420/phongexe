@@ -1909,23 +1909,23 @@ html.reduce .ios-pill.pulse, html.reduce .ig-hl, html.reduce .ig-arrow { animati
 body:has(#app[data-view="play"]) .ios-pill { display: none; }
 
 /* ===== Màn chơi dọc: thu gọn phần trên để dành chỗ cho bộ bài (bài giữ cỡ cố định, to hết mức theo chiều ngang) ===== */
-html[data-layout="port"] #app[data-view="play"] { gap: 4px; }
+html[data-layout="port"] #app[data-view="play"] { gap: 6px; }
 html[data-layout="port"] #app[data-view="play"] .panel.boss.strip { display: none; }
-html[data-layout="port"] #app[data-view="play"] .blindbar { margin: 0 3px 2px; padding: 4px 66px 6px 10px; gap: 2px 6px; }
+html[data-layout="port"] #app[data-view="play"] .blindbar { margin: 0 3px 4px; padding: 6px 66px 8px 10px; gap: 4px 6px; }
 html[data-layout="port"] #app[data-view="play"] .blindbar .bb1 { flex-direction: row; align-items: baseline; gap: 8px; padding-right: 0; flex: 1 1 100%; }
 html[data-layout="port"] #app[data-view="play"] .blindbar b { font-size: 17px; line-height: 1.1; }
 html[data-layout="port"] #app[data-view="play"] .blindbar small { line-height: 1.1; }
 html[data-layout="port"] #app[data-view="play"] .blindbar .mini { min-height: 28px; padding: 0 8px; font-size: 13px; }
 html[data-layout="port"] #app[data-view="play"] .panel { margin-bottom: 0; }
-html[data-layout="port"] #app[data-view="play"] .target { padding: 2px 12px 4px; }
-html[data-layout="port"] #app[data-view="play"] .target .num { font-size: 24px !important; line-height: 1.05; }
+html[data-layout="port"] #app[data-view="play"] .target { padding: 6px 12px 8px; }
+html[data-layout="port"] #app[data-view="play"] .target .num { font-size: 28px !important; line-height: 1.1; }
 html[data-layout="port"] #app[data-view="play"] .target .reward { display: none; }
-html[data-layout="port"] #app[data-view="play"] .calc { height: 54px; min-height: 54px; padding: 2px 10px; }
-html[data-layout="port"] #app[data-view="play"] .eq .cbox, html[data-layout="port"] #app[data-view="play"] .eq .mbox { font-size: 24px; min-width: 58px; }
+html[data-layout="port"] #app[data-view="play"] .calc { height: auto; min-height: 84px; overflow: visible; padding: 8px 12px; }
+html[data-layout="port"] #app[data-view="play"] .eq .cbox, html[data-layout="port"] #app[data-view="play"] .eq .mbox { font-size: 28px; min-width: 62px; }
 html[data-layout="port"] #app[data-view="play"] .stats { margin-bottom: 0; }
-html[data-layout="port"] #app[data-view="play"] .stat { padding: 1px 4px 3px; }
-html[data-layout="port"] #app[data-view="play"] .stage { min-height: 0; flex: 1 1 auto; }
-html[data-layout="port"] #app[data-view="play"] .hand { padding-top: 14px; padding-bottom: 4px; }
+html[data-layout="port"] #app[data-view="play"] .stat { padding: 3px 4px 5px; }
+html[data-layout="port"] #app[data-view="play"] .stage { min-height: calc(var(--cw) * 1.5 + 10px); flex: 1 1 auto; }
+html[data-layout="port"] #app[data-view="play"] .hand { padding-top: 18px; padding-bottom: 6px; }
 html[data-layout="port"] #app[data-view="play"] .hand .card { margin-left: calc(var(--cw) * -.36); }
 html[data-layout="port"] #app[data-view="play"] .hand .card:first-child { margin-left: 0; }
 
