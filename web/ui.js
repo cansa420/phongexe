@@ -258,7 +258,8 @@
     const b = document.createElement('div'); b.className = 'banner ' + (cls || ''); b.style.setProperty('--hold', hold + 'ms');
     b.innerHTML = `<b>${text}</b>${sub ? `<span>${sub}</span>` : ''}`;
     document.body.appendChild(dim); document.body.appendChild(b);
-    const kill = () => { dim.remove(); b.remove(); document.removeEventListener('pointerdown', kill, true); };
+    let doneCalled = false;
+    const kill = () => { dim.remove(); b.remove(); document.removeEventListener('pointerdown', kill, true); if (!doneCalled) { doneCalled = true; if (onDone) setTimeout(onDone, FAST ? 0 : 260); } };
     setTimeout(kill, hold + (FAST ? 10 : 450));
     if (!FAST) setTimeout(() => document.addEventListener('pointerdown', kill, true), 500); // chạm để đóng sớm
   }
@@ -290,7 +291,7 @@
   }
   // thông báo vào ải: tấm bảng có icon, chặng, mục tiêu và (nếu có) hiệu ứng trùm
   const BLIND_ICON = { thuong: 'quat', lon: 'chuong', trum: 'den_long' };
-  function blindBanner(r) {
+  function blindBanner(r, onDone) {
     $$('.banner, .bandim').forEach((b) => b.remove());
     const hold = FAST ? 20 : r.kind === 'trum' ? 3000 : 2100;
     const dim = document.createElement('div'); dim.className = 'bandim'; dim.style.setProperty('--hold', hold + 'ms');
@@ -1097,6 +1098,31 @@
     return { left: innerWidth - 40, top: innerHeight - 80, width: 0, height: 0 };
   }
   // chia bài: từng lá bay từ chồng bài ra vị trí, xoay thẳng dần, lò xo nảy khi đến nơi
+  // Xếp bài: các lá bay từ chỗ cũ sang chỗ mới (FLIP), nhấc lên giữa đường, nghiêng nhẹ rồi hạ xuống
+  function handRects() {
+    const m = new Map();
+    $$('#hand .card').forEach((c) => { const r = c.getBoundingClientRect(); m.set(c.dataset.id, { x: r.left, y: r.top }); });
+    return m;
+  }
+  function flipHand(before) {
+    if (NOFX() || !before || !before.size || !document.body.animate) return;
+    const cards = $$('#hand .card'); let n = 0;
+    const order = cards.map((c) => ({ c, o: before.get(c.dataset.id) })).filter((q) => q.o);
+    order.forEach(({ c, o }, i) => {
+      const r = c.getBoundingClientRect(); const dx = o.x - r.left; const dy = o.y - r.top;
+      if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
+      n++;
+      const tilt = dx > 0 ? -7 : 7; const lift = -Math.min(34, 12 + Math.abs(dx) * 0.08);
+      c.style.zIndex = 30;
+      const a = c.animate([
+        { translate: `${dx}px ${dy}px`, rotate: '0deg', scale: 1 },
+        { translate: `${dx * 0.45}px ${dy * 0.45 + lift}px`, rotate: `${tilt}deg`, scale: 1.1, offset: 0.4 },
+        { translate: '0px 0px', rotate: '0deg', scale: 1 },
+      ], { duration: 520, delay: Math.min(i, 10) * 16, easing: 'cubic-bezier(.3, 1.25, .5, 1)', fill: 'backwards' });
+      a.onfinish = a.oncancel = () => { c.style.zIndex = ''; };
+    });
+    if (n) { try { playSfx('shuffle', 0.25, 1.15); } catch (e) { /* không có âm */ } }
+  }
   function dealIn() {
     if (NOFX() || ui.view !== 'play') return;
     const cards = $$('#hand .card.new'); if (!cards.length) return;
@@ -1432,9 +1458,8 @@
       case 'intro-go': {
         playSfx('shuffle', 0.4);
         ui.intro = false; ui.known = new Set(); render();
-        maybeTutorial();
         const r = run.round;
-        blindBanner(r);
+        blindBanner(r, maybeTutorial);
         if (r.kind === 'trum') { thud(); shake(8); } else whoosh();
         break;
       }
@@ -1552,7 +1577,14 @@
       case 'pack-cancel': ui.packPick = null; render(); break;
       case 'pack-skip': run.pickPack(null); afterPack(); render(); break;
       case 'deck': playSfx('card_select', 0.18, 1.2); ui.deckView = true; render(); break;
-      case 'sort': sweep(380, 720, 0.14, 'triangle', 0.055); ui.sortMode = t.dataset.mode; run.sortHand(ui.sortMode); render(); break;
+      case 'sort': {
+        sweep(380, 720, 0.14, 'triangle', 0.055);
+        const before = handRects();
+        ui.sortMode = t.dataset.mode; run.sortHand(ui.sortMode); render();
+        flipHand(before);
+        const on = $('.sorts .mini.on'); if (on && !NOFX()) popEl(on);
+        break;
+      }
       case 'skip': {
         const res = run.skipAi(); ui.known = new Set(); ui.sel.clear();
         if (res.tag === 'que') { ui.intro = false; ui.view = 'skip'; render(); break; }
@@ -1822,6 +1854,7 @@
     { sel: '.calc', text: 'Điểm = chip (ô xanh) nhân hệ số (ô đỏ). Bộ càng hiếm càng mạnh; xem đủ ở nút Bảng bộ.' },
     { sel: '#btnPlay', text: 'Chọn xong thì bấm Đánh. Chỉ quân thuộc bộ mới ghi điểm.' },
     { sel: '#btnDis', text: 'Quân xấu thì Bỏ bài để rút quân mới. Số lượt bỏ có hạn.' },
+    { sel: '.cons-dock, .cons-bar', text: 'Ô Tiêu hao chứa vật phẩm dùng một lần (Phù, Quẻ...), mua ở chợ. Chạm vật phẩm rồi chọn quân trên tay để dùng ngay trong ván; ô nét đứt là chỗ còn trống.' },
     { sel: '#charms', text: 'Bùa nằm ở hàng này. Mua ở chợ sau mỗi ải; bùa tính từ trái sang phải nên thứ tự là chiến thuật.' },
   ];
   let tutEl = null; let tutRaf = 0;
@@ -1832,7 +1865,7 @@
   function startShopTutorial() {
     if (!isHintMode() || store.get('shopTutDone') || ui.view !== 'shop') return;
     stopTutorial(false);
-    const visible = (sel) => { const t = $(sel); if (!t) return null; const r = t.getBoundingClientRect(); return r.width > 4 && r.height > 4 ? t : null; };
+    const visible = (sel) => pickVisible(sel);
     const shopSteps = [
       { sel: '.shop-sec', text: 'Chào mừng đến Chợ! Mua Bùa để tăng điểm, Quẻ/Ấn để nâng cấp bộ bài, Vật Phẩm để dùng trong ải.' },
       { sel: '.offers .offer', text: 'Chạm vào món để xem chi tiết. Giá tiền hiển thị trên nút mua. Dùng Làm mới để xáo chợ nếu không thấy gì phù hợp.' },
@@ -1867,9 +1900,10 @@
     };
     show(); place();
   }
+  const pickVisible = (sel) => $$(sel).find((t) => { const r = t.getBoundingClientRect(); return r.width > 4 && r.height > 4; }) || null;
   function startTutorial() {
     stopTutorial(false);
-    const visible = (sel) => { const t = $(sel); if (!t) return null; const r = t.getBoundingClientRect(); return r.width > 4 && r.height > 4 ? t : null; };
+    const visible = (sel) => pickVisible(sel);
 
     // Kịch bản ván đầu: chỉ vào bộ bài cụ thể trên tay để người mới biết cách ghép
     const extraSteps = [];
@@ -1909,7 +1943,7 @@
     });
     const place = () => {
       if (!tutEl) return;
-      const t = $(steps[k].sel);
+      const t = pickVisible(steps[k].sel);
       if (!t || ui.view !== 'play' || ui.intro) { stopTutorial(false); return; }
       const r = t.getBoundingClientRect(), pad = 5;
       ring.style.cssText = `left:${r.left - pad}px;top:${r.top - pad}px;width:${r.width + pad * 2}px;height:${r.height + pad * 2}px`;
