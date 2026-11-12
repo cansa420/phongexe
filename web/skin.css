@@ -1518,3 +1518,16 @@ html[data-layout="port"] #app .title { height: auto; min-height: calc(100svh - 2
 html[data-layout="port"] #app .title > * { flex-shrink: 0; }
 html[data-layout="port"] #app[data-view="play"] .hand { margin-left: -12px; margin-right: -12px; }
 html[data-layout="port"] #app[data-view="play"] { overflow: visible; }
+
+/* ===== Huy hiệu cấp bộ: chữ S/A/B/C, màu sáng đặc, dễ phân biệt với nền khung ===== */
+html[data-layout] .htier { display: inline-block; min-width: 1.45em; text-align: center; font-size: 11px; font-weight: 800; line-height: 1.35; padding: 1px 4px; border-radius: 3px; margin-right: 6px; color: #191b1f; box-shadow: 0 1px 0 rgba(0,0,0,.5); letter-spacing: 0; }
+html[data-layout] .calc .htier { font-size: 12px; padding: 1px 5px; }
+html[data-layout] .htier.tS { background: #f4c542; color: #2a1a00; }
+html[data-layout] .htier.tA { background: #b995ff; color: #1d0e3f; }
+html[data-layout] .htier.tB { background: #5fd6a4; color: #06281b; }
+html[data-layout] .htier.tC { background: #d9d6c8; color: #2a2a28; }
+/* ===== Màn chơi dọc: khung tiêu đề và Mục tiêu cao hơn, lề chữ như khung tính điểm ===== */
+html[data-layout="port"] #app[data-view="play"] .blindbar { padding: 12px 70px 12px 18px; gap: 8px 8px; }
+html[data-layout="port"] #app[data-view="play"] .target { padding: 12px 18px 14px; }
+html[data-layout="port"] #app[data-view="play"] .target .bar { margin-top: 8px; }
+html[data-layout="port"] #app[data-view="play"] .calc { padding: 10px 18px; min-height: 88px; }

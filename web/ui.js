@@ -393,7 +393,7 @@
   // Thứ tự mở khóa bộ bài: lợi thuần trước, đổi chác sau, đổi cấu trúc cuối. Mỗi bộ có 4 độ khó; thắng độ khó cuối của bộ mới nhất thì mở bộ kế.
   const DECK_ORDER = ['chuan', 'van', 'vang', 'sach', 'den', 'socao', 'thuan', 'ngau'].filter((id) => CFG.decks[id]);
   const HAND_TIER = { five: 'S', run5_same: 'S', tom: 'S', leo: 'S', tam_yeu: 'S', four: 'A', run4_same: 'A', full: 'A', run5: 'B', three: 'B', flush5: 'B', run3_same: 'B', two_pair: 'C', pair_mixed: 'C', single: 'C' };
-  const TIER_ICON = { S: '★', A: '◆', B: '●', C: '·' };
+  const TIER_ICON = { S: 'S', A: 'A', B: 'B', C: 'C' };
   const DIFF_ORDER = Object.keys(CFG.difficultyPresets);
   const DECK_ICON = { chuan: 'cuon_giay', van: 'bo_van', vang: 'thoi_vang', sach: 'bo_sach', den: 'am_duong', socao: 'ho_lo', thuan: 'bo_thuan', ngau: 'may' };
   const devAll = () => !!(settings.dev && settings.devUnlock);
@@ -1008,7 +1008,7 @@
           const m = $('.meta'); const need = m ? m.offsetTop + m.offsetHeight + 8 : root.scrollHeight;
           z = Math.max(0.55, Math.min(1, z * (VH / z) / need));
           root.style.zoom = z.toFixed(3); root.style.height = (VH / z).toFixed(1) + 'px';
-          const W2 = h.clientWidth || W; shrink(Math.min(92, (W2 - 8) / (n - (n - 1) * 0.36 + 0.78)));
+          shrink(cw);
           if (fits(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cw')) || 38)) break;
         }
       }
